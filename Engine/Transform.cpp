@@ -1,5 +1,5 @@
 #include "Transform.h"
-
+#include "GameObject.h"
 
 
 Transform::Transform(): pParent_(nullptr)
@@ -11,7 +11,9 @@ Transform::Transform(): pParent_(nullptr)
 	matRotate_ = XMMatrixIdentity();
 	matScale_ = XMMatrixIdentity();
 	axisMatrix_ = {0.0f , 0.0f, 0.0f};
-	axis_ = 0;
+	transMode = 0;
+	parentNum = 0;
+	parentNum = 0;
 }
 
 
@@ -38,35 +40,45 @@ void Transform::Calclation()
 XMMATRIX Transform::GetWorldMatrix() 
 {
 	Calclation();
-	if (!axis_)
+	switch (transMode)
 	{
+	case TRANS_NORMAL_MODE :
 		if (pParent_)
 		{
 			return  matScale_ * matRotate_ * matTranslate_ * pParent_->GetWorldMatrix();
 		}
-
 		return  matScale_ * matRotate_ * matTranslate_;
-	}
-	else
-	{
+
+	case TRANS_AXIS_MODE :
 		if (pParent_)
 		{
-			return  matScale_ * XMMatrixTranslation(axisMatrix_.x, axisMatrix_.y, axisMatrix_.z) * matRotate_ 
+			return  matScale_ * XMMatrixTranslation(axisMatrix_.x, axisMatrix_.y, axisMatrix_.z) * matRotate_
 				* XMMatrixTranslation(-(axisMatrix_.x), -(axisMatrix_.y), -(axisMatrix_.z)) * matTranslate_ * pParent_->GetWorldMatrix();
 		}
-
 		return  matScale_ * matRotate_ * matTranslate_;
+
+	case TRANS_CHANGEPARENT_MODE :
+		GameObject* superParent;
+
+	default:
+		break;
 	}
 }
 
 void Transform::MoveAxisRotate()
 {
-	axis_ = true;
+	transMode = TRANS_AXIS_MODE;
+}
+
+void Transform::ChangeParentRotate(int parentNum_)
+{
+	transMode = TRANS_CHANGEPARENT_MODE;
+	parentNum = parentNum_;
 }
 
 void Transform::NomalAxisRotate()
 {
-	axis_ = false;
+	transMode = TRANS_NORMAL_MODE;
 }
 
 void Transform::SetAxisTrans(XMFLOAT3 mat)
