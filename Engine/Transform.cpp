@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 
-Transform::Transform(): pParent_(nullptr)
+Transform::Transform() : pParent_(nullptr)
 {
 	position_ = XMFLOAT3(0, 0, 0);
 	rotate_ = XMFLOAT3(0, 0, 0);
@@ -10,11 +10,13 @@ Transform::Transform(): pParent_(nullptr)
 	matTranslate_ = XMMatrixIdentity();
 	matRotate_ = XMMatrixIdentity();
 	matScale_ = XMMatrixIdentity();
-	axisMatrix_ = {0.0f , 0.0f, 0.0f};
+	axisMatrix_ = { 0.0f , 0.0f, 0.0f };
 	transMode = 0;
 	parentNum = 0;
-	parentNum = 0;
+	transParentTmp = this;
+	pravTransMode = -1;
 }
+
 
 
 Transform::~Transform()
@@ -45,20 +47,40 @@ XMMATRIX Transform::GetWorldMatrix()
 	case TRANS_NORMAL_MODE :
 		if (pParent_)
 		{
+			pravTransMode = TRANS_NORMAL_MODE;
 			return  matScale_ * matRotate_ * matTranslate_ * pParent_->GetWorldMatrix();
 		}
+		pravTransMode = TRANS_NORMAL_MODE;
 		return  matScale_ * matRotate_ * matTranslate_;
 
 	case TRANS_AXIS_MODE :
 		if (pParent_)
 		{
+			pravTransMode = TRANS_AXIS_MODE;
 			return  matScale_ * XMMatrixTranslation(axisMatrix_.x, axisMatrix_.y, axisMatrix_.z) * matRotate_
 				* XMMatrixTranslation(-(axisMatrix_.x), -(axisMatrix_.y), -(axisMatrix_.z)) * matTranslate_ * pParent_->GetWorldMatrix();
 		}
+		pravTransMode = TRANS_AXIS_MODE;
 		return  matScale_ * matRotate_ * matTranslate_;
 
 	case TRANS_CHANGEPARENT_MODE :
-		GameObject* superParent;
+		for (int i = 0; i < parentNum + 1; i++)
+		{
+			if (transParentTmp->pParent_ != nullptr)
+			{
+				transParentTmp = transParentTmp->pParent_;
+			}
+		}
+		XMMATRIX returnMatrix = matScale_ * matRotate_ * matTranslate_ * transParentTmp->GetWorldMatrix();
+		//NumberOfLoops‚ÌƒŠƒZƒbƒg
+		transParentTmp = this;
+		NumberOfLoops = 0;
+		if (!TRANS_CHANGEPARENT_MODE)
+		{
+			//rotate_ = 
+		}
+		pravTransMode = TRANS_CHANGEPARENT_MODE;
+		return  returnMatrix;
 
 	default:
 		break;

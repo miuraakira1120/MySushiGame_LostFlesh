@@ -68,15 +68,17 @@ void Maguro::Update()
     //下にシャリがなかったら
     if (!syariRay.hit)
     {
-        //なんかいろいろ処理する
-        transform_.position_.y -= 0.01;
         fallFlag = true;
-        transform_.rotate_ = Transform::Float3Reverse((GetParent()->GetRotate()));
+        //transform_.rotate_ = GetParent()->GetRotate();
+        //なんかいろいろ処理する
+        transform_.rotate_.z -= 0.25;
+        transform_.position_.y -= 0.01;
+
+        //transform_.rotate_ = Transform::Float3Reverse((GetParent()->GetRotate()));
+        transform_.ChangeParentRotate(1);
     }
-    else
-    {
-        
-    }
+
+
     
     //マグロがシャリの上に乗っていたら
     if (!fallFlag)

@@ -54,7 +54,7 @@ void Syari::Update()
     {
         breakFlag = true;
     }
-    transform_.position_.y -= FALL_SPEED * 0.1;
+    //transform_.position_.y -= FALL_SPEED * 0.1;
     XMFLOAT3 camPos1 = Camera::GetPosition();
     XMVECTOR vSyariCam = XMLoadFloat3(&camPos1) - XMLoadFloat3(&transform_.position_);
     XMFLOAT3 axisPos = { 0.5f, 0.5f, 1.0f };

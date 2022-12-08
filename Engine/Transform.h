@@ -20,15 +20,19 @@ private:
 	unsigned int transMode;			//軸を移動して回転するか
 	
 public:
-	XMMATRIX matTranslate_;	//移動行列
-	XMMATRIX matRotate_;	//回転行列	
-	XMMATRIX matScale_;		//拡大行列
-	XMFLOAT3 position_;		//位置
-	XMFLOAT3 rotate_;		//向き
-	XMFLOAT3 scale_;		//拡大率
-	Transform * pParent_;	//親オブジェクトの情報
-	XMFLOAT3 axisMatrix_;	//このマトリクスを軸に回転する
-	unsigned int parentNum;
+	XMMATRIX matTranslate_;		//移動行列
+	XMMATRIX matRotate_;		//回転行列	
+	XMMATRIX matScale_;			//拡大行列
+	XMFLOAT3 position_;			//位置
+	XMFLOAT3 rotate_;			//向き
+	XMFLOAT3 scale_;			//拡大率
+	Transform * pParent_;		//親オブジェクトの情報
+	XMFLOAT3 axisMatrix_;		//このマトリクスを軸に回転する
+	Transform* transParentTmp;	//親をさかのぼるために使うポインタ変数
+	unsigned int parentNum;		//親をどれくらいさかのぼるか
+	unsigned int NumberOfLoops;	//何回ループしたか
+	unsigned int pravTransMode;	//1フレーム前のTransMode
+
 	
 	
 
