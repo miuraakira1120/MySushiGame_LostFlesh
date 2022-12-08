@@ -34,7 +34,6 @@ void Maguro::Initialize()
 //更新
 void Maguro::Update()
 {
-
     Syari* pSyari = (Syari*)FindObject("Syari");    //Syariオブジェクトを探す
     int hSyariModel = pSyari->GetModelHandle();    //モデル番号を取得
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
@@ -71,7 +70,7 @@ void Maguro::Update()
         fallFlag = true;
         //transform_.rotate_ = GetParent()->GetRotate();
         //なんかいろいろ処理する
-        transform_.rotate_.z -= 0.25;
+        //transform_.rotate_.z -= 0.25;
         transform_.position_.y -= 0.01;
 
         //transform_.rotate_ = Transform::Float3Reverse((GetParent()->GetRotate()));

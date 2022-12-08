@@ -75,9 +75,9 @@ XMMATRIX Transform::GetWorldMatrix()
 		//NumberOfLoops‚ÌƒŠƒZƒbƒg
 		transParentTmp = this;
 		NumberOfLoops = 0;
-		if (!TRANS_CHANGEPARENT_MODE)
+		if (pravTransMode != TRANS_CHANGEPARENT_MODE)
 		{
-			//rotate_ = 
+			rotate_ = pParent_->rotate_;
 		}
 		pravTransMode = TRANS_CHANGEPARENT_MODE;
 		return  returnMatrix;
