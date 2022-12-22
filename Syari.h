@@ -1,7 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
-#define VERTEX_VLU 8
 #include <vector>
+
+#define VERTEX_VLU 8
+
+const float SYARI_SIZE_X = 0.5f; //シャリのXのサイズ（1倍）
+const float SYARI_SIZE_Y = 0.5f; //シャリのYのサイズ（1倍）
+const float SYARI_SIZE_Z = 1.0f; //シャリのZのサイズ（1倍）
 
 using std::vector;
 
@@ -22,10 +27,8 @@ class Syari : public GameObject
         DOWN_LEFT_BACK,
 
     };
-
-    const float SYARI_SIZE_X = 0.5f; //シャリのXのサイズ（1倍）
-    const float SYARI_SIZE_Y = 0.5f; //シャリのYのサイズ（1倍）
-    const float SYARI_SIZE_Z = 1.0f; //シャリのZのサイズ（1倍）
+    
+   
     const float ROTATE_SPEED = 0.5f; //シャリの回転のスピード
     const float FALL_SPEED   = 0.1f; //落ちるスピード
 
@@ -43,8 +46,10 @@ class Syari : public GameObject
     int mode;     //モード
     bool breakFlag = false;
 
+   
 
 public:
+   
     //コンストラクタ
     Syari(GameObject* parent);
 

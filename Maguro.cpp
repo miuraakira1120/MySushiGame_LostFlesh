@@ -9,7 +9,7 @@
 
 //コンストラクタ
 Maguro::Maguro(GameObject* parent)
-    :GameObject(parent, "Maguro"), hModel_(-1),fallFlag(false)
+    :GameObject(parent, "Maguro"), hModel_(-1),fallFlag(false),pravPos(0.0f,0.0f,0.0f)
 {
 }
 
@@ -21,8 +21,7 @@ Maguro::~Maguro()
 //初期化
 void Maguro::Initialize()
 {
-    //transform_.position_.x = 2.0f;
-    transform_.position_.y = 0.75;
+    transform_.position_.y = SYARI_SIZE_Y + MAGURO_SIZE_Y;
 
     //モデルデータのロード
     hModel_ = Model::Load("maguro.fbx");
@@ -98,7 +97,9 @@ void Maguro::Update()
         {
             transform_.position_.z += FALL_SPEED * ((int)pSyari->GetRotate().x % ROTATE_MAX);
         }
+
     }
+    pravPos = transform_.position_;//自分の今の場所を1f前の場所変数に入れる
 }
 
 //描画
@@ -112,4 +113,5 @@ void Maguro::Draw()
 void Maguro::Release()
 {
 }
+
 

@@ -5,3 +5,18 @@
 #define SAFE_DELETE(p) {if ((p)!=nullptr) { delete (p); (p)=nullptr;}}
 #define SAFE_DELETE_ARRAY(p) {if ((p)!=nullptr) { delete[] (p); (p)=nullptr;}}
 #define SAFE_RELEASE(p) {if ((p)!=nullptr) { p->Release(); (p)=nullptr;}}
+
+/// <summary>
+/// ‹——£‚ğ‹‚ß‚éŠÖ”
+/// </summary>
+/// <param name="ˆø”1 : ˆÊ’u1"></param>
+/// <param name="ˆø”2 : ˆÊ’u2"></param>
+/// <returns></returns>
+XMFLOAT3 FindDistance(XMFLOAT3 a, XMFLOAT3 b)
+{
+	XMVECTOR aD = XMLoadFloat3(&a);
+	XMVECTOR bD = XMLoadFloat3(&b);
+
+	std::abs()
+	return 
+}

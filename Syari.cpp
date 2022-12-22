@@ -54,7 +54,6 @@ void Syari::Update()
     {
         breakFlag = true;
     }
-    //transform_.position_.y -= FALL_SPEED * 0.1;
     XMFLOAT3 camPos1 = Camera::GetPosition();
     XMVECTOR vSyariCam = XMLoadFloat3(&camPos1) - XMLoadFloat3(&transform_.position_);
     XMFLOAT3 axisPos = { 0.5f, 0.5f, 1.0f };
@@ -151,6 +150,7 @@ void Syari::Update()
     transform_.rotate_ = Transform::Float3Add(transform_.rotate_, ffRotate);*/
 
     ////////////////////////////////////////////////////////
+
     RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBox生成（一番下の頂点に）
     BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBox生成（transform_.positionに）
 
@@ -200,7 +200,7 @@ void Syari::Update()
     //レイが当たったら
     if (lowestData.hit)
     {
-        //transform_.position_.y += -(lowestData.dist) + upPos;;
+        transform_.position_.y -= 0.1;
     }
     else
     {

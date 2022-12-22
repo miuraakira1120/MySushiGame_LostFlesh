@@ -13,6 +13,8 @@ class Maguro : public GameObject
 
     int hModel_;    //モデル番号
     bool fallFlag;  //マグロが落ちるかどうかフラグ
+
+    XMFLOAT3 pravPos;//1f前の自分の位置
     
 public:
     //コンストラクタ
@@ -38,4 +40,6 @@ public:
     {
         return Transform::Float3Add(GetParent()->GetPosition(), transform_.position_);
     }
+
+   
 };
