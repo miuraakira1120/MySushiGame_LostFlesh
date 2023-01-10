@@ -41,5 +41,7 @@ public:
         return Transform::Float3Add(GetParent()->GetPosition(), transform_.position_);
     }
 
-   
+    //‰½‚©‚É“–‚½‚Á‚½
+     //ˆø”FpTarget “–‚½‚Á‚½‘Šè
+    void OnCollision(GameObject* pTarget) override;
 };

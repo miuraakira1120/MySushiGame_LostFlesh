@@ -10,6 +10,7 @@
 #include "Engine/Camera.h"
 #include "Maguro.h"
 #include <directxmath.h>
+#include "Engine/BoxCollider.h"
 
 using std::vector;
 
@@ -44,6 +45,9 @@ void Syari::Initialize()
     //transform_.position_.y = 100;
 
     Instantiate<Maguro>(this);
+
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+    AddCollider(collision);
 
 }
 
@@ -243,4 +247,10 @@ XMFLOAT3 Syari::GetPosition()
 XMFLOAT3 Syari::GetRotate()
 {
     return transform_.rotate_;
+}
+
+//‰½‚©‚É“–‚½‚Á‚½
+void Syari::OnCollision(GameObject* pTarget)
+{
+   
 }

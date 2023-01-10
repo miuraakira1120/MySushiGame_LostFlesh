@@ -5,6 +5,8 @@
 #include "Syari.h"
 #include "Stage.h"
 #include "Engine/Input.h"
+#include "Engine/BoxCollider.h"
+#include "imgui/imgui.h"
 
 
 //コンストラクタ
@@ -27,12 +29,16 @@ void Maguro::Initialize()
     hModel_ = Model::Load("maguro.fbx");
     assert(hModel_ >= 0);
 
-    //transform_.position_.x = 3;
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+    AddCollider(collision);
 }
 
 //更新
 void Maguro::Update()
 {
+    ImGui::Begin("a");
+    ImGui::End();
+
     Syari* pSyari = (Syari*)FindObject("Syari");    //Syariオブジェクトを探す
     int hSyariModel = pSyari->GetModelHandle();    //モデル番号を取得
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
@@ -112,6 +118,12 @@ void Maguro::Draw()
 //開放
 void Maguro::Release()
 {
+}
+
+//何かに当たった
+void Maguro::OnCollision(GameObject* pTarget)
+{
+    
 }
 
 

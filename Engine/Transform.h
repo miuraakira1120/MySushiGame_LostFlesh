@@ -96,5 +96,22 @@ public:
 	void ChangeParentRotate(int parentNum_);
 
 	void SetAxisTrans(XMFLOAT3 mat);//‚±‚Ì²‚Å‰ñ‚é
+
+	/// <summary>
+	/// ‹——£‚ğ‹‚ß‚éŠÖ”
+	/// </summary>
+	/// <param name="ˆø”1 : ˆÊ’u1"></param>
+	/// <param name="ˆø”2 : ˆÊ’u2"></param>
+	/// <returns></returns>
+	float FindDistance(XMFLOAT3 a, XMFLOAT3 b)
+	{
+		XMVECTOR aD = XMLoadFloat3(&a);
+		XMVECTOR bD = XMLoadFloat3(&b);
+
+		XMVECTOR vResult = aD - bD;
+
+		//return sqrt()
+
+	}
 };
 
