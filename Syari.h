@@ -1,6 +1,7 @@
 #pragma once
-#include "Engine/GameObject.h"
+
 #include <vector>
+#include "Engine/GameObject.h"
 
 #define VERTEX_VLU 8
 
@@ -10,11 +11,8 @@ const float SYARI_SIZE_Z = 1.0f; //シャリのZのサイズ（1倍）
 
 using std::vector;
 
-
-
 class Syari : public GameObject
 {
-
     enum Ver
     {
         UP_RIGHT_FRONT = 0,
@@ -25,10 +23,8 @@ class Syari : public GameObject
         DOWN_RIGHT_BACK,
         DOWN_LEFT_FRONT,
         DOWN_LEFT_BACK,
-
     };
-    
-   
+
     const float ROTATE_SPEED = 0.5f; //シャリの回転のスピード
     const float FALL_SPEED   = 0.1f; //落ちるスピード
 
@@ -45,8 +41,7 @@ class Syari : public GameObject
     int hModel_;    //モデル番号
     int mode;     //モード
     bool breakFlag = false;
-
-   
+    XMFLOAT3 axisPos;
 
 public:
    
@@ -76,7 +71,8 @@ public:
 
     int GetModelHandle() { return hModel_; }
 
-    //何かに当たった
-    //引数：pTarget 当たった相手
-    void OnCollision(GameObject* pTarget) override;
+    /// <summary>
+    /// キー操作をまとめる関数
+    /// </summary>
+    void KeyOperation();
 };

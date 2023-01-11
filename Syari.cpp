@@ -12,11 +12,12 @@
 #include <directxmath.h>
 #include "Engine/BoxCollider.h"
 
+
 using std::vector;
 
 //コンストラクタ
 Syari::Syari(GameObject* parent)
-    :GameObject(parent, "Syari"), hModel_(-1), mode(1)
+    :GameObject(parent, "Syari"), hModel_(-1), mode(1),axisPos(0.5f, 0.5f, 1.0f)
 {
 }
 
@@ -42,10 +43,10 @@ void Syari::Initialize()
     vVertexPos.push_back(downLeftFrontPos);
     vVertexPos.push_back(downLeftBackPos);
 
-    //transform_.position_.y = 100;
-
+    //子オブジェクトの生成
     Instantiate<Maguro>(this);
 
+    //当たり判定の生成
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
     AddCollider(collision);
 
@@ -54,27 +55,9 @@ void Syari::Initialize()
 //更新
 void Syari::Update()
 {
-    if (Input::IsKey(DIK_SPACE))
-    {
-        breakFlag = true;
-    }
-    XMFLOAT3 camPos1 = Camera::GetPosition();
-    XMVECTOR vSyariCam = XMLoadFloat3(&camPos1) - XMLoadFloat3(&transform_.position_);
-    XMFLOAT3 axisPos = { 0.5f, 0.5f, 1.0f };
-    if (Input::IsKeyDown(DIK_RETURN))
-    {
-        switch (mode)
-        {
-        case 0:
-            mode += 1;
-            break;
-        case 1:
-            mode -= 1;          
-            break;
-        default:
-            break;
-        }
-    }
+    //キー入力をする
+    KeyOperation();
+    
     if (mode == 0)
     {
         transform_.MoveAxisRotate();
@@ -83,7 +66,6 @@ void Syari::Update()
     {
         transform_.NomalAxisRotate();
     }
-    
     transform_.SetAxisTrans(axisPos);
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
     int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
@@ -96,65 +78,7 @@ void Syari::Update()
         XMMatrixTranslation(-(axisPos.x), -(axisPos.y), -(axisPos.z));//軸でrotate_度回転させる行列
     XMFLOAT3 fRotate = { 0,0,0 };
 
-    // ////////キー入力///////////////////////////////
-    if (Input::IsKey(DIK_A))
-    {
-        transform_.rotate_.z += 0.3f;
-    }
-    if (Input::IsKey(DIK_D))
-    {
-        transform_.rotate_.z -= 0.3f;
-    }
-    if (Input::IsKey(DIK_W))
-    {
-        transform_.rotate_.x += 0.3f;
-    }
-    if (Input::IsKey(DIK_S))
-    {
-        transform_.rotate_.x -= 0.3f;
-    }
-
-    ////Aキーが押されていたら
-    //if (Input::IsKey(DIK_A))
-    //{
-    //    fRotate.z += 1.0;
-    //}
-    ////Dキーが押されていたら
-    //if (Input::IsKey(DIK_D))
-    //{
-    //    fRotate.z -= 1.0;
-    //}
-    ////Wキーが押されていたら
-    //if (Input::IsKey(DIK_W))
-    //{
-    //    fRotate.x += 1.0;
-    //}
-    ////Sキーが押されていたら
-    //if (Input::IsKey(DIK_S))
-    //{
-    //    fRotate.x -= 1.0;
-    //}
-    //if (Input::IsKey(DIK_SPACE))
-    //{
-    //    breakFlag = true;
-    //}
-    //D3DXQuaternionRotationMatrix();
-    //DirectX::XMMatrixRotationQuaternion(); 
-    //Quaternion _quaternion = Quaternion.Identity;
-    //DirectX::XMMatrixTransformation(aaa, )
-    /*XMVECTOR vRotate;
-    vRotate = XMLoadFloat3(&fRotate);
-    vRotate = DirectX::XMQuaternionRotationAxis(vRotate, XMConvertToRadians(90));
-    XMMATRIX axisRotate = DirectX::XMMatrixRotationQuaternion(vRotate);*/
-    /*XMVECTOR nomalRotate = XMVector3Normalize(vRotate) * ROTATE_SPEED;
-    vRotate = XMVector3TransformCoord(nomalRotate, m);
-    vRotate = XMVector3TransformCoord(vRotate, m);
-    XMFLOAT3 ffRotate;
-    XMStoreFloat3(&ffRotate, vRotate);
-    transform_.rotate_ = Transform::Float3Add(transform_.rotate_, ffRotate);*/
-
-    ////////////////////////////////////////////////////////
-
+    
     RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBox生成（一番下の頂点に）
     BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBox生成（transform_.positionに）
 
@@ -239,18 +163,60 @@ void Syari::Release()
 {
 }
 
+//現在地のゲッター
 XMFLOAT3 Syari::GetPosition()
 {
     return transform_.position_;
 }
 
+//回転のゲッター
 XMFLOAT3 Syari::GetRotate()
 {
     return transform_.rotate_;
 }
 
-//何かに当たった
-void Syari::OnCollision(GameObject* pTarget)
+//キー操作
+void Syari::KeyOperation()
 {
-   
+    //SPACEキーを押したとき
+    if (Input::IsKey(DIK_SPACE))
+    {
+        breakFlag = true;
+    }
+    //ENTERキーを押したとき
+    if (Input::IsKeyDown(DIK_RETURN))
+    {
+        switch (mode)
+        {
+        case 0:
+            mode += 1;
+            break;
+        case 1:
+            mode -= 1;
+            break;
+        default:
+            break;
+        }
+    }
+    //Aキーを押したとき
+    if (Input::IsKey(DIK_A))
+    {
+        transform_.rotate_.z += 0.3f;
+    }
+    //Dキーを押したとき
+    if (Input::IsKey(DIK_D))
+    {
+        transform_.rotate_.z -= 0.3f;
+    }
+    //Wキーを押したとき
+    if (Input::IsKey(DIK_W))
+    {
+        transform_.rotate_.x += 0.3f;
+    }
+    //Sキーを押したとき
+    if (Input::IsKey(DIK_S))
+    {
+        transform_.rotate_.x -= 0.3f;
+    }
 }
+

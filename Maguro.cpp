@@ -6,12 +6,14 @@
 #include "Stage.h"
 #include "Engine/Input.h"
 #include "Engine/BoxCollider.h"
-#include "imgui/imgui.h"
+
 
 
 //コンストラクタ
 Maguro::Maguro(GameObject* parent)
-    :GameObject(parent, "Maguro"), hModel_(-1),fallFlag(false),pravPos(0.0f,0.0f,0.0f)
+    :GameObject(parent, "Maguro"), hModel_(-1),fallFlag(false),
+    pravPos(0.0f,0.0f,0.0f), pSyari(nullptr),pStage(nullptr), hSyariModel(0), 
+    hGroundModel(0)
 {
 }
 
@@ -36,25 +38,10 @@ void Maguro::Initialize()
 //更新
 void Maguro::Update()
 {
-    ImGui::Begin("a");
-    ImGui::End();
-
-    Syari* pSyari = (Syari*)FindObject("Syari");    //Syariオブジェクトを探す
-    int hSyariModel = pSyari->GetModelHandle();    //モデル番号を取得
-    Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
-    int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
-    
-    ////スペースキーが押されていたら
-    //if (Input::IsKey(DIK_A))
-    //{
-    //    //何らかの処理
-    //    transform_.position_.x -= 0.2;
-    //}
-    //if (Input::IsKey(DIK_D))
-    //{
-    //    //何らかの処理
-    //    transform_.position_.x += 0.2;
-    //}
+    pSyari = (Syari*)FindObject("Syari");    //Syariオブジェクトを探す
+    hSyariModel = pSyari->GetModelHandle();     //モデル番号を取得
+    pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
+    hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
 
     RayCastData stageRay;
     stageRay.start = GetParentPos();         //レイの発射位置
@@ -73,16 +60,9 @@ void Maguro::Update()
     if (!syariRay.hit)
     {
         fallFlag = true;
-        //transform_.rotate_ = GetParent()->GetRotate();
-        //なんかいろいろ処理する
-        //transform_.rotate_.z -= 0.25;
         transform_.position_.y -= 0.01;
-
-        //transform_.rotate_ = Transform::Float3Reverse((GetParent()->GetRotate()));
         transform_.ChangeParentRotate(1);
     }
-
-
     
     //マグロがシャリの上に乗っていたら
     if (!fallFlag)
@@ -103,7 +83,6 @@ void Maguro::Update()
         {
             transform_.position_.z += FALL_SPEED * ((int)pSyari->GetRotate().x % ROTATE_MAX);
         }
-
     }
     pravPos = transform_.position_;//自分の今の場所を1f前の場所変数に入れる
 }
@@ -122,8 +101,8 @@ void Maguro::Release()
 
 //何かに当たった
 void Maguro::OnCollision(GameObject* pTarget)
-{
-    
+{ 
 }
+
 
 

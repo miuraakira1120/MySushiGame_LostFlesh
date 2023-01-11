@@ -1,6 +1,10 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+class Stage;
+class Syari;
+
+
 class Maguro : public GameObject
 {
     const float MAGURO_SIZE_X = 0.25f; //マグロのXのサイズ（1倍）
@@ -11,8 +15,12 @@ class Maguro : public GameObject
     const short ROTATE_MAX = 360;      //回転の最大
     const float FALL_SPEED = 0.2f * 0.01f;     //落ちるスピード
 
-    int hModel_;    //モデル番号
-    bool fallFlag;  //マグロが落ちるかどうかフラグ
+    int hModel_;     //モデル番号
+    bool fallFlag;   //マグロが落ちるかどうかフラグ
+    Syari* pSyari;   //シャリのポインタ
+    int hSyariModel; //シャリのモデル番号
+    Stage* pStage;   //ステージのポインタ
+    int hGroundModel;//ステージのモデル番号
 
     XMFLOAT3 pravPos;//1f前の自分の位置
     
@@ -44,4 +52,6 @@ public:
     //何かに当たった
      //引数：pTarget 当たった相手
     void OnCollision(GameObject* pTarget) override;
+
+    
 };
