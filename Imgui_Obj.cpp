@@ -39,7 +39,7 @@ void Imgui_Obj::Release()
 {
 }
 
-//オブジェクトを探す
+//オブジェクトを探してポインタに入れる
 void Imgui_Obj::FindAllObject()
 {
     pMaguro = (Maguro*)FindObject("Maguro");

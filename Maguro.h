@@ -3,7 +3,7 @@
 
 class Stage;
 class Syari;
-
+class RayCastData;
 
 class Maguro : public GameObject
 {
@@ -53,5 +53,18 @@ public:
      //引数：pTarget 当たった相手
     void OnCollision(GameObject* pTarget) override;
 
-    
+    /// <summary>
+    /// オブジェクトをポインタに入れる
+    /// </summary>
+    void FindAllObject();
+
+    /// <summary>
+    /// レイを飛ばす関数
+    /// </summary>
+    RayCastData DoRay(XMFLOAT3 start, XMFLOAT3 dir, int hModel);
+
+    /// <summary>
+    /// マグロの物理演算
+    /// </summary>
+    void PhysicalOperation();
 };
