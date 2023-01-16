@@ -25,6 +25,7 @@ class Syari : public GameObject
         DOWN_LEFT_BACK,
     };
 
+    const float SYARI_SPEED  = 0.25f;//シャリのスピード
     const float ROTATE_SPEED = 0.5f; //シャリの回転のスピード
     const float FALL_SPEED   = 0.1f; //落ちるスピード
 
@@ -42,6 +43,7 @@ class Syari : public GameObject
     int mode;     //モード
     bool breakFlag = false;
     XMFLOAT3 axisPos;
+    XMFLOAT3 syariDir;
 
 public:
    
@@ -75,4 +77,7 @@ public:
     /// キー操作をまとめる関数
     /// </summary>
     void KeyOperation();
+
+
+    XMFLOAT3 GetSyariDir() { return syariDir; }
 };

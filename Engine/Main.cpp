@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <time.h>
 
-
 #include "global.h"
 #include "RootObject.h"
 #include "Model.h"
@@ -12,7 +11,7 @@
 #include "Input.h"
 #include "Audio.h"
 
-
+#include "../Controller.h"
 #include "../imgui/imgui_impl_dx11.h"
 #include "../imgui/imgui_impl_win32.h"
 
@@ -41,10 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int screenWidth = GetPrivateProfileInt("SCREEN", "Width", 800, ".\\setup.ini");		//スクリーンの幅
 	int screenHeight = GetPrivateProfileInt("SCREEN", "Height", 600, ".\\setup.ini");	//スクリーンの高さ
 	int fpsLimit = GetPrivateProfileInt("GAME", "Fps", 60, ".\\setup.ini");				//FPS（画面更新速度）
-	int isDrawFps = GetPrivateProfileInt("DEBUG", "ViewFps", 0, ".\\setup.ini");		//キャプションに現在のFPSを表示するかどうか
-
-
-
+	int isDrawFps = GetPrivateProfileInt("DEBUG", "ViewFps", 0, ".\\setup.ini");	
 
 	//ウィンドウを作成
 	HWND hWnd = InitApp(hInstance, screenWidth, screenHeight, nCmdShow);
@@ -84,6 +80,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RootObject* pRootObject = new RootObject;
 	pRootObject->Initialize();
 
+	//controllerクラスの作成
+	Controller* pController;
+	pController = (Controller*)pRootObject->FindObject("Controller");
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -198,6 +197,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					Direct3D::SetViewPort(1);
 
 					//Camera::SetPosition(XMFLOAT3(10, 0, 0));
+					//Camera::SetPosition(pController->GetPosition());
+
 					Camera::Update();
 
 					//全オブジェクトを描画
@@ -219,8 +220,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			timeEndPeriod(1);	//時間計測の制度を戻す
 		}
 	}
-
-	
 
 	//いろいろ解放
 	Audio::Release();

@@ -1,5 +1,6 @@
 #include "Stage.h"
 #include "Engine/Model.h"
+#include "Goal.h"
 
 //コンストラクタ
 Stage::Stage(GameObject* parent)
@@ -16,9 +17,10 @@ Stage::~Stage()
 void Stage::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("ground.fbx");
+    hModel_ = Model::Load("ground3.fbx");
     assert(hModel_ >= 0);
     transform_.scale_ = { 20.0f, 1.0f, 20.0f };
+    Instantiate<Goal>(this);
 }
 
 //更新

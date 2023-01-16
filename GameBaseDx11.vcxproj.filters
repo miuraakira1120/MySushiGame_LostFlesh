@@ -116,6 +116,7 @@
       <Filter>Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Imgui_Obj.cpp" />
+    <ClCompile Include="Goal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -211,6 +212,7 @@
       <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui_Obj.h" />
+    <ClInclude Include="Goal.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

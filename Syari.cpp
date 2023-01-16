@@ -17,7 +17,7 @@ using std::vector;
 
 //コンストラクタ
 Syari::Syari(GameObject* parent)
-    :GameObject(parent, "Syari"), hModel_(-1), mode(1),axisPos(0.5f, 0.5f, 1.0f)
+    :GameObject(parent, "Syari"), hModel_(-1), mode(1),axisPos(0.5f, 0.5f, 1.0f), syariDir(0,0,0)
 {
 }
 
@@ -47,7 +47,7 @@ void Syari::Initialize()
     Instantiate<Maguro>(this);
 
     //当たり判定の生成
-    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 2));
     AddCollider(collision);
 
 }
@@ -55,8 +55,14 @@ void Syari::Initialize()
 //更新
 void Syari::Update()
 {
+    //シャリの向きの初期化
+    syariDir = { 0,0,0 };
+
     //キー入力をする
     KeyOperation();
+
+    //移動
+    //syariDir
     
     if (mode == 0)
     {
@@ -128,7 +134,7 @@ void Syari::Update()
     //レイが当たったら
     if (lowestData.hit)
     {
-        transform_.position_.y -= 0.1;
+        //transform_.position_.y -= 0.1;
     }
     else
     {
@@ -137,7 +143,7 @@ void Syari::Update()
         posData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
         Model::RayCast(hGroundModel, &posData); //レイを発射
         float distance = abs(lowestPos.y) + abs(transform_.position_.y);//一番低い角と一番高い角の距離を求める
-        upPos = distance - posData.dir.y ;
+        //upPos = distance - posData.dir.y ;
     }
 
     if (breakFlag)
@@ -145,7 +151,8 @@ void Syari::Update()
         int a = 0;
     }
 
-    transform_.position_.y += upPos;
+    //transform_.position_.y += upPos;
+    transform_.position_.y -= lowestData.dist;
     pRedBox->SetPosition(highestPos);
     pBlueBox->SetPosition(transform_.position_);
 
@@ -198,25 +205,38 @@ void Syari::KeyOperation()
             break;
         }
     }
+    ////////移動/////////////
     //Aキーを押したとき
     if (Input::IsKey(DIK_A))
     {
-        transform_.rotate_.z += 0.3f;
+        //シャリの向き
+        syariDir.x -= 1;
+        //transform_.position_.x -= SYARI_SPEED;
+        //transform_.rotate_.z += 0.3f;
     }
     //Dキーを押したとき
     if (Input::IsKey(DIK_D))
     {
-        transform_.rotate_.z -= 0.3f;
+        //シャリの向き
+        syariDir.x += 1;
+        //transform_.position_.x += SYARI_SPEED;
+        //transform_.rotate_.z -= 0.3f;
     }
     //Wキーを押したとき
     if (Input::IsKey(DIK_W))
     {
-        transform_.rotate_.x += 0.3f;
+        //シャリの向き
+        syariDir.z += 1;
+        //transform_.position_.z += SYARI_SPEED;
+       //transform_.rotate_.x += 0.3f;
     }
     //Sキーを押したとき
     if (Input::IsKey(DIK_S))
     {
-        transform_.rotate_.x -= 0.3f;
+        //シャリの向き
+        syariDir.z -= 1;
+        //transform_.position_.z -= SYARI_SPEED;
+        //transform_.rotate_.x -= 0.3f;
     }
 }
 

@@ -3,6 +3,7 @@
 #include "Engine/Input.h"
 #include "Syari.h"
 #include "Maguro.h"
+#include "Engine/Direct3D.h"
 
 //コンストラクタ
 Controller::Controller(GameObject* parent)
@@ -73,11 +74,12 @@ void Controller::Update()
     vCam = XMVector3TransformCoord(vCam, mRotate);
     XMFLOAT3 camPos;
     XMStoreFloat3(&camPos, vPos + vCam);
+
     Camera::SetPosition(camPos);
     Syari* pSyari = (Syari*)FindObject("Syari");
     Maguro* pMaguro = (Maguro*)FindObject("Maguro");
     transform_.position_ = pSyari->GetPosition();
-    //transform_.position_ = pMaguro->GetPosition();
+
     Camera::SetTarget(transform_.position_);
 }
 

@@ -7,8 +7,6 @@
 #include "Engine/Input.h"
 #include "Engine/BoxCollider.h"
 
-
-
 //コンストラクタ
 Maguro::Maguro(GameObject* parent)
     :GameObject(parent, "Maguro"), hModel_(-1),fallFlag(false),
@@ -33,7 +31,7 @@ void Maguro::Initialize()
     assert(hModel_ >= 0);
 
     //当たり判定の生成
-    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 0.5f, 3));
     AddCollider(collision);
 }
 
@@ -42,9 +40,6 @@ void Maguro::Update()
 {
     //オブジェクトを探して、ポインタに入れる
     FindAllObject();
-
-    //レイを飛ばす
-    DoRay();
 
     //シャリの物理演算
     PhysicalOperation();
@@ -101,12 +96,14 @@ RayCastData Maguro::DoRay(XMFLOAT3 start, XMFLOAT3 dir, int hModel)
 
 void Maguro::PhysicalOperation()
 {
+    RayCastData syariData = DoRay(GetParentPos(), XMFLOAT3(0, -1, 0), hSyariModel);
     //下にシャリがなかったら
-    if (!DoRay()
+    if (!syariData.hit)
     {
         fallFlag = true;
-        transform_.position_.y -= 0.01;
-        transform_.ChangeParentRotate(1);
+        //transform_.position_.y -= 0.01;
+        //transform_.position_.y -= syariData.dist;
+        //transform_.ChangeParentRotate(1);
     }
 
     //マグロがシャリの上に乗っていたら

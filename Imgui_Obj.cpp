@@ -1,10 +1,9 @@
 #include "Imgui_Obj.h"
 #include "imgui/imgui.h"
 
-
 //コンストラクタ
 Imgui_Obj::Imgui_Obj(GameObject* parent)
-    :GameObject(parent, "Imgui_Obj"),pMaguro(nullptr),pSyari(nullptr)
+    :GameObject(parent, "Imgui_Obj"),pMaguro(nullptr),pSyari(nullptr), pText(nullptr)
 {
 }
 
@@ -16,6 +15,8 @@ Imgui_Obj::~Imgui_Obj()
 //初期化
 void Imgui_Obj::Initialize()
 {
+    pText = new Text;
+    pText->Initialize();
 }
 
 //更新
@@ -32,11 +33,13 @@ void Imgui_Obj::Update()
 //描画
 void Imgui_Obj::Draw()
 {
+    //pText->Draw(500, 75, "Hello");
 }
 
 //開放
 void Imgui_Obj::Release()
 {
+    pText->Release();
 }
 
 //オブジェクトを探してポインタに入れる
@@ -64,6 +67,14 @@ void Imgui_Obj::InstantiateImgui()
         ImGui::Text("SyariPositionZ  ");
         ImGui::SameLine();
         ImGui::Text(std::to_string(pSyari->GetPosition().z).c_str());
+
+        ImGui::Text("SyariDirX  ");
+        ImGui::SameLine();
+        ImGui::Text(std::to_string(pSyari->GetSyariDir().x).c_str());
+
+        ImGui::Text("SyariDirZ  ");
+        ImGui::SameLine();
+        ImGui::Text(std::to_string(pSyari->GetSyariDir().z).c_str());
     }
     ImGui::End();
 

@@ -2,12 +2,14 @@
 #include "Engine/GameObject.h"
 #include "Maguro.h"
 #include "Syari.h"
+#include "Engine/Text.h"
 
 //imguiを管理するクラス
 class Imgui_Obj : public GameObject
 {
     Maguro* pMaguro;
     Syari* pSyari;
+    Text* pText;
 
 public:
     //コンストラクタ
