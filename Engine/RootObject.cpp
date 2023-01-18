@@ -1,6 +1,7 @@
 #include "RootObject.h"
 #include "SceneManager.h"
-#include "..\Imgui_Obj.h"
+#include "../Imgui_Obj.h"
+#include "../DarwManager.h"
 
 
 RootObject::RootObject():
@@ -16,6 +17,8 @@ RootObject::~RootObject()
 void RootObject::Initialize()
 {
 	Instantiate<SceneManager>(this);
+	Instantiate<DrawManager>(this);
+
 #if _DEBUG
 	Instantiate<Imgui_Obj>(this);
 #endif // DEBUG_

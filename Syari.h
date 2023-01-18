@@ -43,7 +43,6 @@ class Syari : public GameObject
     int mode;     //モード
     bool breakFlag = false;
     XMFLOAT3 axisPos;
-    XMFLOAT3 syariDir;
 
 public:
    
@@ -77,7 +76,4 @@ public:
     /// キー操作をまとめる関数
     /// </summary>
     void KeyOperation();
-
-
-    XMFLOAT3 GetSyariDir() { return syariDir; }
 };

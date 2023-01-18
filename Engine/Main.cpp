@@ -10,8 +10,9 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Audio.h"
-
+#include "../Time.h"
 #include "../Controller.h"
+#include "../DarwManager.h"
 #include "../imgui/imgui_impl_dx11.h"
 #include "../imgui/imgui_impl_win32.h"
 
@@ -19,6 +20,7 @@
 
 //定数宣言
 const char* WIN_CLASS_NAME = "鮮度命";	//ウィンドウクラス名
+const int FPS = 60;
 
 
 //プロトタイプ宣言
@@ -80,9 +82,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RootObject* pRootObject = new RootObject;
 	pRootObject->Initialize();
 
-	//controllerクラスの作成
+	//controllerクラスのポインタを入れる
 	Controller* pController;
 	pController = (Controller*)pRootObject->FindObject("Controller");
+
+	//Drawマネージャーのポインタを入れる
+	DrawManager* pDrawManager;
+	pDrawManager = (DrawManager*)pRootObject->FindObject("DrawManager");
+
+	//Timeのイニシャライズ
+	Time::Initialize(FPS);
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -173,6 +182,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//カメラを更新
 				Camera::Update();
 
+				//Timeの更新
+				Time::Update();
+
 				//このフレームの描画開始
 				Direct3D::BeginDraw();
 
@@ -181,6 +193,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//pRootObject->DrawSub();
 				
 				//左画面描画
+				if (pDrawManager->GetScreenSeparation() >= 1)
 				{
 					Direct3D::SetViewPort(0);
 
@@ -193,6 +206,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 
 				//右画面描画
+				if (pDrawManager->GetScreenSeparation() >= 2)
 				{
 					Direct3D::SetViewPort(1);
 

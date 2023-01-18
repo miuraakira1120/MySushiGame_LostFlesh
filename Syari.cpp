@@ -11,13 +11,14 @@
 #include "Maguro.h"
 #include <directxmath.h>
 #include "Engine/BoxCollider.h"
-
+#include "Goal.h"
+#include "Controller.h"
 
 using std::vector;
 
 //コンストラクタ
 Syari::Syari(GameObject* parent)
-    :GameObject(parent, "Syari"), hModel_(-1), mode(1),axisPos(0.5f, 0.5f, 1.0f), syariDir(0,0,0)
+    :GameObject(parent, "Syari"), hModel_(-1), mode(1),axisPos(0.5f, 0.5f, 1.0f)
 {
 }
 
@@ -50,20 +51,15 @@ void Syari::Initialize()
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 2));
     AddCollider(collision);
 
+    transform_.position_.y = 10;
 }
 
 //更新
 void Syari::Update()
 {
-    //シャリの向きの初期化
-    syariDir = { 0,0,0 };
-
     //キー入力をする
     KeyOperation();
-
-    //移動
-    //syariDir
-    
+    /*
     if (mode == 0)
     {
         transform_.MoveAxisRotate();
@@ -71,10 +67,14 @@ void Syari::Update()
     else
     {
         transform_.NomalAxisRotate();
-    }
+    }*/
+
     transform_.SetAxisTrans(axisPos);
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
     int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
+
+    Goal* pGoal = (Goal*)FindObject("Goal");    //ステージオブジェクトを探す
+    int hGoalModel = pGoal->GetModelHandle();    //モデル番号を取得
 
     XMMATRIX m =
         XMMatrixTranslation(axisPos.x, axisPos.y, axisPos.z) *
@@ -130,6 +130,16 @@ void Syari::Update()
     lowestData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
     Model::RayCast(hGroundModel, &lowestData); //レイを発射
 
+    RayCastData GoalData;
+    GoalData.start = transform_.position_;   //レイの発射位置
+    GoalData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
+    Model::RayCast(hGoalModel, &GoalData); //レイを発射
+
+    if (GoalData.hit)
+    {
+        transform_.position_.y = 10000;
+    }
+
     float upPos = 0;
     //レイが当たったら
     if (lowestData.hit)
@@ -146,16 +156,10 @@ void Syari::Update()
         //upPos = distance - posData.dir.y ;
     }
 
-    if (breakFlag)
-    {
-        int a = 0;
-    }
-
     //transform_.position_.y += upPos;
     transform_.position_.y -= lowestData.dist;
     pRedBox->SetPosition(highestPos);
     pBlueBox->SetPosition(transform_.position_);
-
 }
 
 //描画
@@ -209,34 +213,32 @@ void Syari::KeyOperation()
     //Aキーを押したとき
     if (Input::IsKey(DIK_A))
     {
-        //シャリの向き
-        syariDir.x -= 1;
-        //transform_.position_.x -= SYARI_SPEED;
-        //transform_.rotate_.z += 0.3f;
     }
     //Dキーを押したとき
     if (Input::IsKey(DIK_D))
     {
-        //シャリの向き
-        syariDir.x += 1;
-        //transform_.position_.x += SYARI_SPEED;
-        //transform_.rotate_.z -= 0.3f;
     }
     //Wキーを押したとき
     if (Input::IsKey(DIK_W))
     {
         //シャリの向き
-        syariDir.z += 1;
+        //syariDir.z += 90;
         //transform_.position_.z += SYARI_SPEED;
        //transform_.rotate_.x += 0.3f;
+        Controller* pController = (Controller*)FindObject("Controller");
+        transform_.rotate_.y = pController->GetRotate().y;
+        XMFLOAT3 move = { 0,0,0.1f };//プレイヤーの移動ベクトル
+        XMVECTOR vMove = XMLoadFloat3(&move);//移動ベクトルの型をXMVECTORに変換
+        XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+        vMove = XMVector3TransformCoord(vMove, mRotate);
+        XMVECTOR vPos;
+        vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+        vPos -= vMove * 3;
+        XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
     }
     //Sキーを押したとき
     if (Input::IsKey(DIK_S))
     {
-        //シャリの向き
-        syariDir.z -= 1;
-        //transform_.position_.z -= SYARI_SPEED;
-        //transform_.rotate_.x -= 0.3f;
     }
 }
 

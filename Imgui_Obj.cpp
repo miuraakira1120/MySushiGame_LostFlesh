@@ -1,5 +1,6 @@
 #include "Imgui_Obj.h"
 #include "imgui/imgui.h"
+#include "Time.h"
 
 //コンストラクタ
 Imgui_Obj::Imgui_Obj(GameObject* parent)
@@ -27,7 +28,6 @@ void Imgui_Obj::Update()
 
     //Imguiを生成する
     InstantiateImgui();
-    
 }
 
 //描画
@@ -68,13 +68,6 @@ void Imgui_Obj::InstantiateImgui()
         ImGui::SameLine();
         ImGui::Text(std::to_string(pSyari->GetPosition().z).c_str());
 
-        ImGui::Text("SyariDirX  ");
-        ImGui::SameLine();
-        ImGui::Text(std::to_string(pSyari->GetSyariDir().x).c_str());
-
-        ImGui::Text("SyariDirZ  ");
-        ImGui::SameLine();
-        ImGui::Text(std::to_string(pSyari->GetSyariDir().z).c_str());
     }
     ImGui::End();
 
@@ -94,6 +87,14 @@ void Imgui_Obj::InstantiateImgui()
         ImGui::SameLine();
         ImGui::Text(std::to_string(pMaguro->GetPosition().z).c_str());
     }
+    ImGui::End();
+
+    ImGui::Begin("Time");
+    ImGui::Text("Timer ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(Time::GetTimef()).c_str());
+    ImGui::SameLine();
+    ImGui::Text("s");
     ImGui::End();
 }
 

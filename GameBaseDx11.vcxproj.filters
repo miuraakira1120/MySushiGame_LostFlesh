@@ -117,6 +117,10 @@
     </ClCompile>
     <ClCompile Include="Imgui_Obj.cpp" />
     <ClCompile Include="Goal.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="StartScene.cpp" />
+    <ClCompile Include="DarwManager.cpp" />
+    <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -213,6 +217,10 @@
     </ClInclude>
     <ClInclude Include="Imgui_Obj.h" />
     <ClInclude Include="Goal.h" />
+    <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="StartScene.h" />
+    <ClInclude Include="DarwManager.h" />
+    <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

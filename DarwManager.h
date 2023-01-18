@@ -1,15 +1,17 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-class Controller : public GameObject
+//描画を管理するクラス
+class DrawManager : public GameObject
 {
-    const float CAMERA_SPEED = 1.5f;
+    //画面分割数
+    int screenSeparation;
 public:
     //コンストラクタ
-    Controller(GameObject* parent);
+    DrawManager(GameObject* parent);
 
     //デストラクタ
-    ~Controller();
+    ~DrawManager();
 
     //初期化
     void Initialize() override;
@@ -23,10 +25,9 @@ public:
     //開放
     void Release() override;
 
-    //現在位置のゲッター
-    XMFLOAT3 GetPosition();
+    //ゲッター
+    int GetScreenSeparation();
 
-    //向きのゲッター
-    XMFLOAT3 GetRotate();
+    //セッター
+    void SetScreenSeparation(int num);
 };
-

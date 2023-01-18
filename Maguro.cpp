@@ -6,6 +6,7 @@
 #include "Stage.h"
 #include "Engine/Input.h"
 #include "Engine/BoxCollider.h"
+#include "Time.h"
 
 //コンストラクタ
 Maguro::Maguro(GameObject* parent)
