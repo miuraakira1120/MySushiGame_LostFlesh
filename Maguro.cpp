@@ -11,7 +11,7 @@
 //コンストラクタ
 Maguro::Maguro(GameObject* parent)
     :GameObject(parent, "Maguro"), hModel_(-1),fallFlag(false),
-    pravPos(0.0f,0.0f,0.0f), pSyari(nullptr),pStage(nullptr), hSyariModel(0), 
+    prevPos(0.0f,0.0f,0.0f), pSyari(nullptr),pStage(nullptr), hSyariModel(0), 
     hGroundModel(0)
 {
 }
@@ -45,7 +45,7 @@ void Maguro::Update()
     //シャリの物理演算
     PhysicalOperation();
     
-    pravPos = transform_.position_;//自分の今の場所を1f前の場所変数に入れる
+    prevPos = transform_.position_;//自分の今の場所を1f前の場所変数に入れる
 }
 
 //描画

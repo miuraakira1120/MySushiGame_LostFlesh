@@ -188,16 +188,10 @@ namespace Direct3D
 		//データを画面に描画するための一通りの設定
 		pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);  // データの入力種類を指定
 		pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView);            // 描画先を設定（今後はレンダーターゲットビューを介して描画してね）
-		pContext_->RSSetViewports(1, &vp_left);            
-
-
-
-
-
+		pContext_->RSSetViewports(1, &vp_left);      
 
 		//コリジョン表示するか
 		isDrawCollision_ = GetPrivateProfileInt("DEBUG", "ViewCollider", 0, ".\\setup.ini") != 0;
-
 
 		screenWidth_ = screenWidth;
 		screenHeight_ = screenHeight;

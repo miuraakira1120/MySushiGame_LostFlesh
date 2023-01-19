@@ -14,11 +14,13 @@
 #include "Goal.h"
 #include "Controller.h"
 
+#include <map>
+
 using std::vector;
 
 //コンストラクタ
 Syari::Syari(GameObject* parent)
-    :GameObject(parent, "Syari"), hModel_(-1), mode(1),axisPos(0.5f, 0.5f, 1.0f)
+    :GameObject(parent, "Syari"), hModel_(-1), mode(1),axisPos(0.5f, 0.5f, 1.0f), prevPos(0.0f, 0.0f, 0.0f)
 {
 }
 
@@ -51,12 +53,14 @@ void Syari::Initialize()
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 2));
     AddCollider(collision);
 
-    transform_.position_.y = 10;
+    transform_.position_.y = 20;
 }
 
 //更新
 void Syari::Update()
 {
+    
+
     //キー入力をする
     KeyOperation();
     /*
@@ -73,8 +77,8 @@ void Syari::Update()
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
     int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
 
-    Goal* pGoal = (Goal*)FindObject("Goal");    //ステージオブジェクトを探す
-    int hGoalModel = pGoal->GetModelHandle();    //モデル番号を取得
+    Goal* pGoal = (Goal*)FindObject("Goal");        //ゴールオブジェクトを探す
+    int hGoalModel = pGoal->GetModelHandle();       //モデル番号を取得
 
     XMMATRIX m =
         XMMatrixTranslation(axisPos.x, axisPos.y, axisPos.z) *
@@ -83,10 +87,6 @@ void Syari::Update()
         XMMatrixRotationX(XMConvertToRadians((int)transform_.rotate_.x % 360)) *
         XMMatrixTranslation(-(axisPos.x), -(axisPos.y), -(axisPos.z));//軸でrotate_度回転させる行列
     XMFLOAT3 fRotate = { 0,0,0 };
-
-    
-    RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBox生成（一番下の頂点に）
-    BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBox生成（transform_.positionに）
 
     vector<XMVECTOR> v;
     for (int i = 0; i < vVertexPos.size(); i++)
@@ -125,16 +125,48 @@ void Syari::Update()
         XMVectorGetZ(v[highest]) + transform_.position_.z
     };
 
-    RayCastData lowestData;
-    lowestData.start = lowestPos;   //レイの発射位置
-    lowestData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
-    Model::RayCast(hGroundModel, &lowestData); //レイを発射
+    ////////////////////レイを飛ばす/////////////////////
+    RayCastData lowestData;                     //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    lowestData.start = lowestPos;               //レイの発射位置
+    lowestData.dir = XMFLOAT3(0, -1, 0);        //レイの方向
+    Model::RayCast(hGroundModel, &lowestData);  //レイを発射
 
-    RayCastData GoalData;
-    GoalData.start = transform_.position_;   //レイの発射位置
-    GoalData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
-    Model::RayCast(hGoalModel, &GoalData); //レイを発射
+    RayCastData GoalData;                       //シャリの位置からレイを飛ばして、ゴールとぶつかるかを調べる
+    GoalData.start = transform_.position_;      //レイの発射位置
+    GoalData.dir = XMFLOAT3(0, -1, 0);          //レイの方向
+    Model::RayCast(hGoalModel, &GoalData);      //レイを発射
 
+    RayCastData prevPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    prevPosData.start = prevPos/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    prevPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
+    Model::RayCast(hGroundModel, &prevPosData); //レイを発射
+
+    RayCastData nowPosData;                     //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    nowPosData.start = XMFLOAT3(transform_.position_.x, transform_.position_.y - SYARI_SIZE_Y, transform_.position_.z);    //レイの発射位置
+    nowPosData.dir = XMFLOAT3(0, -1, 0);        //レイの方向
+    Model::RayCast(hGroundModel, &nowPosData);  //レイを発射
+    // ///////////////////////////////////////////////////
+
+    /*{
+        std::map<bool, float>m;
+        m.insert({ false, prevPosData.dist });
+        m.insert({ true, nowPosData.dist });
+        transform_.position_.y -= m.at(nowPosData.hit) - SYARI_SIZE_Y;
+    }*/
+
+    //もし下に地面があったら
+    if (nowPosData.hit && nowPosData.dist >= FALL_SPEED)
+    {
+        //.position_.y -= nowPosData.dist - SYARI_SIZE_Y;
+        //重力
+        transform_.position_.y -= FALL_SPEED;
+    }
+    //もし下に地面がなかったら
+    if (!nowPosData.hit)
+    {
+        transform_.position_.y -= prevPosData.dist - SYARI_SIZE_Y + transform_.position_.y;
+    }
+    //ゴールしたら
     if (GoalData.hit)
     {
         transform_.position_.y = 10000;
@@ -155,11 +187,13 @@ void Syari::Update()
         float distance = abs(lowestPos.y) + abs(transform_.position_.y);//一番低い角と一番高い角の距離を求める
         //upPos = distance - posData.dir.y ;
     }
-
-    //transform_.position_.y += upPos;
-    transform_.position_.y -= lowestData.dist;
+    RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBoxを探す（一番下の頂点に）
+    BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBoxを探す（transform_.positionに）
     pRedBox->SetPosition(highestPos);
     pBlueBox->SetPosition(transform_.position_);
+    
+    //動かす前の位置を保存しておく
+    prevPos = transform_.position_;
 }
 
 //描画

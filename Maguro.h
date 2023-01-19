@@ -22,7 +22,7 @@ class Maguro : public GameObject
     Stage* pStage;   //ステージのポインタ
     int hGroundModel;//ステージのモデル番号
 
-    XMFLOAT3 pravPos;//1f前の自分の位置
+    XMFLOAT3 prevPos;//1f前の自分の位置
     
 public:
     //コンストラクタ

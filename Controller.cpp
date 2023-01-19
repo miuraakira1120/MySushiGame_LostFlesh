@@ -40,17 +40,13 @@ void Controller::Update()
     {
         transform_.rotate_.y += CAMERA_SPEED;
     }
-    if (Input::IsKey(DIK_UP))
+    if (Input::IsKey(DIK_UP) && transform_.rotate_.x > DOWN_ANGLE_LIMIT)
     {
-        if (transform_.rotate_.x < 30)
-        {
-            transform_.rotate_.x += CAMERA_SPEED;
-        }
+            transform_.rotate_.x -= CAMERA_SPEED; 
     }
-    if (Input::IsKey(DIK_DOWN))
+    if (Input::IsKey(DIK_DOWN) && transform_.rotate_.x < UP_ANGLE_LIMIT)
     {
-        if (transform_.rotate_.x > -45)
-            transform_.rotate_.x -= CAMERA_SPEED;
+            transform_.rotate_.x += CAMERA_SPEED; 
     }
     XMVECTOR vCam = XMVectorSet(0.0f, 4.0f, 10.0f, 0.0f);
     XMMATRIX mRotate = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));

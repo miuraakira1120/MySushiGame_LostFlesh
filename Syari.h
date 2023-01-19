@@ -43,6 +43,7 @@ class Syari : public GameObject
     int mode;     //モード
     bool breakFlag = false;
     XMFLOAT3 axisPos;
+    XMFLOAT3 prevPos;//1f前の自分の位置
 
 public:
    

@@ -19,7 +19,7 @@ void Goal::Initialize()
     //モデルデータのロード
     hModel_ = Model::Load("Dishes.fbx");
     assert(hModel_ >= 0);
-    transform_.position_ = { 0, 0, 5 };
+    transform_.position_ = { 15.0f, 20.0f, 15.0f};
     transform_.scale_ = { 0.25f, 0.25f , 0.25f };
 }
 
