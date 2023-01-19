@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Audio.h"
+#include "../Syari.h"
 #include "../Time.h"
 #include "../Controller.h"
 #include "../DarwManager.h"
@@ -197,6 +198,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				{
 					Direct3D::SetViewPort(0);
 
+					Syari* pSyari = (Syari*)pRootObject->FindObject("Syari");
+					Camera::SetTarget(pSyari->GetPosition());
+					Camera::SetPosition(XMFLOAT3(0, 0, -10));
+
 					//Camera::SetPosition(XMFLOAT3(0, 0, -10));
 					Camera::Update();
 
@@ -209,6 +214,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				if (pDrawManager->GetScreenSeparation() >= 2)
 				{
 					Direct3D::SetViewPort(1);
+
+					Syari* pSyari = (Syari*)pRootObject->FindObject("Syari");
+					Camera::SetTarget(XMFLOAT3(0, 0, 0));
+					Camera::SetPosition(XMFLOAT3(10, 0, 0));
 
 					//Camera::SetPosition(XMFLOAT3(10, 0, 0));
 					//Camera::SetPosition(pController->GetPosition());
