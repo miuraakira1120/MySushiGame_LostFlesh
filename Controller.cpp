@@ -19,7 +19,7 @@ Controller::~Controller()
 //èâä˙âª
 void Controller::Initialize()
 {
-//    transform_.position_ = { 7, -10, 7 };
+    transform_.position_ = { 7, -10, 7 };
 //    XMFLOAT3 fCam = { 7, 10, -10 };
 //    Camera::SetPosition(fCam);
 }

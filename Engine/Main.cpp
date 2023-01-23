@@ -83,10 +83,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RootObject* pRootObject = new RootObject;
 	pRootObject->Initialize();
 
-	//controllerクラスのポインタを入れる
-	Controller* pController;
-	pController = (Controller*)pRootObject->FindObject("Controller");
-
 	//Drawマネージャーのポインタを入れる
 	DrawManager* pDrawManager;
 	pDrawManager = (DrawManager*)pRootObject->FindObject("DrawManager");
@@ -199,8 +195,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					Direct3D::SetViewPort(0);
 
 					Syari* pSyari = (Syari*)pRootObject->FindObject("Syari");
+					//controllerクラスのポインタを入れる
+					Controller* pController = (Controller*)pRootObject->FindObject("Controller");
+
 					Camera::SetTarget(pSyari->GetPosition());
-					Camera::SetPosition(XMFLOAT3(0, 0, -10));
+					Camera::SetPosition(pController->GetPosition());
+
 
 					//Camera::SetPosition(XMFLOAT3(0, 0, -10));
 					Camera::Update();
@@ -216,8 +216,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					Direct3D::SetViewPort(1);
 
 					Syari* pSyari = (Syari*)pRootObject->FindObject("Syari");
+					//controllerクラスのポインタを入れる
+					Controller* pController;
+					pController = (Controller*)pRootObject->FindObject("Controller");
+
 					Camera::SetTarget(XMFLOAT3(0, 0, 0));
-					Camera::SetPosition(XMFLOAT3(10, 0, 0));
+					Camera::SetPosition(pController->GetPosition());
 
 					//Camera::SetPosition(XMFLOAT3(10, 0, 0));
 					//Camera::SetPosition(pController->GetPosition());

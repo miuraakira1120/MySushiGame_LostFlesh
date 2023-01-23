@@ -16,8 +16,8 @@ PlayScene::PlayScene(GameObject* parent)
 void PlayScene::Initialize()
 {
 	Instantiate<Syari>(this);
-	Instantiate<Stage>(this);
 	Instantiate<Controller>(this);
+	Instantiate<Stage>(this);
 	Instantiate<RedBox>(this);
 	Instantiate<BlueBox>(this);
 }

@@ -28,6 +28,8 @@ class Syari : public GameObject
     const float SYARI_SPEED  = 0.25f;//シャリのスピード
     const float ROTATE_SPEED = 0.5f; //シャリの回転のスピード
     const float FALL_SPEED   = 0.1f; //落ちるスピード
+    const float SPEED_LIMIT  = 5.0f;
+    const float ACCELERATION = 0.025f;
 
     const XMVECTOR upRightFrontPos =   { 0.5f, 0.5f, 1.0f    };//シャリの上右前の位置
     const XMVECTOR upRightBackPos =    { 0.5f, 0.5f, -1.0f   };//シャリの上右後の位置
@@ -44,9 +46,11 @@ class Syari : public GameObject
     bool breakFlag = false;
     XMFLOAT3 axisPos;
     XMFLOAT3 prevPos;//1f前の自分の位置
+    
+
 
 public:
-   
+    float accel;//今どれだけ加速するか
     //コンストラクタ
     Syari(GameObject* parent);
 
