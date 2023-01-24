@@ -96,6 +96,24 @@ void Imgui_Obj::InstantiateImgui()
     ImGui::SameLine();
     ImGui::Text("s");
     ImGui::End();
+
+    ImGui::Begin("accel");
+    ImGui::Text("accel ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->accel).c_str());
+    ImGui::SameLine();
+    ImGui::Text("s");
+
+    ImGui::Text("kadoX ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->fupRightFrontPos.x).c_str());
+    ImGui::Text("kadoY ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->fupRightFrontPos.y).c_str());
+    ImGui::Text("kadoZ ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->fupRightFrontPos.z).c_str());
+    ImGui::End();
 }
 
 /* static int clickCount;*/

@@ -78,16 +78,6 @@ void Maguro::FindAllObject()
 //レイを飛ばす
 RayCastData Maguro::DoRay(XMFLOAT3 start, XMFLOAT3 dir, int hModel)
 {
-    //RayCastData rayData;
-    //rayData.start = GetParentPos();         //レイの発射位置
-    //rayData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
-
-    ////RayCastData syariRay;
-    ////syariRay.start = GetParentPos();         //レイの発射位置
-    ////syariRay.dir = XMFLOAT3(0, -1, 0);       //レイの方向
-
-    //Model::RayCast(hGroundModel, &rayData); //レイを発射
-    ////Model::RayCast(hSyariModel, &syariRay);  //レイを発射
     RayCastData rayData;
     rayData.start = start;
     rayData.dir = dir;
@@ -98,17 +88,8 @@ RayCastData Maguro::DoRay(XMFLOAT3 start, XMFLOAT3 dir, int hModel)
 void Maguro::PhysicalOperation()
 {
     RayCastData syariData = DoRay(GetParentPos(), XMFLOAT3(0, -1, 0), hSyariModel);
-    //下にシャリがなかったら
-    if (!syariData.hit)
-    {
-        fallFlag = true;
-        //transform_.position_.y -= 0.01;
-        //transform_.position_.y -= syariData.dist;
-        //transform_.ChangeParentRotate(1);
-    }
-
     //マグロがシャリの上に乗っていたら
-    if (!fallFlag)
+    if (!syariData.hit)
     {
         if ((int)pSyari->GetRotate().z % ROTATE_MAX > FALL_ANGLE)
         {
@@ -127,6 +108,7 @@ void Maguro::PhysicalOperation()
             transform_.position_.z += FALL_SPEED * ((int)pSyari->GetRotate().x % ROTATE_MAX);
         }
     }
+    //下にシャリがなかったら
 }
 
 

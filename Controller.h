@@ -30,5 +30,6 @@ public:
 
     //Œü‚«‚ÌƒQƒbƒ^[
     XMFLOAT3 GetRotate();
+    XMFLOAT3 GetCameraPos();
 };
 

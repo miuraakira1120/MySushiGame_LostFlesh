@@ -2,7 +2,7 @@
 
 //コンストラクタ
 DrawManager::DrawManager(GameObject* parent)
-    :GameObject(parent, "DrawManager"), screenSeparation(1)
+    :GameObject(parent, "DrawManager"), screenSeparation(2)
 {
 }
 
