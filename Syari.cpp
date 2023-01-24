@@ -59,8 +59,6 @@ void Syari::Initialize()
 //更新
 void Syari::Update()
 {
-    
-
     //キー入力をする
     KeyOperation();
     /*
@@ -141,10 +139,14 @@ void Syari::Update()
     prevPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
     Model::RayCast(hGroundModel, &prevPosData); //レイを発射
 
-    RayCastData nowPosData;                     //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-    nowPosData.start = XMFLOAT3(transform_.position_.x, transform_.position_.y - SYARI_SIZE_Y, transform_.position_.z);    //レイの発射位置
-    nowPosData.dir = XMFLOAT3(0, -1, 0);        //レイの方向
-    Model::RayCast(hGroundModel, &nowPosData);  //レイを発射
+    RayCastData nowPosData[6];
+    for (int i = 0; i < sizeof(direction) / sizeof(XMFLOAT3); i++)
+    {
+        //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+        nowPosData[i].start = XMFLOAT3(transform_.position_.x, transform_.position_.y - SYARI_SIZE_Y, transform_.position_.z);    //レイの発射位置
+        nowPosData[i].dir = XMFLOAT3(0, -1, 0);        //レイの方向
+        Model::RayCast(hGroundModel, &nowPosData[i]);  //レイを発射
+    }
     // ///////////////////////////////////////////////////
 
     /*{

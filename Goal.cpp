@@ -20,7 +20,7 @@ void Goal::Initialize()
     hModel_ = Model::Load("Dishes.fbx");
     assert(hModel_ >= 0);
     transform_.position_ = { 15.0f, 20.0f, 15.0f};
-    transform_.scale_ = { 0.25f, 0.25f , 0.25f };
+    //transform_.scale_ = { 0.25f, 0.25f , 0.25f };
 }
 
 //XV
@@ -40,7 +40,7 @@ void Goal::Update()
     if (data.hit)
     {
         //‚»‚Ì•ªˆÊ’u‚ğ‰º‚°‚é
-        transform_.position_.y -= data.dist;
+        //transform_.position_.y -= data.dist;
     }
 }
 

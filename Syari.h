@@ -25,6 +25,25 @@ class Syari : public GameObject
         DOWN_LEFT_BACK,
     };
 
+    enum Direction
+    {
+        TOP = 0,
+        BOTOM,
+        LEFT,
+        RIGHT,
+        FRONT,
+        BACK,
+    };
+
+    const XMFLOAT3 direction[6] = {
+        {  0,  1,  0  }, //上
+        {  0, -1,  0  }, //下
+        { -1,  0,  0  }, //左
+        {  1,  0,  0  }, //右
+        {  0 , 0, -1  }, //手前
+        {  0,  0,  1  }  //奥
+    };
+    
     const float SYARI_SPEED  = 0.25f;//シャリのスピード
     const float ROTATE_SPEED = 0.5f; //シャリの回転のスピード
     const float FALL_SPEED   = 0.1f; //落ちるスピード
