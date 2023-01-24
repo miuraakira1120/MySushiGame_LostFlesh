@@ -108,5 +108,34 @@ void Transform::SetAxisTrans(XMFLOAT3 mat)
 	axisMatrix_ = mat;
 }
 
+void Transform::ArbRotationAxis(XMFLOAT3* pos, float rot, XMVECTOR axis, XMVECTOR end)
+{
+	//度数法→弧度法に変換
+	float rad = XMConvertToRadians(rot);
 
+	ArbRotationAxisR(pos, rad, axis, end);
+}
+void Transform::ArbRotationAxisR(XMFLOAT3* pos, float rad, XMVECTOR axis, XMVECTOR end)
+{
+	//endを原点に移動
+	XMVECTOR vPos = XMLoadFloat3(pos);
+	vPos -= end;
+	axis -= end;
+
+	//クォータニオン、共役クォータニオンを作成
+	XMVECTOR Qua = XMQuaternionRotationAxis(axis, rad);
+	XMVECTOR Conj = XMQuaternionConjugate(Qua);
+
+	//ansに移動後の位置情報が入る
+	XMVECTOR ans = vPos;
+
+	//それぞれのベクトルをかける
+	ans = XMQuaternionMultiply(Conj, vPos);
+	ans = XMQuaternionMultiply(ans, Qua);
+
+	ans += end;
+
+	//posの値を更新
+	XMStoreFloat3(pos, ans);
+}
 

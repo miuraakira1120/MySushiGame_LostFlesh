@@ -106,13 +106,23 @@ void Imgui_Obj::InstantiateImgui()
 
     ImGui::Text("kadoX ");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(pSyari->fupRightFrontPos.x).c_str());
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_FRONT].x).c_str());
     ImGui::Text("kadoY ");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(pSyari->fupRightFrontPos.y).c_str());
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_FRONT].y).c_str());
     ImGui::Text("kadoZ ");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(pSyari->fupRightFrontPos.z).c_str());
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_FRONT].z).c_str());
+
+    ImGui::Text("kadoX2 ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_BACK].x).c_str());
+    ImGui::Text("kadoY2 ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_BACK].y).c_str());
+    ImGui::Text("kadoZ2 ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_BACK].z).c_str());
     ImGui::End();
 }
 

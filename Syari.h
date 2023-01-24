@@ -3,6 +3,8 @@
 #include <vector>
 #include "Engine/GameObject.h"
 #include "Engine/Model.h"
+#include "Gauge.h"
+
 
 #define VERTEX_VLU 8
 
@@ -12,20 +14,21 @@ const float SYARI_SIZE_Z = 1.0f; //シャリのZのサイズ（1倍）
 
 using std::vector;
 
+enum Ver
+{
+    UP_RIGHT_FRONT = 0,
+    UP_RIGHT_BACK,
+    UP_LEFT_FRONT,
+    UP_LEFT_BACK,
+    DOWN_RIGHT_FRONT,
+    DOWN_RIGHT_BACK,
+    DOWN_LEFT_FRONT,
+    DOWN_LEFT_BACK,
+    VERTEX_MAX,
+};
+
 class Syari : public GameObject
 {
-    enum Ver
-    {
-        UP_RIGHT_FRONT = 0,
-        UP_RIGHT_BACK,
-        UP_LEFT_FRONT,
-        UP_LEFT_BACK,
-        DOWN_RIGHT_FRONT,
-        DOWN_RIGHT_BACK,
-        DOWN_LEFT_FRONT,
-        DOWN_LEFT_BACK,
-    };
-
     enum Direction
     {
         TOP = 0,
@@ -34,6 +37,7 @@ class Syari : public GameObject
         RIGHT,
         FRONT,
         BACK,
+        DIRECTION_MAX
     };
 
     const XMFLOAT3 direction[6] = {
@@ -43,6 +47,26 @@ class Syari : public GameObject
         {  1,  0,  0  }, //右
         {  0 , 0, -1  }, //手前
         {  0,  0,  1  }  //奥
+    };
+
+    const float directionDistance[6] = {
+        SYARI_SIZE_Y,
+        -SYARI_SIZE_Y,
+        -SYARI_SIZE_X,
+        SYARI_SIZE_X,
+        -SYARI_SIZE_Z,
+        SYARI_SIZE_Z
+    };
+
+    const std::string vertexName[8] = {
+        "Vertex_Hight_Right_Flont",
+        "Vertex_Hight_Right_Back",
+        "Vertex_Hight_Left_Flont",
+        "Vertex_Hight_Left_Back",
+        "Vertex_Low_Right_Flont",
+        "Vertex_Low_Right_Back",
+        "Vertex_Low_Left_Flont",
+        "Vertex_Low_Left_Back"
     };
     
     const float SYARI_SPEED  = 0.25f;//シャリのスピード
@@ -67,12 +91,16 @@ class Syari : public GameObject
     bool breakFlag = false;
     XMFLOAT3 axisPos;
     XMFLOAT3 prevPos;//1f前の自分の位置
+
+    //ゲージオブジェクト
+    Gauge* pGauge_;
     
     float jumpSpeed;
 
 public:
     float accel;//今どれだけ加速するか
     XMFLOAT3 fupRightFrontPos; 
+    XMFLOAT3 vertexBonePos[VERTEX_MAX];
     //コンストラクタ
     Syari(GameObject* parent);
 

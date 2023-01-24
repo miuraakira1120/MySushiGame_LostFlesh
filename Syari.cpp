@@ -22,7 +22,7 @@ using std::vector;
 //コンストラクタ
 Syari::Syari(GameObject* parent)
     :GameObject(parent, "Syari"), hModel_(-1), mode(1), axisPos(0.5f, 0.5f, 1.0f),
-    prevPos(0.0f, 0.0f, 0.0f), accel(1.0f), jumpSpeed(0)
+    prevPos(0.0f, 0.0f, 0.0f), accel(1.0f), jumpSpeed(0), pGauge_(nullptr)
 {
 }
 
@@ -35,7 +35,8 @@ Syari::~Syari()
 void Syari::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("syari.fbx");
+    //hModel_ = Model::Load("syari.fbx");
+    hModel_ = Model::Load("Player.fbx");
     assert(hModel_ >= 0);
 
     //頂点の座標をvVertexPosに入れる
@@ -57,7 +58,7 @@ void Syari::Initialize()
 
     transform_.position_.y = -40;
 
-    fupRightFrontPos = Model::GetBonePosition(hModel_, "Vertex_Hight_Right_Back");//シャリの上右前の位置
+    pGauge_ = Instantiate<Gauge>(this);
 }
 
 //更新
@@ -65,6 +66,14 @@ void Syari::Update()
 {
     //キー入力をする
     KeyOperation();
+
+   /* for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
+    }*/
+
+    vertexBonePos[0] = Model::GetBonePosition(hModel_, "joint1");
+    vertexBonePos[1] = Model::GetBonePosition(hModel_, "joint2");
 
     transform_.SetAxisTrans(axisPos);
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
@@ -138,8 +147,8 @@ void Syari::Update()
     for (int i = 0; i < sizeof(direction) / sizeof(XMFLOAT3); i++)
     {
         //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-        nowPosData[i].start = XMFLOAT3(transform_.position_.x, transform_.position_.y - SYARI_SIZE_Y, transform_.position_.z);    //レイの発射位置
-        nowPosData[i].dir = XMFLOAT3(0, -1, 0);        //レイの方向
+        nowPosData[i].start = XMFLOAT3(transform_.position_.x, transform_.position_.y + directionDistance[i], transform_.position_.z);    //レイの発射位置
+        nowPosData[i].dir = direction[i];        //レイの方向
         Model::RayCast(hGroundModel, &nowPosData[i]);  //レイを発射
     }
     // ///////////////////////////////////////////////////
@@ -151,8 +160,17 @@ void Syari::Update()
         transform_.position_.y -= m.at(nowPosData.hit) - SYARI_SIZE_Y;
     }*/
 
+    for (int i = LEFT; i < DIRECTION_MAX; i++)
+    {
+        if (nowPosData[i].hit && nowPosData[i].dist >= FALL_SPEED)
+        {
+
+        }
+    }
+    
+
     //もし下に地面があったら
-    if (nowPosData.hit && nowPosData.dist >= FALL_SPEED)
+    if (nowPosData[BOTOM].hit && nowPosData[BOTOM].dist >= FALL_SPEED)
     {
         //.position_.y -= nowPosData.dist - SYARI_SIZE_Y;
         //重力
@@ -183,7 +201,6 @@ void Syari::Update()
     //レイが当たったら
     if (lowestData.hit)
     {
-        //transform_.position_.y -= 0.1;
     }
     else
     {
@@ -253,10 +270,12 @@ void Syari::KeyOperation()
     //Aキーを押したとき
     if (Input::IsKey(DIK_A))
     {
+        transform_.rotate_.z += 0.3f;
     }
     //Dキーを押したとき
     if (Input::IsKey(DIK_D))
     {
+        transform_.rotate_.z -= 0.3f;
     }
     //Wキーを押したとき
     if (Input::IsKey(DIK_W))

@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Audio.h"
+#include "Text.h"
 #include "../Syari.h"
 #include "../Time.h"
 #include "../Controller.h"
@@ -231,7 +232,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//全オブジェクトを描画
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->DrawSub();
-				}
+				} 
 
 #if _DEBUG
 				ImGui::Render();
