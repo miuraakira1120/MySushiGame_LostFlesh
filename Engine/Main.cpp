@@ -221,8 +221,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					Controller* pController;
 					pController = (Controller*)pRootObject->FindObject("Controller");
 
-					Camera::SetTarget(XMFLOAT3(0, 0, 0));
-					Camera::SetPosition(pController->GetCameraPos());
+					Camera::SetTarget(pSyari->GetPosition());
+					Camera::SetPosition(XMFLOAT3(0, 10, 0));
 
 					//Camera::SetPosition(XMFLOAT3(10, 0, 0));
 					//Camera::SetPosition(pController->GetPosition());

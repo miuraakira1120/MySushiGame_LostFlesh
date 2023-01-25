@@ -419,6 +419,8 @@ void FbxParts::IntConstantBuffer()
 //描画
 void FbxParts::Draw(Transform& transform)
 {
+	Direct3D::SetBlendMode(Direct3D::BLEND_DEFAULT);
+
 	//今から描画する頂点情報をシェーダに伝える
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;

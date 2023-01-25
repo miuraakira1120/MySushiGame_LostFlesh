@@ -32,4 +32,7 @@ namespace Camera
 	XMMATRIX GetProjectionMatrix();
 
 	void SetViewFlag(int flag);
+
+	//ビルボード用回転行列を取得
+	XMMATRIX GetBillboardMatrix();
 };
