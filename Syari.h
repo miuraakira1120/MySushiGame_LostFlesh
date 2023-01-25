@@ -8,9 +8,9 @@
 
 #define VERTEX_VLU 8
 
-const float SYARI_SIZE_X = 0.5f; //シャリのXのサイズ（1倍）
-const float SYARI_SIZE_Y = 0.5f; //シャリのYのサイズ（1倍）
-const float SYARI_SIZE_Z = 1.0f; //シャリのZのサイズ（1倍）
+static const float SYARI_SIZE_X = 0.5f; //シャリのXのサイズ（1倍）
+static const float SYARI_SIZE_Y = 0.5f; //シャリのYのサイズ（1倍）
+static const float SYARI_SIZE_Z = 1.0f; //シャリのZのサイズ（1倍）
 
 using std::vector;
 
@@ -69,12 +69,13 @@ class Syari : public GameObject
         "Vertex_Low_Left_Back"
     };
     
-    const float SYARI_SPEED  = 0.25f;//シャリのスピード
-    const float ROTATE_SPEED = 0.5f; //シャリの回転のスピード
-    const float FALL_SPEED   = 0.1f; //落ちるスピード
-    const float SPEED_LIMIT  = 6.0f;
-    const float ACCELERATION = 0.025f;
-    const float JUMP_SPEED   = 1.0f; //ジャンプのスピード
+    const float SYARI_SPEED     = 0.25f;//シャリのスピード
+    const float ROTATE_SPEED    = 0.5f; //シャリの回転のスピード
+    const float FALL_SPEED      = 0.01f; //落ちるスピード
+    const float SPEED_LIMIT     = 0.5f;
+    const float ACCELERATION    = 0.025f;
+    const float JUMP_SPEED      = 1.0f; //ジャンプのスピード
+    const float SPEED_OF_JUMP   = 2.0f; //跳躍速度
 
     const XMVECTOR upRightFrontPos =   { 0.5f, 0.5f, 1.0f    };//シャリの上右前の位置
     const XMVECTOR upRightBackPos =    { 0.5f, 0.5f, -1.0f   };//シャリの上右後の位置
@@ -91,7 +92,8 @@ class Syari : public GameObject
     bool breakFlag = false;
     XMFLOAT3 axisPos;
     XMFLOAT3 prevPos;//1f前の自分の位置
-    bool isGround;
+    bool isGround;   //地面に設置しているか
+
 
     //ゲージオブジェクト
     Gauge* pGauge_;

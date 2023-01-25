@@ -22,7 +22,7 @@ using std::vector;
 //コンストラクタ
 Syari::Syari(GameObject* parent)
     :GameObject(parent, "Syari"), hModel_(-1), mode(1), axisPos(0.5f, 0.5f, 1.0f),
-    prevPos(0.0f, 0.0f, 0.0f), accel(1.0f), jumpSpeed(0), pGauge_(nullptr),isGround(false)
+    prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr),isGround(false)
 {
 }
 
@@ -35,8 +35,8 @@ Syari::~Syari()
 void Syari::Initialize()
 {
     //モデルデータのロード
-    //hModel_ = Model::Load("syari.fbx");
     hModel_ = Model::Load("syari.fbx");
+    //hModel_ = Model::Load("GodSyari.fbx");
     assert(hModel_ >= 0);
 
     //頂点の座標をvVertexPosに入れる
@@ -72,6 +72,8 @@ void Syari::Update()
     {
         vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
     }
+    /*vertexBonePos[0] = Model::GetBonePosition(hModel_, "joint1");
+    vertexBonePos[1] = Model::GetBonePosition(hModel_, "joint2");*/
 
     //transform_.SetAxisTrans(axisPos);
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
@@ -174,19 +176,33 @@ void Syari::Update()
 
     //もし下に地面があったら
     if (nowPosData[BOTOM].hit && nowPosData[BOTOM].dist >= FALL_SPEED)
-    {
+    {           
         //接地フラグを真にする
         isGround = false;
+        ////重力
+        //if (FALL_SPEED - accel <= SPEED_LIMIT)
+        //{
+        //    Time::UnLock();
+
+        //    accel += ACCELERATION;
+        //    transform_.position_.y -= FALL_SPEED * (accel);
+        //}
+        //else
+        //{
+        //    transform_.position_.y -= FALL_SPEED;
+        //}
+
         //重力
-        if (FALL_SPEED * (accel - jumpSpeed) <= SPEED_LIMIT)
+        if (SPEED_LIMIT >= accel)
         {
             Time::UnLock();
-            accel += ACCELERATION;
-            transform_.position_.y -= FALL_SPEED * (accel - jumpSpeed);
+            accel += FALL_SPEED;
+            transform_.position_.y -= accel;
         }
         else
         {
-            transform_.position_.y -= FALL_SPEED;
+            Time::Lock();
+            transform_.position_.y -= SPEED_LIMIT;
         }
     }
     else //もし下に地面がなかったら
@@ -290,6 +306,11 @@ void Syari::KeyOperation()
     if (Input::IsKey(DIK_S))
     {
     }
+    //ジャンプする
+    if (Input::IsKey(DIK_SPACE))
+    {
+        Jump();
+    }
 }
 
 bool Syari::isFly()
@@ -299,9 +320,9 @@ bool Syari::isFly()
 
 void Syari::Jump()
 {
-    if (true)
+    if (isGround)
     {
-
+        accel = SPEED_OF_JUMP;
     }
 }
 
