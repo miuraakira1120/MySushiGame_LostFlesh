@@ -91,6 +91,7 @@ class Syari : public GameObject
     bool breakFlag = false;
     XMFLOAT3 axisPos;
     XMFLOAT3 prevPos;//1f前の自分の位置
+    bool isGround;
 
     //ゲージオブジェクト
     Gauge* pGauge_;
@@ -132,5 +133,15 @@ public:
     /// </summary>
     void KeyOperation();
 
+    //ジャンプする
     void Jump();
+
+    /// <summary>
+    /// 今空中にいるかどうか調べる関数
+    /// </summary>
+    /// <returns>
+    /// 真　空中にいる
+    /// 偽　空中にいない
+    /// </returns>
+    bool isFly();
 };

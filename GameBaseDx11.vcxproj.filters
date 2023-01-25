@@ -122,6 +122,9 @@
     <ClCompile Include="DarwManager.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Gauge.cpp" />
+    <ClCompile Include="Engine\ModelManager.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -223,6 +226,9 @@
     <ClInclude Include="DarwManager.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Gauge.h" />
+    <ClInclude Include="Engine\ModelManager.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
