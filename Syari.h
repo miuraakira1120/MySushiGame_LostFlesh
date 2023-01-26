@@ -72,10 +72,10 @@ class Syari : public GameObject
     const float SYARI_SPEED     = 0.25f;//シャリのスピード
     const float ROTATE_SPEED    = 0.5f; //シャリの回転のスピード
     const float FALL_SPEED      = 0.01f; //落ちるスピード
-    const float SPEED_LIMIT     = 0.5f;
+    const float SPEED_LIMIT     = 2.0f;  //落下の速度限界
     const float ACCELERATION    = 0.025f;
     const float JUMP_SPEED      = 1.0f; //ジャンプのスピード
-    const float SPEED_OF_JUMP   = 2.0f; //跳躍速度
+    const float SPEED_OF_JUMP   = 0.5f; //跳躍速度
 
     const XMVECTOR upRightFrontPos =   { 0.5f, 0.5f, 1.0f    };//シャリの上右前の位置
     const XMVECTOR upRightBackPos =    { 0.5f, 0.5f, -1.0f   };//シャリの上右後の位置

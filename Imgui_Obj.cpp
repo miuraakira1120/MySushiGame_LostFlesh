@@ -2,6 +2,7 @@
 #include "imgui/imgui.h"
 #include "Time.h"
 
+
 //コンストラクタ
 Imgui_Obj::Imgui_Obj(GameObject* parent)
     :GameObject(parent, "Imgui_Obj"),pMaguro(nullptr),pSyari(nullptr), pText(nullptr)
@@ -34,6 +35,7 @@ void Imgui_Obj::Update()
 void Imgui_Obj::Draw()
 {
     //pText->Draw(500, 75, "Hello");
+    
 }
 
 //開放

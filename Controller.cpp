@@ -4,10 +4,11 @@
 #include "Syari.h"
 #include "Maguro.h"
 #include "Engine/Direct3D.h"
+#include "Engine/Image.h"
 
 //コンストラクタ
 Controller::Controller(GameObject* parent)
-    :GameObject(parent, "Controller")
+    :GameObject(parent, "Controller"), hPict_(-1)
 {
 }
 
@@ -22,6 +23,10 @@ void Controller::Initialize()
     //transform_.position_ = { 7, -10, 7 };
 //    XMFLOAT3 fCam = { 7, 10, -10 };
 //    Camera::SetPosition(fCam);
+
+    //画像データのロード
+    hPict_ = Image::Load("water.png");
+    assert(hPict_ >= 0);
 }
 
 //更新
@@ -51,6 +56,11 @@ void Controller::Update()
 //描画
 void Controller::Draw()
 {
+    if (Direct3D::lrMode == 1)
+    {
+        Image::SetTransform(hPict_, transform_);
+        Image::Draw(hPict_);
+    }
 }
 
 //開放

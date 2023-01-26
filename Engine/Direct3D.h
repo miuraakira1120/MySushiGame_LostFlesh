@@ -67,7 +67,7 @@ namespace Direct3D
 	extern int		screenHeight_;		//スクリーンの高さ
 	extern bool		isDrawCollision_;	//コリジョンを表示するかフラグ
 
-
+	extern int		lrMode;
 
 
 

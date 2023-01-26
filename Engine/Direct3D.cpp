@@ -47,6 +47,8 @@ namespace Direct3D
 	int						screenWidth_ = 0;
 	int						screenHeight_ = 0;
 
+	int						lrMode;
+
 
 
 	//‰Šú‰»ˆ—
@@ -525,6 +527,7 @@ namespace Direct3D
 
 	void SetViewPort(int lr)
 	{
+		lrMode = lr;
 		switch (lr)
 		{
 		case MAIN_CAM:

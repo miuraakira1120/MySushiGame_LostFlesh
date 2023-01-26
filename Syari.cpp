@@ -1,4 +1,4 @@
-#include <DirectXMath.h>
+ï»¿#include <DirectXMath.h>
 
 #include <vector>
 #include "Syari.h"
@@ -19,27 +19,27 @@
 
 using std::vector;
 
-//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 Syari::Syari(GameObject* parent)
     :GameObject(parent, "Syari"), hModel_(-1), mode(1), axisPos(0.5f, 0.5f, 1.0f),
     prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr),isGround(false)
 {
 }
 
-//ƒfƒXƒgƒ‰ƒNƒ^
+//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 Syari::~Syari()
 {
 }
 
-//‰Šú‰»
+//åˆæœŸåŒ–
 void Syari::Initialize()
 {
-    //ƒ‚ƒfƒ‹ƒf[ƒ^‚Ìƒ[ƒh
+    //ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿ã®ãƒ­ãƒ¼ãƒ‰
     hModel_ = Model::Load("syari.fbx");
     //hModel_ = Model::Load("GodSyari.fbx");
     assert(hModel_ >= 0);
 
-    //’¸“_‚ÌÀ•W‚ğvVertexPos‚É“ü‚ê‚é
+    //é ‚ç‚¹ã®åº§æ¨™ã‚’vVertexPosã«å…¥ã‚Œã‚‹
     vVertexPos.push_back(upRightFrontPos);
     vVertexPos.push_back(upRightBackPos);
     vVertexPos.push_back(upLeftFrontPos);
@@ -49,25 +49,25 @@ void Syari::Initialize()
     vVertexPos.push_back(downLeftFrontPos);
     vVertexPos.push_back(downLeftBackPos);
 
-    //qƒIƒuƒWƒFƒNƒg‚Ì¶¬
+    //å­ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
     Instantiate<Maguro>(this);
 
-    //“–‚½‚è”»’è‚Ì¶¬
+    //å½“ãŸã‚Šåˆ¤å®šã®ç”Ÿæˆ
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 2));
     AddCollider(collision);
 
-    transform_.position_.y = 40;
+    transform_.position_.y = -40;
 
     pGauge_ = Instantiate<Gauge>(this);
 }
 
-//XV
+//æ›´æ–°
 void Syari::Update()
 {
-    //ƒL[“ü—Í‚ğ‚·‚é
+    //ã‚­ãƒ¼å…¥åŠ›ã‚’ã™ã‚‹
     KeyOperation();
 
-    //Še’¸“_‚ÌˆÊ’u‚ğ’²‚×‚é
+    //å„é ‚ç‚¹ã®ä½ç½®ã‚’èª¿ã¹ã‚‹
     for (int i = 0; i < VERTEX_MAX; i++)
     {
         vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
@@ -76,18 +76,18 @@ void Syari::Update()
     vertexBonePos[1] = Model::GetBonePosition(hModel_, "joint2");*/
 
     //transform_.SetAxisTrans(axisPos);
-    Stage* pStage = (Stage*)FindObject("Stage");    //ƒXƒe[ƒWƒIƒuƒWƒFƒNƒg‚ğ’T‚·
-    int hGroundModel = pStage->GetModelHandle();    //ƒ‚ƒfƒ‹”Ô†‚ğæ“¾
+    Stage* pStage = (Stage*)FindObject("Stage");    //ã‚¹ãƒ†ãƒ¼ã‚¸ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¢ã™
+    int hGroundModel = pStage->GetModelHandle();    //ãƒ¢ãƒ‡ãƒ«ç•ªå·ã‚’å–å¾—
 
-    Goal* pGoal = (Goal*)FindObject("Goal");        //ƒS[ƒ‹ƒIƒuƒWƒFƒNƒg‚ğ’T‚·
-    int hGoalModel = pGoal->GetModelHandle();       //ƒ‚ƒfƒ‹”Ô†‚ğæ“¾
+    Goal* pGoal = (Goal*)FindObject("Goal");        //ã‚´ãƒ¼ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¢ã™
+    int hGoalModel = pGoal->GetModelHandle();       //ãƒ¢ãƒ‡ãƒ«ç•ªå·ã‚’å–å¾—
 
-    //XMMATRIX m =
-    //    XMMatrixTranslation(axisPos.x, axisPos.y, axisPos.z) *
-    //    XMMatrixRotationZ(XMConvertToRadians((int)transform_.rotate_.z % 360)) *
-    //    XMMatrixRotationY(XMConvertToRadians((int)transform_.rotate_.y % 360)) *
-    //    XMMatrixRotationX(XMConvertToRadians((int)transform_.rotate_.x % 360)) *
-    //    XMMatrixTranslation(-(axisPos.x), -(axisPos.y), -(axisPos.z));//²‚Årotate_“x‰ñ“]‚³‚¹‚és—ñ
+    XMMATRIX m =
+        XMMatrixTranslation(axisPos.x, axisPos.y, axisPos.z) *
+        XMMatrixRotationZ(XMConvertToRadians((int)transform_.rotate_.z % 360)) *
+        XMMatrixRotationY(XMConvertToRadians((int)transform_.rotate_.y % 360)) *
+        XMMatrixRotationX(XMConvertToRadians((int)transform_.rotate_.x % 360)) *
+        XMMatrixTranslation(-(axisPos.x), -(axisPos.y), -(axisPos.z));//è»¸ã§rotate_åº¦å›è»¢ã•ã›ã‚‹è¡Œåˆ—
     //XMFLOAT3 fRotate = { 0,0,0 };
     //vector<XMVECTOR> v;
     //for (int i = 0; i < vVertexPos.size(); i++)
@@ -111,58 +111,58 @@ void Syari::Update()
     //        highest = i;
     //    }
     //}
-    ////ˆê”Ô’á‚¢Šp‚Ìposition
+    ////ä¸€ç•ªä½ã„è§’ã®position
     //XMFLOAT3 lowestPos = {
     //    XMVectorGetX(v[lowest]) + transform_.position_.x,
     //    XMVectorGetY(v[lowest]) + transform_.position_.y,
     //    XMVectorGetZ(v[lowest]) + transform_.position_.z
     //};
-    ////ˆê”Ô‚‚¢Šp‚Ìposition
+    ////ä¸€ç•ªé«˜ã„è§’ã®position
     //XMFLOAT3 highestPos = {
     //    XMVectorGetX(v[highest]) + transform_.position_.x,
     //    XMVectorGetY(v[highest]) + transform_.position_.y,
     //    XMVectorGetZ(v[highest]) + transform_.position_.z
     //};
-    //RayCastData lowestData;                     //ˆê”Ô’á‚¢Šp‚©‚çƒŒƒC‚ğ”ò‚Î‚µ‚ÄA°‚Æ‚Ô‚Â‚©‚é‚©‚ğ’²‚×‚é
-    //lowestData.start = lowestPos;               //ƒŒƒC‚Ì”­ËˆÊ’u
-    //lowestData.dir = XMFLOAT3(0, -1, 0);        //ƒŒƒC‚Ì•ûŒü
-    //Model::RayCast(hGroundModel, &lowestData);  //ƒŒƒC‚ğ”­Ë
-    ////ƒŒƒC‚ª“–‚½‚Á‚½‚ç
+    //RayCastData lowestData;                     //ä¸€ç•ªä½ã„è§’ã‹ã‚‰ãƒ¬ã‚¤ã‚’é£›ã°ã—ã¦ã€åºŠã¨ã¶ã¤ã‹ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
+    //lowestData.start = lowestPos;               //ãƒ¬ã‚¤ã®ç™ºå°„ä½ç½®
+    //lowestData.dir = XMFLOAT3(0, -1, 0);        //ãƒ¬ã‚¤ã®æ–¹å‘
+    //Model::RayCast(hGroundModel, &lowestData);  //ãƒ¬ã‚¤ã‚’ç™ºå°„
+    ////ãƒ¬ã‚¤ãŒå½“ãŸã£ãŸã‚‰
     //if (lowestData.hit)
     //{
     //}
     //else
     //{
     //    //RayCastData posData;
-    //    //posData.start = transform_.position_;   //ƒŒƒC‚Ì”­ËˆÊ’u
-    //    //posData.dir = XMFLOAT3(0, -1, 0);       //ƒŒƒC‚Ì•ûŒü
-    //    //Model::RayCast(hGroundModel, &posData); //ƒŒƒC‚ğ”­Ë
-    //    //float distance = abs(lowestPos.y) + abs(transform_.position_.y);//ˆê”Ô’á‚¢Šp‚Æˆê”Ô‚‚¢Šp‚Ì‹——£‚ğ‹‚ß‚é
+    //    //posData.start = transform_.position_;   //ãƒ¬ã‚¤ã®ç™ºå°„ä½ç½®
+    //    //posData.dir = XMFLOAT3(0, -1, 0);       //ãƒ¬ã‚¤ã®æ–¹å‘
+    //    //Model::RayCast(hGroundModel, &posData); //ãƒ¬ã‚¤ã‚’ç™ºå°„
+    //    //float distance = abs(lowestPos.y) + abs(transform_.position_.y);//ä¸€ç•ªä½ã„è§’ã¨ä¸€ç•ªé«˜ã„è§’ã®è·é›¢ã‚’æ±‚ã‚ã‚‹
     //}
-    //RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBox‚ğ’T‚·iˆê”Ô‰º‚Ì’¸“_‚Éj
-    //BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBox‚ğ’T‚·itransform_.position‚Éj
+    //RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBoxã‚’æ¢ã™ï¼ˆä¸€ç•ªä¸‹ã®é ‚ç‚¹ã«ï¼‰
+    //BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBoxã‚’æ¢ã™ï¼ˆtransform_.positionã«ï¼‰
     //pRedBox->SetPosition(highestPos);
     //pBlueBox->SetPosition(transform_.position_);
 
-    ////////////////////ƒŒƒC‚ğ”ò‚Î‚·/////////////////////
+    ////////////////////ãƒ¬ã‚¤ã‚’é£›ã°ã™/////////////////////
     
-    RayCastData GoalData;                       //ƒVƒƒƒŠ‚ÌˆÊ’u‚©‚çƒŒƒC‚ğ”ò‚Î‚µ‚ÄAƒS[ƒ‹‚Æ‚Ô‚Â‚©‚é‚©‚ğ’²‚×‚é
-    GoalData.start = transform_.position_;      //ƒŒƒC‚Ì”­ËˆÊ’u
-    GoalData.dir = XMFLOAT3(0, -1, 0);          //ƒŒƒC‚Ì•ûŒü
-    Model::RayCast(hGoalModel, &GoalData);      //ƒŒƒC‚ğ”­Ë
+    RayCastData GoalData;                       //ã‚·ãƒ£ãƒªã®ä½ç½®ã‹ã‚‰ãƒ¬ã‚¤ã‚’é£›ã°ã—ã¦ã€ã‚´ãƒ¼ãƒ«ã¨ã¶ã¤ã‹ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
+    GoalData.start = transform_.position_;      //ãƒ¬ã‚¤ã®ç™ºå°„ä½ç½®
+    GoalData.dir = XMFLOAT3(0, -1, 0);          //ãƒ¬ã‚¤ã®æ–¹å‘
+    Model::RayCast(hGoalModel, &GoalData);      //ãƒ¬ã‚¤ã‚’ç™ºå°„
 
-    RayCastData prevPosData;                    //ˆê”Ô’á‚¢Šp‚©‚çƒŒƒC‚ğ”ò‚Î‚µ‚ÄA°‚Æ‚Ô‚Â‚©‚é‚©‚ğ’²‚×‚é
-    prevPosData.start = prevPos/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //ƒŒƒC‚Ì•ûŒü
-    prevPosData.dir = XMFLOAT3(0, -1, 0);       //ƒŒƒC‚Ì•ûŒü
-    Model::RayCast(hGroundModel, &prevPosData); //ƒŒƒC‚ğ”­Ë
+    RayCastData prevPosData;                    //ä¸€ç•ªä½ã„è§’ã‹ã‚‰ãƒ¬ã‚¤ã‚’é£›ã°ã—ã¦ã€åºŠã¨ã¶ã¤ã‹ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
+    prevPosData.start = prevPos/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //ãƒ¬ã‚¤ã®æ–¹å‘
+    prevPosData.dir = XMFLOAT3(0, -1, 0);       //ãƒ¬ã‚¤ã®æ–¹å‘
+    Model::RayCast(hGroundModel, &prevPosData); //ãƒ¬ã‚¤ã‚’ç™ºå°„
 
     RayCastData nowPosData[6];
     for (int i = 0; i < sizeof(direction) / sizeof(XMFLOAT3); i++)
     {
-        //ˆê”Ô’á‚¢Šp‚©‚çƒŒƒC‚ğ”ò‚Î‚µ‚ÄA°‚Æ‚Ô‚Â‚©‚é‚©‚ğ’²‚×‚é
-        nowPosData[i].start = XMFLOAT3(transform_.position_.x, transform_.position_.y + directionDistance[i], transform_.position_.z);    //ƒŒƒC‚Ì”­ËˆÊ’u
-        nowPosData[i].dir = direction[i];        //ƒŒƒC‚Ì•ûŒü
-        Model::RayCast(hGroundModel, &nowPosData[i]);  //ƒŒƒC‚ğ”­Ë
+        //ä¸€ç•ªä½ã„è§’ã‹ã‚‰ãƒ¬ã‚¤ã‚’é£›ã°ã—ã¦ã€åºŠã¨ã¶ã¤ã‹ã‚‹ã‹ã‚’èª¿ã¹ã‚‹
+        nowPosData[i].start = XMFLOAT3(transform_.position_.x, transform_.position_.y + directionDistance[i], transform_.position_.z);    //ãƒ¬ã‚¤ã®ç™ºå°„ä½ç½®
+        nowPosData[i].dir = direction[i];        //ãƒ¬ã‚¤ã®æ–¹å‘
+        Model::RayCast(hGroundModel, &nowPosData[i]);  //ãƒ¬ã‚¤ã‚’ç™ºå°„
     }
     // ///////////////////////////////////////////////////
 
@@ -174,12 +174,12 @@ void Syari::Update()
         }
     }
 
-    //‚à‚µ‰º‚É’n–Ê‚ª‚ ‚Á‚½‚ç
-    if (nowPosData[BOTOM].hit && nowPosData[BOTOM].dist >= FALL_SPEED)
+    //ã‚‚ã—ä¸‹ã«åœ°é¢ãŒã‚ã£ãŸã‚‰
+    if (nowPosData[BOTOM].hit && nowPosData[BOTOM].dist > accel)
     {           
-        //Ú’nƒtƒ‰ƒO‚ğ^‚É‚·‚é
+        //æ¥åœ°ãƒ•ãƒ©ã‚°ã‚’çœŸã«ã™ã‚‹
         isGround = false;
-        ////d—Í
+        ////é‡åŠ›
         //if (FALL_SPEED - accel <= SPEED_LIMIT)
         //{
         //    Time::UnLock();
@@ -192,73 +192,82 @@ void Syari::Update()
         //    transform_.position_.y -= FALL_SPEED;
         //}
 
-        //d—Í
-        if (SPEED_LIMIT >= accel)
-        {
-            Time::UnLock();
-            accel += FALL_SPEED;
-            transform_.position_.y -= accel;
-        }
-        else
-        {
-            Time::Lock();
-            transform_.position_.y -= SPEED_LIMIT;
-        }
+        ////é‡åŠ›
+        //if (SPEED_LIMIT >= accel)
+        //{
+        //    Time::UnLock();
+        //    accel += FALL_SPEED;
+        //    transform_.position_.y -= accel;
+        //}
+        //else
+        //{
+        //    Time::Lock();
+        //    transform_.position_.y -= SPEED_LIMIT;
+        //}
     }
-    else //‚à‚µ‰º‚É’n–Ê‚ª‚È‚©‚Á‚½‚ç
+    else //ã‚‚ã—ä¸‹ã«åœ°é¢ãŒãªã‹ã£ãŸã‚‰
     {
-        accel = 0.0f;
+        //accel = 0.0f;
 
-        Time::Lock();
-        transform_.position_.y -= prevPosData.dist - SYARI_SIZE_Y;
-        
-        //Ú’nƒtƒ‰ƒO‚ğ^‚É‚·‚é
-        isGround = true;
+        //Time::Lock();
+        //transform_.position_.y -= prevPosData.dist - SYARI_SIZE_Y;
+        //
+        ////æ¥åœ°ãƒ•ãƒ©ã‚°ã‚’çœŸã«ã™ã‚‹
+        //isGround = true;
     }
 
-    //ƒS[ƒ‹‚µ‚½‚ç
+    //ã‚´ãƒ¼ãƒ«ã—ãŸã‚‰
     if (GoalData.hit)
     {
         transform_.position_.y = 10000;
     }
+    
+    XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+    XMVECTOR axisVec = { 0.1, 0, 0, 0};
+    XMMATRIX mmm = XMMatrixRotationAxis(axisVec, XMConvertToRadians(10));
+    mmm * 0.1;
+    mmm = XMMatrixRotationX(XMConvertToRadians(1));   //Xè»¸ã§45Â°å›è»¢ã•ã›ã‚‹è¡Œåˆ—
+    //transform_.rotate_.x += 1;
+    vPos = XMVector3TransformCoord(vPos, mmm);	//ãƒ™ã‚¯ãƒˆãƒ«ï½–ã‚’è¡Œåˆ—ï½ã§å¤‰å½¢
+    XMStoreFloat3(&transform_.position_, vPos);
 
-    //“®‚©‚·‘O‚ÌˆÊ’u‚ğ•Û‘¶‚µ‚Ä‚¨‚­
+    //å‹•ã‹ã™å‰ã®ä½ç½®ã‚’ä¿å­˜ã—ã¦ãŠã
     prevPos = transform_.position_;
 }
 
-//•`‰æ
+//æç”»
 void Syari::Draw()
 {
     Model::SetTransform(hModel_, transform_);
     Model::Draw(hModel_);
 }
 
-//ŠJ•ú
+//é–‹æ”¾
 void Syari::Release()
 {
 }
 
-//Œ»İ’n‚ÌƒQƒbƒ^[
+//ç¾åœ¨åœ°ã®ã‚²ãƒƒã‚¿ãƒ¼
 XMFLOAT3 Syari::GetPosition()
 {
     return transform_.position_;
 }
 
-//‰ñ“]‚ÌƒQƒbƒ^[
+//å›è»¢ã®ã‚²ãƒƒã‚¿ãƒ¼
 XMFLOAT3 Syari::GetRotate()
 {
     return transform_.rotate_;
 }
 
-//ƒL[‘€ì
+//ã‚­ãƒ¼æ“ä½œ
 void Syari::KeyOperation()
 {
-    //SPACEƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
+    //SPACEã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã¨ã
     if (Input::IsKey(DIK_SPACE))
     {
         breakFlag = true;
     }
-    //ENTERƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
+    //ENTERã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã¨ã
     if (Input::IsKeyDown(DIK_RETURN))
     {
         switch (mode)
@@ -273,40 +282,40 @@ void Syari::KeyOperation()
             break;
         }
     }
-    ////////ˆÚ“®/////////////
-    //AƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
+    ////////ç§»å‹•/////////////
+    //Aã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã¨ã
     if (Input::IsKey(DIK_A))
     {
         transform_.rotate_.z += 0.3f;
     }
-    //DƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
+    //Dã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã¨ã
     if (Input::IsKey(DIK_D))
     {
         transform_.rotate_.z -= 0.3f;
     }
-    //WƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
+    //Wã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã¨ã
     if (Input::IsKey(DIK_W))
     {
-        //ƒVƒƒƒŠ‚ÌŒü‚«
+        //ã‚·ãƒ£ãƒªã®å‘ã
         //syariDir.z += 90;
         //transform_.position_.z += SYARI_SPEED;
        //transform_.rotate_.x += 0.3f;
         Controller* pController = (Controller*)FindObject("Controller");
         transform_.rotate_.y = pController->GetRotate().y;
-        XMFLOAT3 move = { 0,0,0.1f };//ƒvƒŒƒCƒ„[‚ÌˆÚ“®ƒxƒNƒgƒ‹
-        XMVECTOR vMove = XMLoadFloat3(&move);//ˆÚ“®ƒxƒNƒgƒ‹‚ÌŒ^‚ğXMVECTOR‚É•ÏŠ·
+        XMFLOAT3 move = { 0,0,0.1f };//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«
+        XMVECTOR vMove = XMLoadFloat3(&move);//ç§»å‹•ãƒ™ã‚¯ãƒˆãƒ«ã®å‹ã‚’XMVECTORã«å¤‰æ›
         XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
         vMove = XMVector3TransformCoord(vMove, mRotate);
         XMVECTOR vPos;
-        vPos = XMLoadFloat3(&transform_.position_);//ƒVƒƒƒŠ‚ÌŒ»İ’n‚ğXMVECTOR‚É•ÏŠ·
+        vPos = XMLoadFloat3(&transform_.position_);//ã‚·ãƒ£ãƒªã®ç¾åœ¨åœ°ã‚’XMVECTORã«å¤‰æ›
         vPos -= vMove * 3;
-        XMStoreFloat3(&transform_.position_, vPos);//Œ»İ’n‚ğtransform_.position_‚É‘—‚é
+        XMStoreFloat3(&transform_.position_, vPos);//ç¾åœ¨åœ°ã‚’transform_.position_ã«é€ã‚‹
     }
-    //SƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«
+    //Sã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã¨ã
     if (Input::IsKey(DIK_S))
     {
     }
-    //ƒWƒƒƒ“ƒv‚·‚é
+    //ã‚¸ãƒ£ãƒ³ãƒ—ã™ã‚‹
     if (Input::IsKey(DIK_SPACE))
     {
         Jump();
@@ -322,7 +331,7 @@ void Syari::Jump()
 {
     if (isGround)
     {
-        accel = SPEED_OF_JUMP;
+        accel -= SPEED_OF_JUMP;
     }
 }
 
