@@ -59,23 +59,22 @@ class Syari : public GameObject
     };
 
     const std::string vertexName[8] = {
-        "Vertex_Hight_Right_Flont",
+        "Vertex_Hight_Right_Front",
         "Vertex_Hight_Right_Back",
-        "Vertex_Hight_Left_Flont",
+        "Vertex_Hight_Left_Front",
         "Vertex_Hight_Left_Back",
-        "Vertex_Low_Right_Flont",
+        "Vertex_Low_Right_Front",
         "Vertex_Low_Right_Back",
-        "Vertex_Low_Left_Flont",
+        "Vertex_Low_Left_Front",
         "Vertex_Low_Left_Back"
     };
     
     const float SYARI_SPEED     = 0.25f;//シャリのスピード
     const float ROTATE_SPEED    = 0.5f; //シャリの回転のスピード
-    const float FALL_SPEED      = 0.01f; //落ちるスピード
+    const float FALL_SPEED      = 0.02f; //落ちるスピード
     const float SPEED_LIMIT     = 2.0f;  //落下の速度限界
-    const float ACCELERATION    = 0.025f;
     const float JUMP_SPEED      = 1.0f; //ジャンプのスピード
-    const float SPEED_OF_JUMP   = 0.5f; //跳躍速度
+    const float SPEED_OF_JUMP   = 0.4f; //跳躍速度
 
     const XMVECTOR upRightFrontPos =   { 0.5f, 0.5f, 1.0f    };//シャリの上右前の位置
     const XMVECTOR upRightBackPos =    { 0.5f, 0.5f, -1.0f   };//シャリの上右後の位置

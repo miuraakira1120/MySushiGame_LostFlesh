@@ -15,7 +15,6 @@
 #include "Controller.h"
 #include "Time.h"
 
-#include <map>
 
 using std::vector;
 
@@ -82,12 +81,12 @@ void Syari::Update()
     Goal* pGoal = (Goal*)FindObject("Goal");        //ゴールオブジェクトを探す
     int hGoalModel = pGoal->GetModelHandle();       //モデル番号を取得
 
-    XMMATRIX m =
-        XMMatrixTranslation(axisPos.x, axisPos.y, axisPos.z) *
-        XMMatrixRotationZ(XMConvertToRadians((int)transform_.rotate_.z % 360)) *
-        XMMatrixRotationY(XMConvertToRadians((int)transform_.rotate_.y % 360)) *
-        XMMatrixRotationX(XMConvertToRadians((int)transform_.rotate_.x % 360)) *
-        XMMatrixTranslation(-(axisPos.x), -(axisPos.y), -(axisPos.z));//軸でrotate_度回転させる行列
+    //XMMATRIX m =
+    //    XMMatrixTranslation(axisPos.x, axisPos.y, axisPos.z) *
+    //    XMMatrixRotationZ(XMConvertToRadians((int)transform_.rotate_.z % 360)) *
+    //    XMMatrixRotationY(XMConvertToRadians((int)transform_.rotate_.y % 360)) *
+    //    XMMatrixRotationX(XMConvertToRadians((int)transform_.rotate_.x % 360)) *
+    //    XMMatrixTranslation(-(axisPos.x), -(axisPos.y), -(axisPos.z));//軸でrotate_度回転させる行列
     //XMFLOAT3 fRotate = { 0,0,0 };
     //vector<XMVECTOR> v;
     //for (int i = 0; i < vVertexPos.size(); i++)
@@ -168,7 +167,7 @@ void Syari::Update()
 
     for (int i = LEFT; i < DIRECTION_MAX; i++)
     {
-        if (nowPosData[i].hit && nowPosData[i].dist >= FALL_SPEED)
+        if (nowPosData[i].hit && nowPosData[i].dist >= SYARI_SIZE_X)
         {
 
         }
@@ -192,28 +191,28 @@ void Syari::Update()
         //    transform_.position_.y -= FALL_SPEED;
         //}
 
-        ////重力
-        //if (SPEED_LIMIT >= accel)
-        //{
-        //    Time::UnLock();
-        //    accel += FALL_SPEED;
-        //    transform_.position_.y -= accel;
-        //}
-        //else
-        //{
-        //    Time::Lock();
-        //    transform_.position_.y -= SPEED_LIMIT;
-        //}
+        //重力
+        if (SPEED_LIMIT >= accel)
+        {
+            Time::UnLock();
+            accel += FALL_SPEED;
+            transform_.position_.y -= accel;
+        }
+        else
+        {
+            Time::Lock();
+            transform_.position_.y -= SPEED_LIMIT;
+        }
     }
     else //もし下に地面がなかったら
     {
-        //accel = 0.0f;
+        accel = 0.0f;
 
-        //Time::Lock();
-        //transform_.position_.y -= prevPosData.dist - SYARI_SIZE_Y;
-        //
-        ////接地フラグを真にする
-        //isGround = true;
+        Time::Lock();
+        transform_.position_.y -= prevPosData.dist - SYARI_SIZE_Y;
+        
+        //接地フラグを真にする
+        isGround = true;
     }
 
     //ゴールしたら
@@ -221,15 +220,15 @@ void Syari::Update()
     {
         transform_.position_.y = 10000;
     }
-    
-    XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
-    XMVECTOR axisVec = { 0.1, 0, 0, 0};
-    XMMATRIX mmm = XMMatrixRotationAxis(axisVec, XMConvertToRadians(10));
-    mmm * 0.1;
-    mmm = XMMatrixRotationX(XMConvertToRadians(1));   //X軸で45°回転させる行列
-    //transform_.rotate_.x += 1;
-    vPos = XMVector3TransformCoord(vPos, mmm);	//ベクトルｖを行列ｍで変形
-    XMStoreFloat3(&transform_.position_, vPos);
+    //
+    //XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+    //XMVECTOR axisVec = { 0.1, 0, 0, 0};
+    //XMMATRIX mmm = XMMatrixRotationAxis(axisVec, XMConvertToRadians(10));
+    //mmm * 0.1;
+    //mmm = XMMatrixRotationX(XMConvertToRadians(1));   //X軸で45°回転させる行列
+    ////transform_.rotate_.x += 1;
+    //vPos = XMVector3TransformCoord(vPos, mmm);	//ベクトルｖを行列ｍで変形
+    //XMStoreFloat3(&transform_.position_, vPos);
 
     //動かす前の位置を保存しておく
     prevPos = transform_.position_;

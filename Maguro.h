@@ -15,6 +15,17 @@ class Maguro : public GameObject
     const short ROTATE_MAX = 360;      //回転の最大
     const float FALL_SPEED = 0.2f * 0.01f;     //落ちるスピード
 
+    const std::string vertexName[8] = {
+       "Vertex_Hight_Right_Front",
+       "Vertex_Hight_Right_Back",
+       "Vertex_Hight_Left_Front",
+       "Vertex_Hight_Left_Back",
+       "Vertex_Low_Right_Front",
+       "Vertex_Low_Right_Back",
+       "Vertex_Low_Left_Front",
+       "Vertex_Low_Left_Back"
+    };
+
     int hModel_;     //モデル番号
     bool fallFlag;   //マグロが落ちるかどうかフラグ
     Syari* pSyari;   //シャリのポインタ

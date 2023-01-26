@@ -106,25 +106,94 @@ void Imgui_Obj::InstantiateImgui()
     ImGui::SameLine();
     ImGui::Text("s");
 
-    ImGui::Text("kadoX ");
+    ImGui::Text("UP_RIGHT_FRONTX ");
     ImGui::SameLine();
     ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_FRONT].x).c_str());
-    ImGui::Text("kadoY ");
+    ImGui::Text("UP_RIGHT_FRONTY ");
     ImGui::SameLine();
     ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_FRONT].y).c_str());
-    ImGui::Text("kadoZ ");
+    ImGui::Text("UP_RIGHT_FRONTZ ");
     ImGui::SameLine();
     ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_FRONT].z).c_str());
+    ImGui::NewLine();
 
-    ImGui::Text("kadoX2 ");
+    ImGui::Text("UP_RIGHT_BACKX ");
     ImGui::SameLine();
     ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_BACK].x).c_str());
-    ImGui::Text("kadoY2 ");
+    ImGui::Text("UP_RIGHT_BACKY ");
     ImGui::SameLine();
     ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_BACK].y).c_str());
-    ImGui::Text("kadoZ2 ");
+    ImGui::Text("UP_RIGHT_BACKZ ");
     ImGui::SameLine();
     ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_BACK].z).c_str());
+    ImGui::NewLine();
+
+    ImGui::Text("UP_LEFT_FRONTX ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_FRONT].x).c_str());
+    ImGui::Text("UP_LEFT_FRONTY ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_FRONT].y).c_str());
+    ImGui::Text("UP_LEFT_FRONTZ ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_FRONT].z).c_str());
+    ImGui::NewLine();
+
+    ImGui::Text("UP_LEFT_BACKX ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_BACK].x).c_str());
+    ImGui::Text("UP_LEFT_BACKY ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_BACK].y).c_str());
+    ImGui::Text("UP_LEFT_BACKZ ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_BACK].z).c_str());
+    ImGui::NewLine();
+
+    ImGui::Text("DOWN_RIGHT_FRONTX ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_FRONT].x).c_str());
+    ImGui::Text("DOWN_RIGHT_FRONTY ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_FRONT].y).c_str());
+    ImGui::Text("DOWN_RIGHT_FRONTZ ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_FRONT].z).c_str());
+    ImGui::NewLine();
+
+    ImGui::Text("DOWN_RIGHT_BACKX ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_BACK].x).c_str());
+    ImGui::Text("DOWN_RIGHT_BACKY ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_BACK].y).c_str());
+    ImGui::Text("DOWN_RIGHT_BACKZ ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_BACK].z).c_str());
+    ImGui::NewLine();
+
+    ImGui::Text("DOWN_LEFT_FRONTX ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_FRONT].x).c_str());
+    ImGui::Text("DOWN_LEFT_FRONTY ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_FRONT].y).c_str());
+    ImGui::Text("DOWN_LEFT_FRONTZ ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_FRONT].z).c_str());
+    ImGui::NewLine();
+
+    ImGui::Text("DOWN_LEFT_BACKX ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_BACK].x).c_str());
+    ImGui::Text("DOWN_LEFT_BACKY ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_BACK].y).c_str());
+    ImGui::Text("DOWN_LEFT_BACKZ ");
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_BACK].z).c_str());
+    ImGui::NewLine();
+
     ImGui::End();
 }
 

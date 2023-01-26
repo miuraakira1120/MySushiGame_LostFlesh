@@ -227,11 +227,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//Camera::SetPosition(XMFLOAT3(10, 0, 0));
 					//Camera::SetPosition(pController->GetPosition());
 
-					Camera::Update();
+					//Camera::Update();
 
-					//全オブジェクトを描画
-					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-					pRootObject->DrawSub();
+					////全オブジェクトを描画
+					////ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+					//pRootObject->DrawSub();
 				} 
 
 #if _DEBUG
