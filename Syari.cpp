@@ -21,7 +21,7 @@ using std::vector;
 //コンストラクタ
 Syari::Syari(GameObject* parent)
     :GameObject(parent, "Syari"), hModel_(-1), mode(1), axisPos(0.5f, 0.5f, 1.0f),
-    prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr),isGround(false)
+    prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr),isGround(false),pravBonePos()
 {
 }
 
@@ -55,9 +55,13 @@ void Syari::Initialize()
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 2));
     AddCollider(collision);
 
-    transform_.position_.y = -40;
+    //transform_.position_.y = -40;
 
     pGauge_ = Instantiate<Gauge>(this);
+
+    //ポリライン初期化
+    pLine = new PoryLine;
+    pLine->Load("tex.png");
 }
 
 //更新
@@ -71,8 +75,6 @@ void Syari::Update()
     {
         vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
     }
-    /*vertexBonePos[0] = Model::GetBonePosition(hModel_, "joint1");
-    vertexBonePos[1] = Model::GetBonePosition(hModel_, "joint2");*/
 
     //transform_.SetAxisTrans(axisPos);
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
@@ -81,68 +83,21 @@ void Syari::Update()
     Goal* pGoal = (Goal*)FindObject("Goal");        //ゴールオブジェクトを探す
     int hGoalModel = pGoal->GetModelHandle();       //モデル番号を取得
 
-    //XMMATRIX m =
-    //    XMMatrixTranslation(axisPos.x, axisPos.y, axisPos.z) *
-    //    XMMatrixRotationZ(XMConvertToRadians((int)transform_.rotate_.z % 360)) *
-    //    XMMatrixRotationY(XMConvertToRadians((int)transform_.rotate_.y % 360)) *
-    //    XMMatrixRotationX(XMConvertToRadians((int)transform_.rotate_.x % 360)) *
-    //    XMMatrixTranslation(-(axisPos.x), -(axisPos.y), -(axisPos.z));//軸でrotate_度回転させる行列
-    //XMFLOAT3 fRotate = { 0,0,0 };
-    //vector<XMVECTOR> v;
-    //for (int i = 0; i < vVertexPos.size(); i++)
-    //{
-    //    v.push_back(XMVector3TransformCoord(vVertexPos[i], m ));
-    //}
-    //XMVECTOR vAxis = XMLoadFloat3(&axisPos);
-    //XMVECTOR vPos = XMLoadFloat3(&transform_.rotate_);
-    //XMVector3TransformCoord(vPos, XMMatrixRotationAxis(vAxis, XMConvertToRadians(90)));
-    //XMStoreFloat3(&transform_.rotate_, vPos);
-    //float lowest = 0;
-    //float highest = 0;
-    //for (int i = 1; i < v.size(); i++)
-    //{
-    //    if ( XMVectorGetY(v[lowest]) > XMVectorGetY(v[i]))
-    //    {
-    //        lowest = i;
-    //    }
-    //    if (XMVectorGetY(v[highest]) < XMVectorGetY(v[i]))
-    //    {
-    //        highest = i;
-    //    }
-    //}
-    ////一番低い角のposition
-    //XMFLOAT3 lowestPos = {
-    //    XMVectorGetX(v[lowest]) + transform_.position_.x,
-    //    XMVectorGetY(v[lowest]) + transform_.position_.y,
-    //    XMVectorGetZ(v[lowest]) + transform_.position_.z
-    //};
-    ////一番高い角のposition
-    //XMFLOAT3 highestPos = {
-    //    XMVectorGetX(v[highest]) + transform_.position_.x,
-    //    XMVectorGetY(v[highest]) + transform_.position_.y,
-    //    XMVectorGetZ(v[highest]) + transform_.position_.z
-    //};
-    //RayCastData lowestData;                     //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-    //lowestData.start = lowestPos;               //レイの発射位置
-    //lowestData.dir = XMFLOAT3(0, -1, 0);        //レイの方向
-    //Model::RayCast(hGroundModel, &lowestData);  //レイを発射
-    ////レイが当たったら
-    //if (lowestData.hit)
-    //{
-    //}
-    //else
-    //{
-    //    //RayCastData posData;
-    //    //posData.start = transform_.position_;   //レイの発射位置
-    //    //posData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
-    //    //Model::RayCast(hGroundModel, &posData); //レイを発射
-    //    //float distance = abs(lowestPos.y) + abs(transform_.position_.y);//一番低い角と一番高い角の距離を求める
-    //}
-    //RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBoxを探す（一番下の頂点に）
-    //BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBoxを探す（transform_.positionに）
-    //pRedBox->SetPosition(highestPos);
-    //pBlueBox->SetPosition(transform_.position_);
+    //一番低いところと高いところを探す
+    int lowest = 0;
+    int highest = 0;
+    for (int i = 1; i < sizeof(vertexBonePos) / sizeof(XMFLOAT3); i++)
+    {
+        if (vertexBonePos[lowest].y > vertexBonePos[i].y)
+        {
+            lowest = i;
+        }
+        if (vertexBonePos[highest].y < vertexBonePos[i].y)
+        {
+            highest = i;
+        }
 
+    }
     ////////////////////レイを飛ばす/////////////////////
     
     RayCastData GoalData;                       //シャリの位置からレイを飛ばして、ゴールとぶつかるかを調べる
@@ -155,41 +110,70 @@ void Syari::Update()
     prevPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
     Model::RayCast(hGroundModel, &prevPosData); //レイを発射
 
+    RayCastData prevLowPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    prevLowPosData.start = pravBonePos[lowest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    prevLowPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
+    Model::RayCast(hGroundModel, &prevLowPosData); //レイを発射
+
+    RayCastData nowLowPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    nowLowPosData.start = vertexBonePos[lowest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    nowLowPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
+    Model::RayCast(hGroundModel, &nowLowPosData); //レイを発射
+
     RayCastData nowPosData[6];
     for (int i = 0; i < sizeof(direction) / sizeof(XMFLOAT3); i++)
     {
-        //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-        nowPosData[i].start = XMFLOAT3(transform_.position_.x, transform_.position_.y + directionDistance[i], transform_.position_.z);    //レイの発射位置
+        nowPosData[i].start = XMFLOAT3(transform_.position_.x, transform_.position_.y, transform_.position_.z);    //レイの発射位置
         nowPosData[i].dir = direction[i];        //レイの方向
         Model::RayCast(hGroundModel, &nowPosData[i]);  //レイを発射
     }
-    // ///////////////////////////////////////////////////
 
-    for (int i = LEFT; i < DIRECTION_MAX; i++)
+    RayCastData vertexCollision[VERTEX_MAX];
+    for (int i = 0; i < VERTEX_MAX; i++)
     {
-        if (nowPosData[i].hit && nowPosData[i].dist >= SYARI_SIZE_X)
-        {
+        vertexCollision[i].start = transform_.position_;
+        vertexCollision[i].dir = Transform::Float3Sub(vertexBonePos[i], transform_.position_);
+        Model::RayCast(hGroundModel, &vertexCollision[i]);  //レイを発射
+    }
 
+    //横の当たり判定
+    RayCastData vertexCollision[VERTEX_MAX];
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        vertexCollision[i].start = transform_.position_;
+        vertexCollision[i].dir = Transform::Float3Sub(vertexBonePos[i], transform_.position_);
+        Model::RayCast(hGroundModel, &vertexCollision[i]);  //レイを発射
+    }
+
+
+
+    /////////////////////////////////////////////////////
+
+    //中心から角までの距離
+    float vertexDistance[VERTEX_MAX];
+    //中心から角までの距離を求める
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        vertexDistance[i] = Transform::FloatDistance(transform_.position_, vertexBonePos[i]);
+    }
+    //distがvertexDistanceより短ければ当たっている
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        if (vertexCollision[i].dist < vertexDistance[i])
+        {
+            if (i != lowest)
+            {
+                int b = 0;
+            }
         }
     }
 
     //もし下に地面があったら
-    if (nowPosData[BOTOM].hit && nowPosData[BOTOM].dist > accel)
+    if (nowLowPosData.hit && nowLowPosData.dist > accel)
+    //if (nowPosData[BOTOM].hit && nowPosData[BOTOM].dist > accel)
     {           
         //接地フラグを真にする
         isGround = false;
-        ////重力
-        //if (FALL_SPEED - accel <= SPEED_LIMIT)
-        //{
-        //    Time::UnLock();
-
-        //    accel += ACCELERATION;
-        //    transform_.position_.y -= FALL_SPEED * (accel);
-        //}
-        //else
-        //{
-        //    transform_.position_.y -= FALL_SPEED;
-        //}
 
         //重力
         if (SPEED_LIMIT >= accel)
@@ -209,7 +193,10 @@ void Syari::Update()
         accel = 0.0f;
 
         Time::Lock();
-        transform_.position_.y -= prevPosData.dist - SYARI_SIZE_Y;
+        XMFLOAT3 lowDistance2 = { abs(transform_.position_.x - vertexBonePos[lowest].x),  abs(transform_.position_.y - vertexBonePos[lowest].y),  abs(transform_.position_.z - vertexBonePos[lowest].z) };
+        XMFLOAT3 lowDistance = { abs(prevPos.x - pravBonePos[lowest].x),  abs(prevPos.y - pravBonePos[lowest].y),  abs(prevPos.z - pravBonePos[lowest].z) };
+        transform_.position_.y -= nowPosData[BOTOM].dist - lowDistance2.y;
+        //transform_.position_.y -= prevPosData.dist - SYARI_SIZE_Y;
         
         //接地フラグを真にする
         isGround = true;
@@ -220,18 +207,21 @@ void Syari::Update()
     {
         transform_.position_.y = 10000;
     }
-    //
-    //XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
-    //XMVECTOR axisVec = { 0.1, 0, 0, 0};
-    //XMMATRIX mmm = XMMatrixRotationAxis(axisVec, XMConvertToRadians(10));
-    //mmm * 0.1;
-    //mmm = XMMatrixRotationX(XMConvertToRadians(1));   //X軸で45°回転させる行列
-    ////transform_.rotate_.x += 1;
-    //vPos = XMVector3TransformCoord(vPos, mmm);	//ベクトルｖを行列ｍで変形
-    //XMStoreFloat3(&transform_.position_, vPos);
+
+    RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBoxを探す（一番下の頂点に）
+    BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBoxを探す（transform_.positionに）
+    pRedBox->SetPosition(vertexBonePos[highest]);
+    pBlueBox->SetPosition(vertexBonePos[lowest]);
+
+    //ポリラインに現在の位置を伝える
+    pLine->AddPosition(transform_.position_);
 
     //動かす前の位置を保存しておく
     prevPos = transform_.position_;
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        pravBonePos[i] = vertexBonePos[i];
+    }
 }
 
 //描画
@@ -239,11 +229,15 @@ void Syari::Draw()
 {
     Model::SetTransform(hModel_, transform_);
     Model::Draw(hModel_);
+
+    //ポリラインを描画
+    pLine->Draw();
 }
 
 //開放
 void Syari::Release()
 {
+    pLine->Release();
 }
 
 //現在地のゲッター

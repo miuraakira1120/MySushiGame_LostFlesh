@@ -4,6 +4,7 @@
 #include "Engine/GameObject.h"
 #include "Engine/Model.h"
 #include "Gauge.h"
+#include "PoryLine.h"
 
 
 #define VERTEX_VLU 8
@@ -38,6 +39,19 @@ class Syari : public GameObject
         FRONT,
         BACK,
         DIRECTION_MAX
+    };
+
+    enum VertexDirection
+    {
+        TOP_RIGHT_FRONT = 0,
+        TOP_RIGHT_BACK,
+        TOP_LEFT_FRONT,
+        TOP_LEFT_BACK,
+        BACK_RIGHT_FRONT,
+        BACK_RIGHT_BACK,
+        BACK_LEFT_FRONT,
+        BACK_LEFT_BACK,
+        VERTEX_DIRECTION_MAX
     };
 
     const XMFLOAT3 direction[6] = {
@@ -91,6 +105,7 @@ class Syari : public GameObject
     bool breakFlag = false;
     XMFLOAT3 axisPos;
     XMFLOAT3 prevPos;//1f前の自分の位置
+    XMFLOAT3 pravBonePos[VERTEX_MAX]; //1f前の角の位置
     bool isGround;   //地面に設置しているか
 
 
@@ -98,6 +113,8 @@ class Syari : public GameObject
     Gauge* pGauge_;
     
     float jumpSpeed;
+
+    PoryLine* pLine;
 
 public:
     float accel;//今どれだけ加速するか
