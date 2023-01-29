@@ -21,7 +21,7 @@ using std::vector;
 //コンストラクタ
 Syari::Syari(GameObject* parent)
     :GameObject(parent, "Syari"), hModel_(-1), mode(1), axisPos(0.5f, 0.5f, 1.0f),
-    prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr),isGround(false),pravBonePos()
+    prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr),isGround(false),prevBonePos()
 {
 }
 
@@ -76,6 +76,8 @@ void Syari::Update()
         vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
     }
 
+    
+
     //transform_.SetAxisTrans(axisPos);
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
     int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
@@ -96,7 +98,36 @@ void Syari::Update()
         {
             highest = i;
         }
+    }
 
+    //一番右と左を探す
+    int rightest = 0;
+    int leftest = 0;
+    for (int i = 1; i < sizeof(vertexBonePos) / sizeof(XMFLOAT3); i++)
+    {
+        if (vertexBonePos[rightest].x > vertexBonePos[i].x)
+        {
+            rightest = i;
+        }
+        if (vertexBonePos[leftest].x < vertexBonePos[i].x)
+        {
+            leftest = i;
+        }
+    }
+
+    //一番奥と手前を探す
+    int foremost = 0;
+    int innermost = 0;
+    for (int i = 1; i < sizeof(vertexBonePos) / sizeof(XMFLOAT3); i++)
+    {
+        if (vertexBonePos[innermost].z > vertexBonePos[i].z)
+        {
+            innermost = i;
+        }
+        if (vertexBonePos[foremost].z < vertexBonePos[i].z)
+        {
+            foremost = i;
+        }
     }
     ////////////////////レイを飛ばす/////////////////////
     
@@ -111,7 +142,7 @@ void Syari::Update()
     Model::RayCast(hGroundModel, &prevPosData); //レイを発射
 
     RayCastData prevLowPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-    prevLowPosData.start = pravBonePos[lowest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    prevLowPosData.start = prevBonePos[lowest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
     prevLowPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
     Model::RayCast(hGroundModel, &prevLowPosData); //レイを発射
 
@@ -128,45 +159,10 @@ void Syari::Update()
         Model::RayCast(hGroundModel, &nowPosData[i]);  //レイを発射
     }
 
-    RayCastData vertexCollision[VERTEX_MAX];
-    for (int i = 0; i < VERTEX_MAX; i++)
-    {
-        vertexCollision[i].start = transform_.position_;
-        vertexCollision[i].dir = Transform::Float3Sub(vertexBonePos[i], transform_.position_);
-        Model::RayCast(hGroundModel, &vertexCollision[i]);  //レイを発射
-    }
-
-    //横の当たり判定
-    RayCastData vertexCollision[VERTEX_MAX];
-    for (int i = 0; i < VERTEX_MAX; i++)
-    {
-        vertexCollision[i].start = transform_.position_;
-        vertexCollision[i].dir = Transform::Float3Sub(vertexBonePos[i], transform_.position_);
-        Model::RayCast(hGroundModel, &vertexCollision[i]);  //レイを発射
-    }
-
 
 
     /////////////////////////////////////////////////////
 
-    //中心から角までの距離
-    float vertexDistance[VERTEX_MAX];
-    //中心から角までの距離を求める
-    for (int i = 0; i < VERTEX_MAX; i++)
-    {
-        vertexDistance[i] = Transform::FloatDistance(transform_.position_, vertexBonePos[i]);
-    }
-    //distがvertexDistanceより短ければ当たっている
-    for (int i = 0; i < VERTEX_MAX; i++)
-    {
-        if (vertexCollision[i].dist < vertexDistance[i])
-        {
-            if (i != lowest)
-            {
-                int b = 0;
-            }
-        }
-    }
 
     //もし下に地面があったら
     if (nowLowPosData.hit && nowLowPosData.dist > accel)
@@ -193,13 +189,97 @@ void Syari::Update()
         accel = 0.0f;
 
         Time::Lock();
-        XMFLOAT3 lowDistance2 = { abs(transform_.position_.x - vertexBonePos[lowest].x),  abs(transform_.position_.y - vertexBonePos[lowest].y),  abs(transform_.position_.z - vertexBonePos[lowest].z) };
-        XMFLOAT3 lowDistance = { abs(prevPos.x - pravBonePos[lowest].x),  abs(prevPos.y - pravBonePos[lowest].y),  abs(prevPos.z - pravBonePos[lowest].z) };
-        transform_.position_.y -= nowPosData[BOTOM].dist - lowDistance2.y;
+        XMFLOAT3 lowDistance = { abs(transform_.position_.x - vertexBonePos[lowest].x),  abs(transform_.position_.y - vertexBonePos[lowest].y),  abs(transform_.position_.z - vertexBonePos[lowest].z) };
+        //XMFLOAT3 lowDistance = { abs(prevPos.x - pravBonePos[lowest].x),  abs(prevPos.y - pravBonePos[lowest].y),  abs(prevPos.z - pravBonePos[lowest].z) };
+        transform_.position_.y -= nowPosData[BOTOM].dist - lowDistance.y;
         //transform_.position_.y -= prevPosData.dist - SYARI_SIZE_Y;
         
         //接地フラグを真にする
         isGround = true;
+    }
+
+    ////横の当たり判定
+    //RayCastData vertexCollision[VERTEX_MAX];
+    //for (int i = 0; i < VERTEX_MAX; i++)
+    //{
+    //    vertexCollision[i].start = transform_.position_;
+    //    vertexCollision[i].dir = Transform::Float3Sub(transform_.position_, vertexBonePos[i]);
+    //    Model::RayCast(hGroundModel, &vertexCollision[i]);  //レイを発射
+    //}
+
+    ////中心から角までの距離
+    //float vertexDistance[VERTEX_MAX];
+    ////中心から角までの距離を求める
+    //for (int i = 0; i < VERTEX_MAX; i++)
+    //{
+    //    vertexDistance[i] = Transform::FloatDistance(transform_.position_, vertexBonePos[i]);
+    //}
+    ////distがvertexDistanceより短ければ当たっている
+    //for (int i = 0; i < VERTEX_MAX; i++)
+    //{
+    //    if (vertexCollision[i].dist < vertexDistance[i] && vertexCollision[i].hit)
+    //    {
+    //            //x > 0 = 右向きのベクトルなら
+    //            if (vertexCollision[i].dir.x > 0)
+    //            {
+    //                transform_.position_ = prevPos;
+    //            }
+    //            //x > 0 = 左向きのベクトルなら
+    //            if (vertexCollision[i].dir.x < 0)
+    //            {
+    //                transform_.position_ = prevPos;
+    //            }
+    //            //x > 0 = 右向きのベクトルなら
+    //            if (vertexCollision[i].dir.z > 0)
+    //            {
+    //                transform_.position_.z = prevPos.z;
+    //            }
+    //            //x > 0 = 右向きのベクトルなら
+    //            if (vertexCollision[i].dir.z < 0)
+    //            {
+    //                transform_.position_.z = prevPos.z;
+    //            }
+    //    }
+    //}
+
+    //各頂点の位置を調べる
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
+    }
+
+    //1f前からどこに移動したかのベクトル
+    XMFLOAT3 fMoveBonePos[VERTEX_MAX];
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        fMoveBonePos[i] = Transform::Float3Sub(prevBonePos[i], vertexBonePos[i]);
+    }
+
+    //レイを飛ばす
+    RayCastData prevVertexCollision[VERTEX_MAX];
+    for (size_t i = 0; i < VERTEX_MAX; i++)
+    {
+        prevVertexCollision[i].start = prevBonePos[i];
+        prevVertexCollision[i].dir = fMoveBonePos[i];
+        Model::RayCast(hGroundModel, &prevVertexCollision[i]);
+    }
+    //レイを飛ばす
+    RayCastData nowVertexCollision[VERTEX_MAX];
+    for (size_t i = 0; i < VERTEX_MAX; i++)
+    {
+        nowVertexCollision[i].start = prevBonePos[i];
+        nowVertexCollision[i].dir = fMoveBonePos[i];
+        Model::RayCast(hGroundModel, &nowVertexCollision[i]);
+    }
+
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        XMVECTOR vMoveBonePos = XMLoadFloat3(&fMoveBonePos[i]);
+        float length = XMVectorGetX(XMVector3Length(vMoveBonePos));
+        if (prevVertexCollision[i].hit && nowVertexCollision[i].dist < length)
+        {
+            transform_.position_ = Transform::Float3Add(prevPos, prevVertexCollision[i].dir);
+        }
     }
 
     //ゴールしたら
@@ -210,8 +290,8 @@ void Syari::Update()
 
     RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBoxを探す（一番下の頂点に）
     BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBoxを探す（transform_.positionに）
-    pRedBox->SetPosition(vertexBonePos[highest]);
-    pBlueBox->SetPosition(vertexBonePos[lowest]);
+    pRedBox->SetPosition(vertexBonePos[innermost]);
+    pBlueBox->SetPosition(vertexBonePos[foremost]);
 
     //ポリラインに現在の位置を伝える
     pLine->AddPosition(transform_.position_);
@@ -220,7 +300,7 @@ void Syari::Update()
     prevPos = transform_.position_;
     for (int i = 0; i < VERTEX_MAX; i++)
     {
-        pravBonePos[i] = vertexBonePos[i];
+        prevBonePos[i] = vertexBonePos[i];
     }
 }
 

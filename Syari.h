@@ -105,7 +105,7 @@ class Syari : public GameObject
     bool breakFlag = false;
     XMFLOAT3 axisPos;
     XMFLOAT3 prevPos;//1f前の自分の位置
-    XMFLOAT3 pravBonePos[VERTEX_MAX]; //1f前の角の位置
+    XMFLOAT3 prevBonePos[VERTEX_MAX]; //1f前の角の位置
     bool isGround;   //地面に設置しているか
 
 
