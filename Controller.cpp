@@ -34,19 +34,19 @@ void Controller::Update()
 {
     //カメラの焦点をControllerオブジェクトに
     //矢印キーで回転
-    if (Input::IsKey(DIK_LEFT))
+    if (Input::IsKey(DIK_A))
     {
         transform_.rotate_.y -= CAMERA_SPEED;
     }
-    if (Input::IsKey(DIK_RIGHT))
+    if (Input::IsKey(DIK_D))
     {
         transform_.rotate_.y += CAMERA_SPEED;
     }
-    if (Input::IsKey(DIK_UP) && transform_.rotate_.x > DOWN_ANGLE_LIMIT)
+    if (Input::IsKey(DIK_S) && transform_.rotate_.x > DOWN_ANGLE_LIMIT)
     {
             transform_.rotate_.x -= CAMERA_SPEED; 
     }
-    if (Input::IsKey(DIK_DOWN) && transform_.rotate_.x < UP_ANGLE_LIMIT)
+    if (Input::IsKey(DIK_W) && transform_.rotate_.x < UP_ANGLE_LIMIT)
     {
             transform_.rotate_.x += CAMERA_SPEED; 
     }

@@ -84,7 +84,7 @@ class Syari : public GameObject
     };
     
     const float SYARI_SPEED     = 0.25f;//シャリのスピード
-    const float ROTATE_SPEED    = 0.5f; //シャリの回転のスピード
+    const float ROTATE_SPEED    = 0.2f; //シャリの回転のスピード
     const float FALL_SPEED      = 0.02f; //落ちるスピード
     const float SPEED_LIMIT     = 2.0f;  //落下の速度限界
     const float JUMP_SPEED      = 1.0f; //ジャンプのスピード
@@ -115,6 +115,8 @@ class Syari : public GameObject
     float jumpSpeed;
 
     PoryLine* pLine;
+
+    //int hGoalModel;//地面のモデル番号
 
 public:
     float accel;//今どれだけ加速するか
@@ -162,4 +164,7 @@ public:
     /// 偽　空中にいない
     /// </returns>
     bool isFly();
+
+    //マウスによる回転
+    void MoveMouse();
 };

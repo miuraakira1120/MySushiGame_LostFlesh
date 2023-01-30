@@ -76,7 +76,7 @@ void Syari::Update()
         vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
     }
 
-    
+    MoveMouse();
 
     //transform_.SetAxisTrans(axisPos);
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
@@ -241,49 +241,12 @@ void Syari::Update()
     //            }
     //    }
     //}
-
-    //各頂点の位置を調べる
-    for (int i = 0; i < VERTEX_MAX; i++)
-    {
-        vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
-    }
-
-    //1f前からどこに移動したかのベクトル
-    XMFLOAT3 fMoveBonePos[VERTEX_MAX];
-    for (int i = 0; i < VERTEX_MAX; i++)
-    {
-        fMoveBonePos[i] = Transform::Float3Sub(prevBonePos[i], vertexBonePos[i]);
-    }
-
-    //レイを飛ばす
-    RayCastData prevVertexCollision[VERTEX_MAX];
-    for (size_t i = 0; i < VERTEX_MAX; i++)
-    {
-        prevVertexCollision[i].start = prevBonePos[i];
-        prevVertexCollision[i].dir = fMoveBonePos[i];
-        Model::RayCast(hGroundModel, &prevVertexCollision[i]);
-    }
-    //レイを飛ばす
-    RayCastData nowVertexCollision[VERTEX_MAX];
-    for (size_t i = 0; i < VERTEX_MAX; i++)
-    {
-        nowVertexCollision[i].start = prevBonePos[i];
-        nowVertexCollision[i].dir = fMoveBonePos[i];
-        Model::RayCast(hGroundModel, &nowVertexCollision[i]);
-    }
-
-    for (int i = 0; i < VERTEX_MAX; i++)
-    {
-        XMVECTOR vMoveBonePos = XMLoadFloat3(&fMoveBonePos[i]);
-        float length = XMVectorGetX(XMVector3Length(vMoveBonePos));
-        if (prevVertexCollision[i].hit && nowVertexCollision[i].dist < length)
-        {
-            transform_.position_ = Transform::Float3Add(prevPos, prevVertexCollision[i].dir);
-        }
-    }
-
+     
+     
     //ゴールしたら
     if (GoalData.hit)
+
+
     {
         transform_.position_.y = 10000;
     }
@@ -356,18 +319,81 @@ void Syari::KeyOperation()
         }
     }
     ////////移動/////////////
-    //Aキーを押したとき
-    if (Input::IsKey(DIK_A))
+
+    //左マウスキーを押したとき
+    if (Input::IsMouseButton(0))
     {
-        transform_.rotate_.z += 0.3f;
+
+        Controller* pController = (Controller*)FindObject("Controller");
+        transform_.rotate_.y = pController->GetRotate().y;
+        XMFLOAT3 move = { 0,0,0.1f };//プレイヤーの移動ベクトル
+        XMVECTOR vMove = XMLoadFloat3(&move);//移動ベクトルの型をXMVECTORに変換
+        XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+        vMove = XMVector3TransformCoord(vMove, mRotate);
+        XMFLOAT3 fMove;
+        XMStoreFloat3(&fMove, vMove);
+
+        Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
+        int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
+
+        //各頂点の位置を調べる
+        for (int i = 0; i < VERTEX_MAX; i++)
+        {
+            vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
+        }
+
+        ////1f前からどこに移動したかのベクトル
+        //XMFLOAT3 fMoveBonePos[VERTEX_MAX];
+        //for (int i = 0; i < VERTEX_MAX; i++)
+        //{
+        //    fMoveBonePos[i] = Transform::Float3Sub(prevBonePos[i], vertexBonePos[i]);
+        //}
+
+        //レイを飛ばす
+        RayCastData prevVertexCollision[VERTEX_MAX];
+        for (size_t i = 0; i < VERTEX_MAX; i++)
+        {
+            prevVertexCollision[i].start = vertexBonePos[i];
+            prevVertexCollision[i].dir = fMove;
+            Model::RayCast(hGroundModel, &prevVertexCollision[i]);
+            //}
+            ////レイを飛ばす
+            //RayCastData nowVertexCollision[VERTEX_MAX];
+            //for (size_t i = 0; i < VERTEX_MAX; i++)
+            //{
+            //    nowVertexCollision[i].start = prevBonePos[i];
+            //    nowVertexCollision[i].dir = fMoveBonePos[i];
+            //    Model::RayCast(hGroundModel, &nowVertexCollision[i]);
+            //}
+        }
+
+        bool moveFlag = false;
+        for (int i = 0; i < VERTEX_MAX; i++)
+        {
+            float length = XMVectorGetX(XMVector3Length(vMove * 3));
+            if (prevVertexCollision[i].dist < length)
+            {
+                moveFlag = true;
+            }
+        }
+
+        if (moveFlag)
+        {
+           // transform_.position_ = Transform::Float3Add(transform_.position_, prevVertexCollision[i].dir);
+            transform_.position_.x = prevPos.x;
+            transform_.position_.y = prevPos.y;
+            transform_.position_.z = prevPos.z;
+        }
+        else
+        {
+            XMVECTOR vPos;
+            vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+            vPos -= vMove * 3;
+            XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
+        }
     }
-    //Dキーを押したとき
-    if (Input::IsKey(DIK_D))
-    {
-        transform_.rotate_.z -= 0.3f;
-    }
-    //Wキーを押したとき
-    if (Input::IsKey(DIK_W))
+    //左マウスキーを押したとき
+    if (Input::IsMouseButton(1))
     {
         //シャリの向き
         //syariDir.z += 90;
@@ -381,7 +407,7 @@ void Syari::KeyOperation()
         vMove = XMVector3TransformCoord(vMove, mRotate);
         XMVECTOR vPos;
         vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
-        vPos -= vMove * 3;
+        vPos += vMove * 3;
         XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
     }
     //Sキーを押したとき
@@ -398,6 +424,13 @@ void Syari::KeyOperation()
 bool Syari::isFly()
 {
     return false;
+}
+
+void Syari::MoveMouse()
+{
+    XMFLOAT3 moveMouse = Input::GetMouseMove();
+    transform_.rotate_.x += moveMouse.y * ROTATE_SPEED;
+    transform_.rotate_.z += moveMouse.x * ROTATE_SPEED;
 }
 
 void Syari::Jump()

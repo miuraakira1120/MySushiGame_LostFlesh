@@ -140,8 +140,8 @@ void PlayScene::Update()
 //•`‰æ
 void PlayScene::Draw()
 {
-	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
+	/*Model::SetTransform(hModel_, transform_);
+	Model::Draw(hModel_);*/
 }
 
 //ŠJ•ú
