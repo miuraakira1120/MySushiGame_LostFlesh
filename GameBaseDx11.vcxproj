@@ -152,6 +152,7 @@
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Gauge.cpp" />
     <ClCompile Include="Goal.cpp" />
+    <ClCompile Include="GoalScene.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_dx11.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Gauge.h" />
     <ClInclude Include="Goal.h" />
+    <ClInclude Include="GoalScene.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />

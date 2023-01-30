@@ -5,6 +5,7 @@
 
 #include "global.h"
 #include "RootObject.h"
+#include "SceneManager.h"
 #include "Model.h"
 #include "Image.h"
 #include "Camera.h"
@@ -87,6 +88,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//Drawマネージャーのポインタを入れる
 	DrawManager* pDrawManager;
 	pDrawManager = (DrawManager*)pRootObject->FindObject("DrawManager");
+
+	//シーンマネージャーのポインタを入れる
+	SceneManager* pSceneManager;
+	pSceneManager = (SceneManager*)pRootObject->FindObject("SceneManager");
 
 	//Timeのイニシャライズ
 	Time::Initialize(FPS);
@@ -199,8 +204,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//controllerクラスのポインタを入れる
 					Controller* pController = (Controller*)pRootObject->FindObject("Controller");
 
-					Camera::SetTarget(pSyari->GetPosition());
-					Camera::SetPosition(pController->GetCameraPos());
+					if (pSyari != nullptr)
+					{
+						Camera::SetTarget(pSyari->GetPosition());
+						Camera::SetPosition(pController->GetCameraPos());
+					}
+					
 
 
 					//Camera::SetPosition(XMFLOAT3(0, 0, -10));
@@ -221,8 +230,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					Controller* pController;
 					pController = (Controller*)pRootObject->FindObject("Controller");
 
-					Camera::SetTarget(pSyari->GetPosition());
-					Camera::SetPosition(XMFLOAT3(0, 10, 0));
+					if (pSyari != nullptr)
+					{
+						Camera::SetTarget(pSyari->GetPosition());
+						Camera::SetPosition(XMFLOAT3(0, 10, 0));
+					}
 
 					//Camera::SetPosition(XMFLOAT3(10, 0, 0));
 					//Camera::SetPosition(pController->GetPosition());

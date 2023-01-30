@@ -1,41 +1,41 @@
-#include "StartScene.h"
+#include "GoalScene.h"
 #include "Engine/Image.h"
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
 
 //コンストラクタ
-StartScene::StartScene(GameObject* parent)
-	: GameObject(parent, "StartScene"), hPict_(-1)
+GoalScene::GoalScene(GameObject* parent)
+	: GameObject(parent, "GoalScene"), hPict_(-1)
 {
 }
 
 //初期化
-void StartScene::Initialize()
+void GoalScene::Initialize()
 {
 	//画像データのロード
-	hPict_ = Image::Load("start.png");
+	hPict_ = Image::Load("goal.jpg");
 	assert(hPict_ >= 0);
 }
 
 //更新
-void StartScene::Update()
+void GoalScene::Update()
 {
 	if (Input::IsKeyDown(DIK_RETURN))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_PLAY);
+		pSceneManager->ChangeScene(SCENE_ID_START);
 	}
 
 }
 
 //描画
-void StartScene::Draw()
+void GoalScene::Draw()
 {
 	Image::SetTransform(hPict_, transform_);
 	Image::Draw(hPict_);
 }
 
 //開放
-void StartScene::Release()
+void GoalScene::Release()
 {
 }

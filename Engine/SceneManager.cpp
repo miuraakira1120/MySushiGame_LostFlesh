@@ -8,6 +8,9 @@
 #include "../PlayScene.h"
 #include "../StartScene.h"
 
+#include "../GoalScene.h"
+
+
 
 //コンストラクタ
 SceneManager::SceneManager(GameObject * parent)
@@ -19,9 +22,9 @@ SceneManager::SceneManager(GameObject * parent)
 void SceneManager::Initialize()
 {
 	//最初のシーンを準備
-	currentSceneID_ = SCENE_ID_PLAY;
+	currentSceneID_ = SCENE_ID_START;
 	nextSceneID_ = currentSceneID_;
-	Instantiate<PlayScene>(this);
+	Instantiate<StartScene>(this);
 }
 
 //更新
@@ -44,7 +47,7 @@ void SceneManager::Update()
 		case SCENE_ID_TEST: Instantiate<TestScene>(this); break;
 		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
 		case SCENE_ID_START: Instantiate<StartScene>(this); break;
-
+		case SCENE_ID_GOAL: Instantiate<GoalScene>(this); break;
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;
@@ -65,4 +68,9 @@ void SceneManager::Release()
 void SceneManager::ChangeScene(SCENE_ID next)
 {
 	nextSceneID_ = next;
+}
+
+int SceneManager::GetScene()
+{
+	return currentSceneID_;
 }

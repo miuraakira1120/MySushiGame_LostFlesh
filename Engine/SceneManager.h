@@ -8,6 +8,7 @@ enum SCENE_ID
 	SCENE_ID_TEST = 0,
 	SCENE_ID_PLAY,
 	SCENE_ID_START,
+	SCENE_ID_GOAL,
 };
 
 //-----------------------------------------------------------
@@ -29,6 +30,8 @@ public:
 	//シーン切り替え（実際に切り替わるのはこの次のフレーム）
 	//引数：next	次のシーンのID
 	void ChangeScene(SCENE_ID next);
+
+	int GetScene();
 
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン

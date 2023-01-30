@@ -14,6 +14,7 @@
 #include "Goal.h"
 #include "Controller.h"
 #include "Time.h"
+#include "Engine/SceneManager.h"
 
 
 using std::vector;
@@ -246,10 +247,9 @@ void Syari::Update()
      
     //ゴールしたら
     if (GoalData.hit)
-
-
     {
-        transform_.position_.y = 10000;
+        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->ChangeScene(SCENE_ID_GOAL);
     }
 
     RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBoxを探す（一番下の頂点に）
@@ -299,6 +299,13 @@ XMFLOAT3 Syari::GetRotate()
 //キー操作
 void Syari::KeyOperation()
 {
+#if _DEBUG
+    if (Input::IsKeyDown(DIK_RETURN))
+    {
+        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->ChangeScene(SCENE_ID_GOAL);
+    }
+#endif
     //SPACEキーを押したとき
     if (Input::IsKey(DIK_SPACE))
     {
@@ -371,7 +378,7 @@ void Syari::KeyOperation()
         bool moveFlag = false;
         for (int i = 0; i < VERTEX_MAX; i++)
         {
-            float length = XMVectorGetX(XMVector3Length(vMove * 120));
+            float length = XMVectorGetX(XMVector3Length(vMove * 150));
             if (prevVertexCollision[i].dist < length)
             {
                 moveFlag = true;
