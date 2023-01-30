@@ -55,7 +55,7 @@ void Syari::Initialize()
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 2));
     AddCollider(collision);
 
-    //transform_.position_.y = -40;
+    transform_.position_.y = -40;
 
     pGauge_ = Instantiate<Gauge>(this);
 
@@ -67,6 +67,8 @@ void Syari::Initialize()
 //更新
 void Syari::Update()
 {
+
+    MoveMouse();
     //キー入力をする
     KeyOperation();
 
@@ -76,7 +78,6 @@ void Syari::Update()
         vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
     }
 
-    MoveMouse();
 
     //transform_.SetAxisTrans(axisPos);
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
@@ -370,7 +371,7 @@ void Syari::KeyOperation()
         bool moveFlag = false;
         for (int i = 0; i < VERTEX_MAX; i++)
         {
-            float length = XMVectorGetX(XMVector3Length(vMove * 3));
+            float length = XMVectorGetX(XMVector3Length(vMove * 120));
             if (prevVertexCollision[i].dist < length)
             {
                 moveFlag = true;
