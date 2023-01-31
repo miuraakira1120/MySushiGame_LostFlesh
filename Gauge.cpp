@@ -8,8 +8,8 @@ Gauge::Gauge(GameObject* parent)
     stopRatio_((float)nowHp_ / (float)maxHp_), moveRatio_(stopRatio_),
 
 
-    nowHp_(180),      //初期HP （適宜変更）
-    maxHp_(250),      //MaxHP（適宜変更）
+    nowHp_(250 * 60),      //初期HP （適宜変更）
+    maxHp_(250 * 60),      //MaxHP（適宜変更）
     SPEED(0.005f)     //バーの移動速度（お好みで）
 {
 }
@@ -133,4 +133,24 @@ void Gauge::Recovery(int value)
 {
     nowHp_ += value;
     if (nowHp_ > maxHp_) nowHp_ = maxHp_;
+}
+
+void Gauge::SetMaxHP(int maxHP)
+{
+    maxHp_ = maxHP;
+}
+
+void Gauge::SetNowHP(int nowHP)
+{
+    nowHp_ = nowHP;
+}
+
+int Gauge::GetMaxHP()
+{
+    return maxHp_;
+}
+
+int Gauge::GetNowHP()
+{
+    return nowHp_;
 }

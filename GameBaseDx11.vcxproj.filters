@@ -129,6 +129,7 @@
     <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="PoryLine.cpp" />
     <ClCompile Include="GoalScene.cpp" />
+    <ClCompile Include="GameOverScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -237,6 +238,7 @@
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="PoryLine.h" />
     <ClInclude Include="GoalScene.h" />
+    <ClInclude Include="GameOverScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

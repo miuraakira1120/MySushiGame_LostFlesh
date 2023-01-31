@@ -22,7 +22,7 @@ using std::vector;
 //コンストラクタ
 Syari::Syari(GameObject* parent)
     :GameObject(parent, "Syari"), hModel_(-1), mode(1), axisPos(0.5f, 0.5f, 1.0f),
-    prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr),isGround(false),prevBonePos()
+    prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr),isGround(false),prevBonePos(),countTime(0)
 {
 }
 
@@ -63,11 +63,23 @@ void Syari::Initialize()
     //ポリライン初期化
     pLine = new PoryLine;
     pLine->Load("tex.png");
+
+    //Time::UnLock();
+    //pGauge_->SetMaxHP(300 * 60);
 }
 
 //更新
 void Syari::Update()
 {
+    countTime ++;
+    //pGauge_->SetNowHP(Time::GetTimei());
+    pGauge_->Damage(1);
+
+    if (countTime > 250 * 60)
+    {
+        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
+    }
 
     MoveMouse();
     //キー入力をする
@@ -107,19 +119,19 @@ void Syari::Update()
     int leftest = 0;
     for (int i = 1; i < sizeof(vertexBonePos) / sizeof(XMFLOAT3); i++)
     {
-        if (vertexBonePos[rightest].x > vertexBonePos[i].x)
-        {
-            rightest = i;
-        }
-        if (vertexBonePos[leftest].x < vertexBonePos[i].x)
+        if (vertexBonePos[leftest].x > vertexBonePos[i].x)
         {
             leftest = i;
+        }
+        if (vertexBonePos[rightest].x < vertexBonePos[i].x)
+        {
+            rightest = i;
         }
     }
 
     //一番奥と手前を探す
-    int foremost = 0;
-    int innermost = 0;
+    int foremost = 0;//奥
+    int innermost = 0;//手前
     for (int i = 1; i < sizeof(vertexBonePos) / sizeof(XMFLOAT3); i++)
     {
         if (vertexBonePos[innermost].z > vertexBonePos[i].z)
@@ -148,11 +160,6 @@ void Syari::Update()
     prevLowPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
     Model::RayCast(hGroundModel, &prevLowPosData); //レイを発射
 
-    RayCastData nowLowPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-    nowLowPosData.start = vertexBonePos[lowest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
-    nowLowPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
-    Model::RayCast(hGroundModel, &nowLowPosData); //レイを発射
-
     RayCastData nowPosData[6];
     for (int i = 0; i < sizeof(direction) / sizeof(XMFLOAT3); i++)
     {
@@ -161,11 +168,45 @@ void Syari::Update()
         Model::RayCast(hGroundModel, &nowPosData[i]);  //レイを発射
     }
 
+    //一番下の位置からレイを飛ばす
+    RayCastData nowLowPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    nowLowPosData.start = vertexBonePos[lowest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    nowLowPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
+    Model::RayCast(hGroundModel, &nowLowPosData); //レイを発射
 
+    //一番上の位置からレイを飛ばす
+    RayCastData nowUpPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    nowUpPosData.start = vertexBonePos[highest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    nowUpPosData.dir = XMFLOAT3(0, 1, 0);       //レイの方向
+    Model::RayCast(hGroundModel, &nowUpPosData); //レイを発射
+
+    //一番左の位置からレイを飛ばす
+    RayCastData nowLeftPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    nowLeftPosData.start = vertexBonePos[leftest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    nowLeftPosData.dir = XMFLOAT3(-1, 0, 0);       //レイの方向
+    Model::RayCast(hGroundModel, &nowLeftPosData); //レイを発射
+
+    //一番右の位置からレイを飛ばす
+    RayCastData nowRightPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    nowRightPosData.start = vertexBonePos[rightest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    nowRightPosData.dir = XMFLOAT3(1, 0, 0);       //レイの方向
+    Model::RayCast(hGroundModel, &nowRightPosData); //レイを発射
+
+    //一番奥の位置からレイを飛ばす
+    RayCastData nowBackPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    nowBackPosData.start = vertexBonePos[foremost]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    nowBackPosData.dir = XMFLOAT3(0, 0, 1);       //レイの方向
+    Model::RayCast(hGroundModel, &nowBackPosData); //レイを発射
+
+    //一番手前の位置からレイを飛ばす
+    RayCastData nowFrontPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    nowFrontPosData.start = vertexBonePos[innermost]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    nowFrontPosData.dir = XMFLOAT3(0, 0, -1);       //レイの方向
+    Model::RayCast(hGroundModel, &nowFrontPosData); //レイを発射
 
     /////////////////////////////////////////////////////
 
-
+    
     //もし下に地面があったら
     if (nowLowPosData.hit && nowLowPosData.dist > accel)
     //if (nowPosData[BOTOM].hit && nowPosData[BOTOM].dist > accel)
@@ -176,29 +217,79 @@ void Syari::Update()
         //重力
         if (SPEED_LIMIT >= accel)
         {
-            Time::UnLock();
             accel += FALL_SPEED;
             transform_.position_.y -= accel;
         }
         else
         {
-            Time::Lock();
             transform_.position_.y -= SPEED_LIMIT;
         }
     }
     else //もし下に地面がなかったら
     {
+        /*isGround = true;
         accel = 0.0f;
+        transform_.position_.y -= nowLowPosData.dist;*/
 
-        Time::Lock();
+        accel = 0.0f;
         XMFLOAT3 lowDistance = { abs(transform_.position_.x - vertexBonePos[lowest].x),  abs(transform_.position_.y - vertexBonePos[lowest].y),  abs(transform_.position_.z - vertexBonePos[lowest].z) };
         //XMFLOAT3 lowDistance = { abs(prevPos.x - pravBonePos[lowest].x),  abs(prevPos.y - pravBonePos[lowest].y),  abs(prevPos.z - pravBonePos[lowest].z) };
         transform_.position_.y -= nowPosData[BOTOM].dist - lowDistance.y;
         //transform_.position_.y -= prevPosData.dist - SYARI_SIZE_Y;
-        
         //接地フラグを真にする
         isGround = true;
     }
+
+    //右の当たり判定
+    if (nowRightPosData.hit && nowRightPosData.dist < fabs(XMVectorGetX(vMove)))
+    {
+        transform_.position_.x += nowRightPosData.dist;
+    }
+    //左の当たり判定
+    else if (nowLeftPosData.hit && nowLeftPosData.dist < fabs(XMVectorGetX(vMove)))
+    {
+        transform_.position_.x -= nowLeftPosData.dist;
+    }
+    else
+    {
+        XMVECTOR vPos;
+        vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+        vPos += vMove;
+        transform_.position_.z = XMVectorGetZ(vPos);
+        //XMFLOAT3 tmpPosition_;
+        //XMStoreFloat3(&tmpPosition_, vPos);//現在地をtransform_.position_に送る
+        //tmpPosition_ = { tmpPosition_.x, 0, 0 };
+        //transform_.position_ = Transform::Float3Add(transform_.position_, tmpPosition_);
+    }
+
+    //奥の当たり判定
+    if (nowBackPosData.hit && nowBackPosData.dist < fabs(XMVectorGetZ(vMove)))
+    {
+        transform_.position_.z += nowBackPosData.dist;
+    }
+    //手前の当たり判定
+    else if (nowFrontPosData.hit && nowFrontPosData.dist < fabs(XMVectorGetZ(vMove)))
+    {
+        transform_.position_.z -= nowFrontPosData.dist;
+    }
+    else
+    {
+        XMVECTOR vPos;
+        vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+        vPos -= vMove;
+        //XMFLOAT3 tmpPosition_;
+        transform_.position_.z = XMVectorGetZ(vPos);
+        //XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
+        //tmpPosition_ = { 0, 0, tmpPosition_.z };
+        //transform_.position_ = Transform::Float3Add(transform_.position_, vPos);
+    }
+
+    //XMVECTOR vPos;
+    //vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+    //vPos -= vMove;
+    //XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
+    
+
 
     ////横の当たり判定
     //RayCastData vertexCollision[VERTEX_MAX];
@@ -254,8 +345,8 @@ void Syari::Update()
 
     RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBoxを探す（一番下の頂点に）
     BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBoxを探す（transform_.positionに）
-    pRedBox->SetPosition(vertexBonePos[innermost]);
-    pBlueBox->SetPosition(vertexBonePos[foremost]);
+    pRedBox->SetPosition(vertexBonePos[foremost]);
+    pBlueBox->SetPosition(vertexBonePos[innermost]);
 
     //ポリラインに現在の位置を伝える
     pLine->AddPosition(transform_.position_);
@@ -306,11 +397,6 @@ void Syari::KeyOperation()
         pSceneManager->ChangeScene(SCENE_ID_GOAL);
     }
 #endif
-    //SPACEキーを押したとき
-    if (Input::IsKey(DIK_SPACE))
-    {
-        breakFlag = true;
-    }
     //ENTERキーを押したとき
     if (Input::IsKeyDown(DIK_RETURN))
     {
@@ -328,95 +414,51 @@ void Syari::KeyOperation()
     }
     ////////移動/////////////
 
+    vMove = { 0,0,0,0 };
     //左マウスキーを押したとき
     if (Input::IsMouseButton(0))
     {
+    //    Controller* pController = (Controller*)FindObject("Controller");
+    //    transform_.rotate_.y = pController->GetRotate().y;
+    //    XMFLOAT3 move = { 0,0,0.3f };//プレイヤーの移動ベクトル
+    //    XMVECTOR vMove = XMLoadFloat3(&move);//移動ベクトルの型をXMVECTORに変換
+    //    XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+    //    vMove -= XMVector3TransformCoord(vMove, mRotate);
+    //    //移動
+    //    XMVECTOR vPos;
+    //    vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+    //    vPos += vMove;
+    //    XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
 
         Controller* pController = (Controller*)FindObject("Controller");
         transform_.rotate_.y = pController->GetRotate().y;
-        XMFLOAT3 move = { 0,0,0.1f };//プレイヤーの移動ベクトル
-        XMVECTOR vMove = XMLoadFloat3(&move);//移動ベクトルの型をXMVECTORに変換
+        XMFLOAT3 move = { 0,0,0.3f };//プレイヤーの移動ベクトル
+        vMove = XMLoadFloat3(&move);//移動ベクトルの型をXMVECTORに変換
         XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
         vMove = XMVector3TransformCoord(vMove, mRotate);
-        XMFLOAT3 fMove;
+       
         XMStoreFloat3(&fMove, vMove);
-
-        Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
-        int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
-
-        //各頂点の位置を調べる
-        for (int i = 0; i < VERTEX_MAX; i++)
-        {
-            vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
-        }
-
-        ////1f前からどこに移動したかのベクトル
-        //XMFLOAT3 fMoveBonePos[VERTEX_MAX];
-        //for (int i = 0; i < VERTEX_MAX; i++)
-        //{
-        //    fMoveBonePos[i] = Transform::Float3Sub(prevBonePos[i], vertexBonePos[i]);
-        //}
-
-        //レイを飛ばす
-        RayCastData prevVertexCollision[VERTEX_MAX];
-        for (size_t i = 0; i < VERTEX_MAX; i++)
-        {
-            prevVertexCollision[i].start = vertexBonePos[i];
-            prevVertexCollision[i].dir = fMove;
-            Model::RayCast(hGroundModel, &prevVertexCollision[i]);
-            //}
-            ////レイを飛ばす
-            //RayCastData nowVertexCollision[VERTEX_MAX];
-            //for (size_t i = 0; i < VERTEX_MAX; i++)
-            //{
-            //    nowVertexCollision[i].start = prevBonePos[i];
-            //    nowVertexCollision[i].dir = fMoveBonePos[i];
-            //    Model::RayCast(hGroundModel, &nowVertexCollision[i]);
-            //}
-        }
-
-        bool moveFlag = false;
-        for (int i = 0; i < VERTEX_MAX; i++)
-        {
-            float length = XMVectorGetX(XMVector3Length(vMove * 150));
-            if (prevVertexCollision[i].dist < length)
-            {
-                moveFlag = true;
-            }
-        }
-
-        if (moveFlag)
-        {
-           // transform_.position_ = Transform::Float3Add(transform_.position_, prevVertexCollision[i].dir);
-            transform_.position_.x = prevPos.x;
-            transform_.position_.y = prevPos.y;
-            transform_.position_.z = prevPos.z;
-        }
-        else
-        {
-            XMVECTOR vPos;
-            vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
-            vPos -= vMove * 3;
-            XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
-        }
+        //XMVECTOR vPos;
+        //vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+        //vPos -= vMove;
+        //XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
     }
+
     //左マウスキーを押したとき
     if (Input::IsMouseButton(1))
     {
-        //シャリの向き
-        //syariDir.z += 90;
-        //transform_.position_.z += SYARI_SPEED;
-       //transform_.rotate_.x += 0.3f;
         Controller* pController = (Controller*)FindObject("Controller");
         transform_.rotate_.y = pController->GetRotate().y;
-        XMFLOAT3 move = { 0,0,0.1f };//プレイヤーの移動ベクトル
-        XMVECTOR vMove = XMLoadFloat3(&move);//移動ベクトルの型をXMVECTORに変換
+        XMFLOAT3 move = { 0,0,0.3f };//プレイヤーの移動ベクトル
+        vMove = XMLoadFloat3(&move);//移動ベクトルの型をXMVECTORに変換
         XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
         vMove = XMVector3TransformCoord(vMove, mRotate);
-        XMVECTOR vPos;
-        vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
-        vPos += vMove * 3;
-        XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
+        vMove *= -1;
+        XMStoreFloat3(&fMove, vMove);
+        //XMVECTOR vPos;
+        //vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+        //vPos += vMove;
+        //XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
     }
     //Sキーを押したとき
     if (Input::IsKey(DIK_S))
@@ -436,7 +478,7 @@ bool Syari::isFly()
 
 void Syari::MoveMouse()
 {
-    XMFLOAT3 moveMouse = Input::GetMouseMove();
+   XMFLOAT3 moveMouse = Input::GetMouseMove();
     transform_.rotate_.x += moveMouse.y * ROTATE_SPEED;
     transform_.rotate_.z += moveMouse.x * ROTATE_SPEED;
 }

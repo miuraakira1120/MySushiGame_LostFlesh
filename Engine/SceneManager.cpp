@@ -9,7 +9,7 @@
 #include "../StartScene.h"
 
 #include "../GoalScene.h"
-
+#include "../GameOverScene.h"
 
 
 //コンストラクタ
@@ -22,9 +22,9 @@ SceneManager::SceneManager(GameObject * parent)
 void SceneManager::Initialize()
 {
 	//最初のシーンを準備
-	currentSceneID_ = SCENE_ID_START;
+	currentSceneID_ = SCENE_ID_PLAY;
 	nextSceneID_ = currentSceneID_;
-	Instantiate<StartScene>(this);
+	Instantiate<PlayScene>(this);
 }
 
 //更新
@@ -48,6 +48,7 @@ void SceneManager::Update()
 		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
 		case SCENE_ID_START: Instantiate<StartScene>(this); break;
 		case SCENE_ID_GOAL: Instantiate<GoalScene>(this); break;
+		case SCENE_ID_GAMEOVER: Instantiate<GameOverScene>(this); break;
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;

@@ -18,7 +18,7 @@ void Stage::Initialize()
 {
     //モデルデータのロード
     //hModel_ = Model::Load("ground2.fbx");
-    hModel_ = Model::Load("stage1.fbx");
+    hModel_ = Model::Load("stage1-1.fbx");
     assert(hModel_ >= 0);
     //transform_.scale_ = { 20.0f, 20.0f, 20.0f };
     Instantiate<Goal>(this);

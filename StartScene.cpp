@@ -13,14 +13,14 @@ StartScene::StartScene(GameObject* parent)
 void StartScene::Initialize()
 {
 	//画像データのロード
-	hPict_ = Image::Load("start.png");
+	hPict_ = Image::Load("start.jpg");
 	assert(hPict_ >= 0);
 }
 
 //更新
 void StartScene::Update()
 {
-	if (Input::IsKeyDown(DIK_RETURN))
+	if (Input::IsMouseButtonDown(0))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_PLAY);

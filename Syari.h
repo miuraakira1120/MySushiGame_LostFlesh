@@ -111,10 +111,11 @@ class Syari : public GameObject
 
     //ゲージオブジェクト
     Gauge* pGauge_;
-    
     float jumpSpeed;
-
     PoryLine* pLine;
+    int countTime;
+    /*XMVECTOR vMove;
+    XMFLOAT3 fMove;*/
 
     //int hGoalModel;//地面のモデル番号
 

@@ -150,6 +150,7 @@
     <ClCompile Include="Engine\Text.cpp" />
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
+    <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Gauge.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="GoalScene.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Engine\Text.h" />
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
+    <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="Gauge.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="GoalScene.h" />

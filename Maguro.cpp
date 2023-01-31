@@ -7,6 +7,7 @@
 #include "Engine/Input.h"
 #include "Engine/BoxCollider.h"
 #include "Time.h"
+#include "Engine/SceneManager.h"
 
 //コンストラクタ
 Maguro::Maguro(GameObject* parent)
@@ -76,6 +77,8 @@ void Maguro::Update()
 
     if (!nowLowPosData.hit)
     {
+        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
         //炎
         {
             EmitterData data;

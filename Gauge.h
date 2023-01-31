@@ -54,4 +54,10 @@ public:
     //‰ñ•œ
     //ˆø”Fvalue  ‰ñ•œ—Ê
     void Recovery(int value);
+
+    void SetMaxHP(int maxHP);
+    void SetNowHP(int nowHP);
+
+    int GetMaxHP();
+    int GetNowHP();
 };

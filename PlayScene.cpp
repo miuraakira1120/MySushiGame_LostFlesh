@@ -5,6 +5,7 @@
 #include "Controller.h"
 #include "RedBox.h"
 #include "BlueBox.h"
+#include "Goal.h"
 #include "Engine/Camera.h"
 
 
@@ -20,6 +21,7 @@ void PlayScene::Initialize()
 	Instantiate<Syari>(this);
 	Instantiate<Controller>(this);
 	Instantiate<Stage>(this);
+	Instantiate<Goal>(this);
 	Instantiate<RedBox>(this);
 	Instantiate<BlueBox>(this);
 

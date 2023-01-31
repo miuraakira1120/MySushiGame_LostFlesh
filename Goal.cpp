@@ -1,6 +1,7 @@
 #include "Goal.h"
 #include "Engine/Model.h"
 #include "Stage.h"
+#include "Syari.h"
 
 //コンストラクタ
 Goal::Goal(GameObject* parent)
@@ -19,8 +20,8 @@ void Goal::Initialize()
     //モデルデータのロード
     hModel_ = Model::Load("Dishes.fbx");
     assert(hModel_ >= 0);
-    transform_.position_ = { 15.0f, 20.0f, 15.0f};
-    //transform_.scale_ = { 0.25f, 0.25f , 0.25f };
+    transform_.position_ = { 14.0f, -34.0f, -33.0f};
+    transform_.scale_ = { 2.5f, 0.25f , 2.5f };
 }
 
 //更新
@@ -30,6 +31,9 @@ void Goal::Update()
 
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
     int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
+
+    Syari* pSyari = (Syari*)FindObject("Syari");    //ステージオブジェクトを探す
+    hGroundModel = pSyari->GetModelHandle();    //モデル番号を取得
 
     RayCastData data;
     data.start = transform_.position_;   //レイの発射位置
@@ -42,6 +46,7 @@ void Goal::Update()
         //その分位置を下げる
         //transform_.position_.y -= data.dist;
     }
+
 }
 
 //描画
