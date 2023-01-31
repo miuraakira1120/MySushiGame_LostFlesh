@@ -89,7 +89,7 @@ void Maguro::PhysicalOperation()
 {
     RayCastData syariData = DoRay(GetParentPos(), XMFLOAT3(0, -1, 0), hSyariModel);
     //マグロがシャリの上に乗っていたら
-    if (!syariData.hit)
+    //if (!syariData.hit)
     {
         if ((int)pSyari->GetRotate().z % ROTATE_MAX > FALL_ANGLE)
         {
@@ -108,6 +108,12 @@ void Maguro::PhysicalOperation()
             transform_.position_.z += FALL_SPEED * ((int)pSyari->GetRotate().x % ROTATE_MAX);
         }
     }
+
+    if (abs(transform_.position_.x) > SYARI_SIZE_X || abs(transform_.position_.z) > SYARI_SIZE_Z)
+    {
+
+    }
+    transform_.position_.x
     //下にシャリがなかったら
 }
 
