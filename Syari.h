@@ -15,7 +15,7 @@ static const float SYARI_SIZE_Z = 1.0f; //シャリのZのサイズ（1倍）
 
 using std::vector;
 
-enum Ver
+static enum Ver
 {
     UP_RIGHT_FRONT = 0,
     UP_RIGHT_BACK,

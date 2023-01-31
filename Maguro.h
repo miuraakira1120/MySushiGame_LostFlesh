@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Particle.h"
 
 class Stage;
 class Syari;
@@ -26,14 +27,17 @@ class Maguro : public GameObject
        "Vertex_Low_Left_Back"
     };
 
-    int hModel_;     //モデル番号
+    int hModel_[2];     //モデル番号
     bool fallFlag;   //マグロが落ちるかどうかフラグ
     Syari* pSyari;   //シャリのポインタ
     int hSyariModel; //シャリのモデル番号
     Stage* pStage;   //ステージのポインタ
     int hGroundModel;//ステージのモデル番号
+    XMFLOAT3 vertexBonePos[8];
 
     XMFLOAT3 prevPos;//1f前の自分の位置
+
+    Particle* pParticle_;
     
 public:
     //コンストラクタ
