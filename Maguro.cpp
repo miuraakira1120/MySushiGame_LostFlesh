@@ -79,30 +79,6 @@ void Maguro::Update()
     {
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
-        //‰Š
-        {
-            EmitterData data;
-
-            //‰Š
-            data.textureFileName = "Cloud.png";
-            data.position = XMFLOAT3(-4, 1.5, -4);
-            data.positionErr = XMFLOAT3(0.1, 0, 0.1);
-            data.delay = 5;
-            data.number = 1;
-            data.lifeTime = 60;
-            data.gravity = -0.002f;
-            data.dir = XMFLOAT3(0, 0, 0);
-            data.dirErr = XMFLOAT3(0, 0, 0);
-            data.speed = 0.01f;
-            data.speedErr = 0.0;
-            data.size = XMFLOAT2(1.5, 1.5);
-            data.sizeErr = XMFLOAT2(0.4, 0.4);
-            data.scale = XMFLOAT2(1.01, 1.01);
-            data.color = XMFLOAT4(0.5, 1, 0, 1);
-            data.deltaColor = XMFLOAT4(0, -0.03, 0, -0.02);
-            pParticle_->Start(data);
-            transform_.position_ = prevPos;
-        }
     }
 
     //ƒVƒƒƒŠ‚Ì•¨—‰‰ŽZ
@@ -171,6 +147,8 @@ void Maguro::PhysicalOperation()
             transform_.position_.z += FALL_SPEED * ((int)pSyari->GetRotate().x % ROTATE_MAX);
         }
     }
+
+    XMFLOAT3 fSyariToMaguroVec;
 
     if (abs(transform_.position_.x) > SYARI_SIZE_X || abs(transform_.position_.z) > SYARI_SIZE_Z)
     {

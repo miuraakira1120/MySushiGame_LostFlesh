@@ -114,8 +114,8 @@ class Syari : public GameObject
     float jumpSpeed;
     PoryLine* pLine;
     int countTime;
-    /*XMVECTOR vMove;
-    XMFLOAT3 fMove;*/
+    XMVECTOR vMove;
+    XMFLOAT3 fMove;
 
     //int hGoalModel;//ínñ ÇÃÉÇÉfÉãî‘çÜ
 

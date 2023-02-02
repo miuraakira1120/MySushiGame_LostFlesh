@@ -414,7 +414,6 @@ void Syari::KeyOperation()
     }
     ////////移動/////////////
 
-    vMove = { 0,0,0,0 };
     //左マウスキーを押したとき
     if (Input::IsMouseButton(0))
     {

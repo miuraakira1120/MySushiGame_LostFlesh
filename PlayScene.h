@@ -1,8 +1,11 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Particle.h"
 
 class PlayScene : public GameObject
 {
+	Particle* pParticle_;
+
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

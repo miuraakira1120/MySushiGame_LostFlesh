@@ -4,8 +4,8 @@
 class Controller : public GameObject
 {
     const float CAMERA_SPEED = 3.0f;
-    const float UP_ANGLE_LIMIT = 30;
-    const float DOWN_ANGLE_LIMIT = -45;
+    const float UP_ANGLE_LIMIT = 1000;
+    const float DOWN_ANGLE_LIMIT = -1000;
     int hPict_;    //画像番号
 public:
     //コンストラクタ

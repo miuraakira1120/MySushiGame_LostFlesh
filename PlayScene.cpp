@@ -137,6 +137,44 @@ void PlayScene::Initialize()
 //XV
 void PlayScene::Update()
 {
+	//Maguro* pMaguro;// = (Maguro*)FindObject("Maguro");    //Maguro‚ð’T‚·
+
+	//if (pMaguro != nullptr)
+	//{
+	//	EmitterData data;
+	//	data.textureFileName = "Cloud.png";
+	//	data.position = Transform::Float3Add(pMaguro->GetPosition(), pMaguro->GetParent()->GetPosition());
+	//	data.delay = 0;
+	//	data.number = 80;
+	//	data.lifeTime = 20;
+	//	data.dir = XMFLOAT3(0, 1, 0);
+	//	data.dirErr = XMFLOAT3(90, 90, 90);
+	//	data.speed = 0.1f;
+	//	data.speedErr = 0.8;
+	//	data.size = XMFLOAT2(1, 1);
+	//	data.sizeErr = XMFLOAT2(0.4, 0.4);
+	//	data.scale = XMFLOAT2(1.05, 1.05);
+	//	data.color = XMFLOAT4(1, 1, 0.1, 1);
+	//	data.deltaColor = XMFLOAT4(0, -1.0 / 20, 0, -1.0 / 20);
+	//	pParticle_->Start(data);
+
+	//	data.delay = 0;
+	//	data.number = 80;
+	//	data.lifeTime = 100;
+	//	data.positionErr = XMFLOAT3(0.5, 0, 0.5);
+	//	data.dir = XMFLOAT3(0, 1, 0);
+	//	data.dirErr = XMFLOAT3(90, 90, 90);
+	//	data.speed = 0.25f;
+	//	data.speedErr = 1;
+	//	data.accel = 0.93;
+	//	data.size = XMFLOAT2(0.1, 0.1);
+	//	data.sizeErr = XMFLOAT2(0.4, 0.4);
+	//	data.scale = XMFLOAT2(0.99, 0.99);
+	//	data.color = XMFLOAT4(1, 1, 0.1, 1);
+	//	data.deltaColor = XMFLOAT4(0, 0, 0, 0);
+	//	data.gravity = 0.003f;
+	//	pParticle_->Start(data);
+	//}
 }
 
 //•`‰æ
