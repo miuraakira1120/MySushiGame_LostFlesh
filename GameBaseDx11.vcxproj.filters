@@ -131,6 +131,7 @@
     <ClCompile Include="GoalScene.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Neta.cpp" />
+    <ClCompile Include="Crab.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -241,6 +242,7 @@
     <ClInclude Include="GoalScene.h" />
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="Neta.h" />
+    <ClInclude Include="Crab.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

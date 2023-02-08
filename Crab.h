@@ -6,7 +6,7 @@ class Stage;
 class Syari;
 class RayCastData;
 
-class Maguro : public GameObject
+class Crab : public GameObject
 {
     const float MAGURO_SIZE_X = 0.25f; //マグロのXのサイズ（1倍）
     const float MAGURO_SIZE_Y = 0.25f; //マグロのYのサイズ（1倍）
@@ -38,13 +38,13 @@ class Maguro : public GameObject
     XMFLOAT3 prevPos;//1f前の自分の位置
 
     Particle* pParticle_;
-    
+
 public:
     //コンストラクタ
-    Maguro(GameObject* parent);
+    Crab(GameObject* parent);
 
     //デストラクタ
-    ~Maguro();
+    ~Crab();
 
     //初期化
     void Initialize() override;
@@ -54,10 +54,92 @@ public:
 
     //描画
     void Draw() override;
-
+    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     //開放
     void Release() override;
-
+//あきらくんさいてー！
+//どんまい
+//さながやってあげました
+//     あいす
+//     すいか
+// からす
+//     すずめ
+//     めだか
+//     かもめ
+//     めもり
+//     りんご
+//     ごりら
+//     らっぱ
+//     ぱんつ
+//     つみき
+//     きつね
+//     ねんど
+//     どいつ
+//     つがる
+//     るーる
+//     るーと
+//     とまと
+//     とんぼ
+//     ぼうず
+//     ずーむ
+//     むかで
+//     でんき
+//     きんぐ
+//     ぐんま
+//     まんと
+//     とーく
+//     くもり
+//     りーる
+//     るんば
+//     ばった
+//     たんぼ
+//     ぼーと
+//     とんび
+//     びーち
+//     ちょこ
+//     こども
+//     もぐら
+//     らじお
+//     おとな
+//     なむこ
+//     こーと
+//     とんぐ
+//     ぐりこ
+//     こーど
+//     どらい
+//     いちご
+//     ごっど
+//     どっど
+//     どーむ
+//     むじな
+//     なまえ
+//     えいと
+//     といれ
+//     れーす
+//     するめ
+//     めいろ
+//     ろうか
+//     かーど
+// どっぐ
+//     ぐっず
+//     ずっく
+//     くるま
+//     まくら
+// らいと
+//     とうし
+//     しじみ
+//     みみず
+//     ずけい
+//     いるみ
+//     みんと
+//     とけい
+//     いんと
+//     とんち
+//     ちょき
+//     きかい
+//     いしょ
+//     よろい
+// 
     //親の親から見た位置を入手
     XMFLOAT3 GetParentPos()
     {

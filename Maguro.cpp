@@ -11,14 +11,10 @@
 
 //コンストラクタ
 Maguro::Maguro(GameObject* parent)
-    :GameObject(parent, "Maguro"), hModel_(),fallFlag(false),
+    :GameObject(parent, "Maguro"), hModel_(-1),fallFlag(false),
     prevPos(0.0f,0.0f,0.0f), pSyari(nullptr),pStage(nullptr), hSyariModel(0), 
     hGroundModel(0)
 {
-    for (int i = 0; i < sizeof(hModel_) / sizeof(int); i++)
-    {
-        hModel_[i] = -1;
-    }
 }
 
 //デストラクタ
@@ -33,8 +29,8 @@ void Maguro::Initialize()
     transform_.position_.y = SYARI_SIZE_Y + MAGURO_SIZE_Y;
 
     //モデルデータのロード
-    hModel_[0] = Model::Load("maguro.fbx");
-    assert(hModel_[0] >= 0);
+    hModel_ = Model::Load("Crab.fbx");
+    assert(hModel_ >= 0);
 
     //当たり判定の生成
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 0.5f, 3));
@@ -52,7 +48,7 @@ void Maguro::Update()
     //各頂点の位置を調べる
     for (int i = 0; i < VERTEX_MAX; i++)
     {
-        vertexBonePos[i] = Model::GetBonePosition(hModel_[0], vertexName[i]);
+        vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
     }
 
     //一番低いところと高いところを探す
@@ -90,8 +86,8 @@ void Maguro::Update()
 //描画
 void Maguro::Draw()
 {
-    Model::SetTransform(hModel_[0], transform_);
-    Model::Draw(hModel_[0]);
+    Model::SetTransform(hModel_, transform_);
+    Model::Draw(hModel_);
 }
 
 //開放

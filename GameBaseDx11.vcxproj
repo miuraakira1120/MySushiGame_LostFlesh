@@ -128,6 +128,7 @@
     <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="BlueBox.cpp" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="Crab.cpp" />
     <ClCompile Include="DarwManager.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="BlueBox.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="Crab.h" />
     <ClInclude Include="DarwManager.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
