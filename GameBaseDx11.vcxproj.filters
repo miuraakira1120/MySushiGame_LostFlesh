@@ -130,6 +130,7 @@
     <ClCompile Include="PoryLine.cpp" />
     <ClCompile Include="GoalScene.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
+    <ClCompile Include="Neta.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -239,6 +240,7 @@
     <ClInclude Include="PoryLine.h" />
     <ClInclude Include="GoalScene.h" />
     <ClInclude Include="GameOverScene.h" />
+    <ClInclude Include="Neta.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
