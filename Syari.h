@@ -41,7 +41,16 @@ class Syari : public GameObject
         DIRECTION_MAX
     };
 
-    enum VertexDirection
+    enum ShortDistance
+    {
+        LEFTEST,
+        RIGHTEST,
+        FOREMOST,
+        INNERMOST,
+        SHORT_DISTANCE_MAX
+    };
+
+    /*enum VertexDirection
     {
         TOP_RIGHT_FRONT = 0,
         TOP_RIGHT_BACK,
@@ -52,7 +61,9 @@ class Syari : public GameObject
         BACK_LEFT_FRONT,
         BACK_LEFT_BACK,
         VERTEX_DIRECTION_MAX
-    };
+    };*/
+
+
 
     const XMFLOAT3 direction[6] = {
         {  0,  1,  0  }, //è„

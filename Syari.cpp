@@ -211,31 +211,63 @@ void Syari::Update()
     Model::RayCast(hGroundModel, &nowFrontPosData); //レイを発射
 
     /////////全部の角から全方向にレイを飛ばす//////
-    ////一番左の位置からレイを飛ばす
-    //for (int i = 0; i < VERTEX_MAX; i++)
-    //{
-    //    RayCastData nowLeftPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-    //    nowLeftPosData.start = Transform::Float3Add(vertexBonePos[i], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
-    //    nowLeftPosData.dir = XMFLOAT3(-1, 0, 0);       //レイの方向
-    //    Model::RayCast(hGroundModel, &nowLeftPosData); //レイを発射
-    //}
-    ////一番右の位置からレイを飛ばす
-    //RayCastData nowRightPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-    //nowRightPosData.start = Transform::Float3Add(vertexBonePos[rightest], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
-    //nowRightPosData.dir = XMFLOAT3(1, 0, 0);       //レイの方向
-    //Model::RayCast(hGroundModel, &nowRightPosData); //レイを発射
+    RayCastData shortDistance[SHORT_DISTANCE_MAX];
+    for (int i = 0; i < SHORT_DISTANCE_MAX; i++)
+    {
+        shortDistance[i].dist = 99999;
+    }
+    
+    //一番左の位置からレイを飛ばす
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        RayCastData nowLeftPosDataAll;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+        nowLeftPosDataAll.start = Transform::Float3Add(vertexBonePos[i], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+        nowLeftPosDataAll.dir = XMFLOAT3(-1, 0, 0);       //レイの方向
+        Model::RayCast(hGroundModel, &nowLeftPosDataAll); //レイを発射
+        if (nowLeftPosDataAll.dist < shortDistance[LEFTEST].dist)
+        {
+            shortDistance[LEFTEST] = nowLeftPosDataAll;
+        }
+    }
 
-    ////一番奥の位置からレイを飛ばす
-    //RayCastData nowBackPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-    //nowBackPosData.start = Transform::Float3Add(vertexBonePos[foremost], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
-    //nowBackPosData.dir = XMFLOAT3(0, 0, 1);       //レイの方向
-    //Model::RayCast(hGroundModel, &nowBackPosData); //レイを発射
+    //一番右の位置からレイを飛ばす
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        RayCastData nowRightPosDataAll;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+        nowRightPosDataAll.start = Transform::Float3Add(vertexBonePos[i], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+        nowRightPosDataAll.dir = XMFLOAT3(1, 0, 0);       //レイの方向
+        Model::RayCast(hGroundModel, &nowRightPosDataAll); //レイを発射
+        if (nowRightPosDataAll.dist < shortDistance[RIGHTEST].dist)
+        {
+            shortDistance[RIGHTEST] = nowRightPosDataAll;
+        }
+    }
 
-    ////一番手前の位置からレイを飛ばす
-    //RayCastData nowFrontPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-    //nowFrontPosData.start = Transform::Float3Add(vertexBonePos[innermost], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
-    //nowFrontPosData.dir = XMFLOAT3(0, 0, -1);       //レイの方向
-    //Model::RayCast(hGroundModel, &nowFrontPosData); //レイを発射
+    //一番奥の位置からレイを飛ばす
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        RayCastData nowBackPosDataAll;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+        nowBackPosDataAll.start = Transform::Float3Add(vertexBonePos[i], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+        nowBackPosDataAll.dir = XMFLOAT3(0, 0, 1);       //レイの方向
+        Model::RayCast(hGroundModel, &nowBackPosDataAll); //レイを発射
+        if (nowBackPosDataAll.dist < shortDistance[FOREMOST].dist)
+        {
+            shortDistance[FOREMOST] = nowBackPosDataAll;
+        }
+    }
+
+    //一番手前の位置からレイを飛ばす
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        RayCastData nowFrontPosDataAll;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+        nowFrontPosDataAll.start = Transform::Float3Add(vertexBonePos[i], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+        nowFrontPosDataAll.dir = XMFLOAT3(0, 0, -1);       //レイの方向
+        Model::RayCast(hGroundModel, &nowFrontPosDataAll); //レイを発射
+        if (nowFrontPosDataAll.dist < shortDistance[INNERMOST].dist)
+        {
+            shortDistance[INNERMOST] = nowFrontPosDataAll;
+        }
+    }
 
     /////////////////////////////////////////////////////
 
@@ -274,14 +306,14 @@ void Syari::Update()
     }
 
     //右の当たり判定
-    if (nowRightPosData.hit && nowRightPosData.dist <= fabs(XMVectorGetX(vMove)))
+    if (shortDistance[RIGHTEST].hit && shortDistance[RIGHTEST].dist <= fabs(XMVectorGetX(vMove)))
     {
-        transform_.position_.x -= nowRightPosData.dist;
+        transform_.position_.x -= shortDistance[RIGHTEST].dist;
     }
     //左の当たり判定
-    else if (nowLeftPosData.hit && nowLeftPosData.dist <= fabs(XMVectorGetX(vMove)))
+    else if (shortDistance[LEFTEST].hit && shortDistance[LEFTEST].dist <= fabs(XMVectorGetX(vMove)))
     {
-        transform_.position_.x += nowLeftPosData.dist;
+        transform_.position_.x += shortDistance[LEFTEST].dist;
     }
     else
     {
@@ -296,14 +328,14 @@ void Syari::Update()
     }
 
     //奥の当たり判定
-    if (nowBackPosData.hit && nowBackPosData.dist <= fabs(XMVectorGetZ(vMove)))
+    if (shortDistance[FOREMOST].hit && shortDistance[FOREMOST].dist <= fabs(XMVectorGetZ(vMove)))
     {
-        transform_.position_.z -= nowBackPosData.dist;
+        transform_.position_.z -= shortDistance[FOREMOST].dist;
     }
     //手前の当たり判定
-    else if (nowFrontPosData.hit && nowFrontPosData.dist <= fabs(XMVectorGetZ(vMove)))
+    else if (shortDistance[INNERMOST].hit && shortDistance[INNERMOST].dist <= fabs(XMVectorGetZ(vMove)))
     {
-        transform_.position_.z += nowFrontPosData.dist;
+        transform_.position_.z += shortDistance[INNERMOST].dist;
     }
     else
     {
@@ -316,6 +348,50 @@ void Syari::Update()
         //tmpPosition_ = { 0, 0, tmpPosition_.z };
         //transform_.position_ = Transform::Float3Add(transform_.position_, vPos);
     }
+
+    ////右の当たり判定
+    //if (nowRightPosData.hit && nowRightPosData.dist <= fabs(XMVectorGetX(vMove)))
+    //{
+    //    transform_.position_.x -= nowRightPosData.dist;
+    //}
+    ////左の当たり判定
+    //else if (nowLeftPosData.hit && nowLeftPosData.dist <= fabs(XMVectorGetX(vMove)))
+    //{
+    //    transform_.position_.x += nowLeftPosData.dist;
+    //}
+    //else
+    //{
+    //    XMVECTOR vPos;
+    //    vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+    //    vPos += vMove;
+    //    transform_.position_.x = XMVectorGetX(vPos);
+    //    //XMFLOAT3 tmpPosition_;
+    //    //XMStoreFloat3(&tmpPosition_, vPos);//現在地をtransform_.position_に送る
+    //    //tmpPosition_ = { tmpPosition_.x, 0, 0 };
+    //    //transform_.position_ = Transform::Float3Add(transform_.position_, tmpPosition_);
+    //}
+
+    ////奥の当たり判定
+    //if (nowBackPosData.hit && nowBackPosData.dist <= fabs(XMVectorGetZ(vMove)))
+    //{
+    //    transform_.position_.z -= nowBackPosData.dist;
+    //}
+    ////手前の当たり判定
+    //else if (nowFrontPosData.hit && nowFrontPosData.dist <= fabs(XMVectorGetZ(vMove)))
+    //{
+    //    transform_.position_.z += nowFrontPosData.dist;
+    //}
+    //else
+    //{
+    //    XMVECTOR vPos;
+    //    vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+    //    vPos += vMove;
+    //    //XMFLOAT3 tmpPosition_;
+    //    transform_.position_.z = XMVectorGetZ(vPos);
+    //    //XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
+    //    //tmpPosition_ = { 0, 0, tmpPosition_.z };
+    //    //transform_.position_ = Transform::Float3Add(transform_.position_, vPos);
+    //}
 
     //XMVECTOR vPos;
     //vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
