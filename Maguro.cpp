@@ -77,8 +77,8 @@ void Maguro::Update()
 
     if (!nowLowPosData.hit)
     {
-        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
+       /* SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);*/
     }
 
     //ƒVƒƒƒŠ‚Ì•¨—‰‰ŽZ
