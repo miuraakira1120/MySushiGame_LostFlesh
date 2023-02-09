@@ -268,9 +268,7 @@ void Syari::Update()
             shortDistance[INNERMOST] = nowFrontPosDataAll;
         }
     }
-
     /////////////////////////////////////////////////////
-
     
     //もし下に地面があったら
     if (nowLowPosData.hit && nowLowPosData.dist > accel)
@@ -444,6 +442,35 @@ void Syari::Update()
     //    }
     //}
      
+
+    ///////////////レイを飛ばし放題//////////////
+    XMFLOAT3 fMoveBonePos[VERTEX_MAX];
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        //過去のボーンの位置からどこに動いたか
+        fMoveBonePos[i] = Transform::Float3Sub(prevBonePos[i], vertexBonePos[i]);
+    }
+
+    RayCastData rayMove[VERTEX_MAX];
+
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        rayMove[i].start = prevBonePos[i];   //レイの発射位置
+        rayMove[i].dir = fMoveBonePos[i];       //レイの方向
+        Model::RayCast(hGroundModel, &rayMove[i]); //レイを発射
+    }
+
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        XMVECTOR vMoveBonePos = XMLoadFloat3(&fMoveBonePos[i]);
+        float moveLength = XMVectorGetX(XMVector3Length(vMoveBonePos));
+        if (rayMove->hit && rayMove->dist < moveLength)
+        {
+            
+        }
+    }
+
+    /////////////////////////////////////////////
      
     //ゴールしたら
     if (GoalData.hit)
