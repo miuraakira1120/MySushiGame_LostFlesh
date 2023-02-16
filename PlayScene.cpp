@@ -7,6 +7,7 @@
 #include "BlueBox.h"
 #include "Goal.h"
 #include "Engine/Camera.h"
+#include "Cannon.h"
 
 
 //コンストラクタ
@@ -24,6 +25,7 @@ void PlayScene::Initialize()
 	Instantiate<Goal>(this);
 	Instantiate<RedBox>(this);
 	Instantiate<BlueBox>(this);
+	Instantiate<Cannon>(this);
 
 
 	/*Camera::SetPosition(XMFLOAT3(0, 10, -15));

@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="BlueBox.cpp" />
+    <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Crab.cpp" />
     <ClCompile Include="DarwManager.cpp" />
@@ -178,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="BlueBox.h" />
+    <ClInclude Include="Cannon.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Crab.h" />
     <ClInclude Include="DarwManager.h" />

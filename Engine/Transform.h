@@ -33,8 +33,6 @@ public:
 	unsigned int NumberOfLoops;	//何回ループしたか
 	unsigned int pravTransMode;	//1フレーム前のTransMode
 
-
-
 	//コンストラクタ
 	Transform();
 
