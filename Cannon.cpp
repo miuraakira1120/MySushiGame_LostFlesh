@@ -19,7 +19,7 @@ Cannon::~Cannon()
 void Cannon::Initialize()
 {
     //モデルデータのロード
-    hModel_ = Model::Load("Cannon.fbx");
+    hModel_ = Model::Load("Cannon_kari.fbx");
     assert(hModel_ >= 0);
 
     //Model::SetAnimFrame(hModel_, 1, 3000, 3.0f);
@@ -44,24 +44,27 @@ void Cannon::Initialize()
 //更新
 void Cannon::Update()
 {
-    XMFLOAT3 CannonFront = Model::GetBonePosition(hModel_, "Cannon_Front");
-    XMFLOAT3 CannonBack = Model::GetBonePosition(hModel_, "Cannon_Back");
-    if (timer >= 60)
+    /*XMFLOAT3 CannonFront = Model::GetBonePosition(hModel_, "Cannon_Front");
+    XMFLOAT3 CannonBack = Model::GetBonePosition(hModel_, "Cannon_Back");*/
+   
+    if (timer >=60)
     {
-        XMVECTOR vCannonFront = XMLoadFloat3(&CannonFront);
-        XMVECTOR vCannonBack = XMLoadFloat3(&CannonBack);
+        XMFLOAT3 CannonFront = Transform::Float3Add({ 1.5f,2,0 }, transform_.position_);
+        XMFLOAT3 CannonBack = transform_.position_;
+            XMVECTOR vCannonFront = XMLoadFloat3(&CannonFront);
+            XMVECTOR vCannonBack = XMLoadFloat3(&CannonBack);
 
-        XMFLOAT3 fBallMove;
-        XMVECTOR vBallMove = vCannonFront - vCannonBack;
-        vBallMove = XMVector3Normalize(vBallMove);
-        vBallMove *= 0.5;
-        XMStoreFloat3(&fBallMove, vBallMove);
+            XMFLOAT3 fBallMove;
+            XMVECTOR vBallMove = vCannonFront - vCannonBack;
+            vBallMove = XMVector3Normalize(vBallMove);
+            vBallMove *= 0.5;
+            XMStoreFloat3(&fBallMove, vBallMove);
 
-        Ball* pBall = Instantiate<Ball>(this->GetParent());
-        pBall->SetPosition(CannonBack);
-        pBall->SetMove(fBallMove);
+            Ball* pBall = Instantiate<Ball>(this->GetParent());
+            pBall->SetPosition(CannonBack);
+            pBall->SetMove(fBallMove);
 
-        timer = 0;
+            timer = 0;
     }
     timer++;
    /* Syari* pSyari = (Syari*)FindObject("Syari");

@@ -1,11 +1,20 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+
 //◆◆◆を管理するクラス
 class Ball : public GameObject
 {
+    //定数
+    const float SPEED_LIMIT = 2.0f;  //落下の速度限界
+    const float FALL_SPEED = 0.02f; //落ちるスピード
+    const float BALL_SIZE_Y = 1.0f;
+
     int hModel_;    //モデル番号
     XMFLOAT3 fMove;
+    bool isGround;   //地面に設置しているか
+    float accel;//今どれだけ加速するか
+    bool isPrevRayHit;
 public:
     //コンストラクタ
     Ball(GameObject* parent);
