@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="BlueBox.cpp" />
     <ClCompile Include="Cannon.cpp" />
@@ -175,8 +176,10 @@
     <ClCompile Include="Syari.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="BlueBox.h" />
     <ClInclude Include="Cannon.h" />
@@ -229,6 +232,7 @@
     <ClInclude Include="Syari.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">

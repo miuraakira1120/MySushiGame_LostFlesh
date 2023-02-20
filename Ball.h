@@ -2,17 +2,16 @@
 #include "Engine/GameObject.h"
 
 //◆◆◆を管理するクラス
-class Cannon : public GameObject
+class Ball : public GameObject
 {
     int hModel_;    //モデル番号
-    const float CANNON_SIZE_Y = 1.0f;
-    unsigned int timer;
+    XMFLOAT3 fMove;
 public:
     //コンストラクタ
-    Cannon(GameObject* parent);
+    Ball(GameObject* parent);
 
     //デストラクタ
-    ~Cannon();
+    ~Ball();
 
     //初期化
     void Initialize() override;
@@ -25,4 +24,8 @@ public:
 
     //開放
     void Release() override;
+
+    //セッター
+    void SetMove(XMFLOAT3 move);
+    void SetPosition(XMFLOAT3 pos);
 };
