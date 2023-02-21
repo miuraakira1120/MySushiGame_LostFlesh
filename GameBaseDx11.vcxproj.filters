@@ -135,6 +135,7 @@
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="SalmonRoe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -249,6 +250,7 @@
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Ball.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="SalmonRoe.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

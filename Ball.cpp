@@ -1,6 +1,7 @@
 #include "Ball.h"
 #include "Engine/Model.h"
 #include "Stage.h"
+#include "Engine/Camera.h"
 
 //コンストラクタ
 Ball::Ball(GameObject* parent)
@@ -59,6 +60,7 @@ void Ball::Update()
     }
 
    isPrevRayHit = nowLowPosData.hit;
+
 }
 
 //描画

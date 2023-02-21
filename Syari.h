@@ -3,6 +3,7 @@
 #include <vector>
 #include "Engine/GameObject.h"
 #include "Engine/Model.h"
+#include "OBB.h"
 #include "Gauge.h"
 #include "PoryLine.h"
 
@@ -27,7 +28,7 @@ static enum Ver
     VERTEX_MAX,
 };
 
-class Syari : public GameObject
+class Syari : public GameObject, public OBB
 {
     enum Direction
     {

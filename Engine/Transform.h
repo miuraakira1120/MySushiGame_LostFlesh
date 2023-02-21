@@ -74,6 +74,19 @@ public:
 	}
 
 	/// <summary>
+	///  XMFloat3‚Ìxyz‚É“¯‚¶”‚©‚¯‚é
+	/// </summary>
+	/// <param name="a">XMFloat3‚Ì‚©‚¯‚ç‚ê‚é”</param>
+	/// <param name="b">XMFloat3‚Ìx‚É‚©‚¯‚é”</param>
+	/// <param name="c">XMFloat3‚Ìy‚É‚©‚¯‚é”</param>
+	/// <param name="d">XMFloat3‚Ìz‚É‚©‚¯‚é”</param>
+	/// <returns></returns>
+	static XMFLOAT3 Float3Mul(XMFLOAT3 a, float b, float c, float d)
+	{
+		return XMFLOAT3(a.x * b, a.y * c, a.z * d);
+	}
+
+	/// <summary>
 	/// XMFloat3‚Ì•„†‚Ì”½“]
 	/// </summary>
 	/// <param name="ˆø”1 : ”½“]‚·‚é”"></param>

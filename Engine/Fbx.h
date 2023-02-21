@@ -14,7 +14,8 @@ struct RayCastData
 	XMFLOAT3	dir;	//レイの向きベクトル
 	float       dist;	//衝突点までの距離
 	BOOL        hit;	//レイが当たったか
-	XMFLOAT3 normal;	//法線
+	XMVECTOR	normal;	//法線
+	XMFLOAT3	pos;	//当たった位置
 
 	RayCastData() { dist = 99999.0f; }
 };
