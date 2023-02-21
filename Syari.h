@@ -6,7 +6,6 @@
 #include "Gauge.h"
 #include "PoryLine.h"
 
-
 #define VERTEX_VLU 8
 
 static const float SYARI_SIZE_X = 0.5f; //シャリのXのサイズ（1倍）

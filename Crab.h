@@ -54,92 +54,10 @@ public:
 
     //描画
     void Draw() override;
-    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
     //開放
     void Release() override;
-//あきらくんさいてー！
-//どんまい
-//さながやってあげました
-//     あいす
-//     すいか
-// からす
-//     すずめ
-//     めだか
-//     かもめ
-//     めもり
-//     りんご
-//     ごりら
-//     らっぱ
-//     ぱんつ
-//     つみき
-//     きつね
-//     ねんど
-//     どいつ
-//     つがる
-//     るーる
-//     るーと
-//     とまと
-//     とんぼ
-//     ぼうず
-//     ずーむ
-//     むかで
-//     でんき
-//     きんぐ
-//     ぐんま
-//     まんと
-//     とーく
-//     くもり
-//     りーる
-//     るんば
-//     ばった
-//     たんぼ
-//     ぼーと
-//     とんび
-//     びーち
-//     ちょこ
-//     こども
-//     もぐら
-//     らじお
-//     おとな
-//     なむこ
-//     こーと
-//     とんぐ
-//     ぐりこ
-//     こーど
-//     どらい
-//     いちご
-//     ごっど
-//     どっど
-//     どーむ
-//     むじな
-//     なまえ
-//     えいと
-//     といれ
-//     れーす
-//     するめ
-//     めいろ
-//     ろうか
-//     かーど
-// どっぐ
-//     ぐっず
-//     ずっく
-//     くるま
-//     まくら
-// らいと
-//     とうし
-//     しじみ
-//     みみず
-//     ずけい
-//     いるみ
-//     みんと
-//     とけい
-//     いんと
-//     とんち
-//     ちょき
-//     きかい
-//     いしょ
-//     よろい
-// 
+
     //親の親から見た位置を入手
     XMFLOAT3 GetParentPos()
     {

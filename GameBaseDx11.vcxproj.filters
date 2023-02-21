@@ -132,6 +132,9 @@
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Neta.cpp" />
     <ClCompile Include="Crab.cpp" />
+    <ClCompile Include="Cannon.cpp" />
+    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -243,6 +246,9 @@
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="Neta.h" />
     <ClInclude Include="Crab.h" />
+    <ClInclude Include="Cannon.h" />
+    <ClInclude Include="Ball.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
