@@ -93,10 +93,11 @@ void Imgui_Obj::InstantiateImgui()
         }
         ImGui::End();
 
+        gameTimerID = Time::GetTimerID();
         ImGui::Begin("Time");
         ImGui::Text("Timer ");
         ImGui::SameLine();
-        ImGui::Text(std::to_string(Time::GetTimef()).c_str());
+        ImGui::Text(std::to_string(Time::GetTimef(gameTimerID)).c_str());
         ImGui::SameLine();
         ImGui::Text("s");
         ImGui::End();

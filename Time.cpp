@@ -6,6 +6,7 @@ namespace
 {
 	//60進法
 	const char HEX = 60;
+	const unsigned int TIMER_MAX = 100;
 }
 
 //変数
@@ -13,11 +14,13 @@ namespace
 {
 	char Hours_;
 	char Minuts_;
-	double Seconds_;
+	double Seconds_[TIMER_MAX];
 	bool Lock_ = true;		//現在の状態で固定するか
 	std::vector<int> CountFps_;	//現在のフレームレートを格納しておくもの
 	int FPS_;		//初期化時に最大フレームレートを格納しておく
 	int LookAt_;	//配列のどこを見るか
+	float fps[TIMER_MAX]; 
+	int TimerID; //タイマーのID
 }
 
 namespace Time
@@ -26,7 +29,11 @@ namespace Time
 	{
 		Hours_ = 0;
 		Minuts_ = 0;
-		Seconds_ = 0;
+		for (int i = 0; i < TIMER_MAX; i++)
+		{
+
+			Seconds_[i] = 0;
+		}
 		FPS_ = FPS;
 		LookAt_ = 0;
 
@@ -53,42 +60,73 @@ namespace Time
 			LookAt_ -= FPS_;
 
 		//Lockされていたら更新しない
-		if (!Lock_)
+		for (int i = 0; i < TIMER_MAX; i++)
 		{
-			float fps = CountFps_.at(LookAt_) * 0.98f;
-			Seconds_ += 1.0 / fps;
+			if (!Lock_)
+			{
+				fps[i] = CountFps_.at(LookAt_) * 0.98f;
+				Seconds_[i] += 1.0 / fps[i];
+			}
 		}
-
 		CountFps_.at(LookAt_) = 0;
 	}
 
-	void Reset()
+	void Reset(int ID)
 	{
+		if (ID >= TIMER_MAX)
+		{
+			return;
+		}
 		Hours_ = 0;
 		Minuts_ = 0;
-		Seconds_ = 0;
+		Seconds_[ID] = 0;
 	}
 
-	void Lock()
+	void Lock(int ID)
 	{
+		if (ID >= TIMER_MAX)
+		{
+			return;
+		}
 		Lock_ = true;
 	}
 
-	void UnLock()
+	void UnLock(int ID)
 	{
+		if (ID >= TIMER_MAX)
+		{
+			return;
+		}
 		Lock_ = false;
 	}
 
-	int GetTimei()
+	int GetTimei(int ID)
 	{
-		return (int)Seconds_;
+		if (ID >= TIMER_MAX)
+		{
+			return -1;
+		}
+		return (int)Seconds_[ID];
 	}
-	float GetTimef()
+	float GetTimef(int ID)
 	{
-		return (float)Seconds_;
+		if (ID >= TIMER_MAX)
+		{
+			return -1;
+		}
+		return (float)Seconds_[ID];
 	}
-	double GetTime()
+	double GetTime(int ID)
 	{
-		return Seconds_;
+		if (ID >= TIMER_MAX)
+		{
+			return -1;
+		}
+		return Seconds_[ID];
+	}
+	int GetTimerID()
+	{
+		TimerID++;
+		return TimerID - 1;
 	}
 }

@@ -10,6 +10,7 @@ class Imgui_Obj : public GameObject
     Maguro* pMaguro;
     Syari* pSyari;
     Text* pText;
+    int gameTimerID;
 
 public:
     //コンストラクタ

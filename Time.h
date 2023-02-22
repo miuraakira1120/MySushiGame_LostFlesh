@@ -11,15 +11,16 @@ namespace Time
 	//更新(Mainで呼び出し)
 	void Update();
 
-	void Reset();
+	void Reset(int ID);
 
-	void Lock();
+	void Lock(int ID);
 
-	void UnLock();
+	void UnLock(int ID);
 
 	//呼び出し時点の時間を取得
-	int GetTimei();
-	float GetTimef();
-	double GetTime();
+	int GetTimei(int ID);
+	float GetTimef(int ID);
+	double GetTime(int ID);
+	int GetTimerID();
 };
 
