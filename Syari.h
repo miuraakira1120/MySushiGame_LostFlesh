@@ -226,15 +226,17 @@
 #include <vector>
 #include "Engine/GameObject.h"
 #include "Engine/Model.h"
-#include "OBB.h"
 #include "Gauge.h"
 #include "PoryLine.h"
 
 #define VERTEX_VLU 8
 
+class OBB;
+
 static const float SYARI_SIZE_X = 0.5f; //シャリのXのサイズ（1倍）
 static const float SYARI_SIZE_Y = 0.5f; //シャリのYのサイズ（1倍）
 static const float SYARI_SIZE_Z = 1.0f; //シャリのZのサイズ（1倍）
+const int BONE_DIRECTION_ARRAY_SIZE = 3;
 
 using std::vector;
 
@@ -251,7 +253,7 @@ static enum Ver
     VERTEX_MAX,
 };
 
-class Syari : public GameObject, public OBB
+class Syari : public GameObject
 {
     enum Direction
     {
@@ -272,21 +274,6 @@ class Syari : public GameObject, public OBB
         INNERMOST,
         SHORT_DISTANCE_MAX
     };
-
-    /*enum VertexDirection
-    {
-        TOP_RIGHT_FRONT = 0,
-        TOP_RIGHT_BACK,
-        TOP_LEFT_FRONT,
-        TOP_LEFT_BACK,
-        BACK_RIGHT_FRONT,
-        BACK_RIGHT_BACK,
-        BACK_LEFT_FRONT,
-        BACK_LEFT_BACK,
-        VERTEX_DIRECTION_MAX
-    };*/
-
-
 
     const XMFLOAT3 direction[6] = {
         {  0,  1,  0  }, //上
@@ -351,8 +338,6 @@ class Syari : public GameObject, public OBB
     XMVECTOR vMove;
     XMFLOAT3 fMove;
 
-    //int hGoalModel;//地面のモデル番号
-
 public:
     float accel;//今どれだけ加速するか
     XMFLOAT3 fupRightFrontPos;
@@ -402,4 +387,9 @@ public:
 
     //マウスによる回転
     void MoveMouse();
+
+    /// <summary>
+    /// OBBと平面の衝突判定
+    /// </summary>
+    bool OBBvsPlane(OBB& obb, XMFLOAT3 pos, XMVECTOR nomal, float* Len = 0);
 };

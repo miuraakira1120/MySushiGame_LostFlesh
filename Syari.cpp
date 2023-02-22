@@ -497,39 +497,6 @@
 //    }
 //}
 //
-////// OBB vs Plane
-////bool Syari::OBBvsPlane(OBB& obb, XMFLOAT3 pos, XMVECTOR nomal, float* Len = 0)
-////{
-////    // 平面の法線に対するOBBの射影線の長さを算出
-////    FLOAT r = 0.0f;          // 近接距離
-////    XMVECTOR PlaneNormal; // 平面の法線ベクトル
-////    plane.GetNormal_W(&PlaneNormal);
-////    int i;
-////    for (i = 0; i < 3; i++) {
-////        XMVECTOR Direct = obb.GetDirect(i); // OBBの1つの軸ベクトル
-////        r += fabs(XMVectorGetX(XMVector3Dot((Direct * obb.GetLen_W(i)), PlaneNormal)));
-////    }
-////
-////    // 平面とOBBの距離を算出
-////    XMVECTOR ObbPos = obb.GetPos_W();
-////    XMVECTOR PlanePos = plane.GetPos_W();
-////    FLOAT s = XMVectorGetX((XMVector3Dot((ObbPos - PlanePos), PlaneNormal)));
-////
-////    // 戻し距離を算出
-////    if (Len != NULL) {
-////        if (s > 0)
-////            *Len = r - fabs(s);
-////        else
-////            *Len = r + fabs(s);
-////    }
-////
-////    // 衝突判定
-////    if (fabs(s) - r < 0.0f)
-////        return true; // 衝突している
-////
-////    return false; // 衝突していない
-////}
-//
 ////////////////////////////////////当たり判定//////////////////////////////////
 //    ////右の当たり判定
 //    //if (shortDistance[RIGHTEST].hit && shortDistance[RIGHTEST].dist <= fabs(XMVectorGetX(vMove)))
@@ -663,7 +630,6 @@
 //    //}
 
 #include <DirectXMath.h>
-
 #include <vector>
 #include "Syari.h"
 #include "Engine/Model.h"
@@ -679,13 +645,14 @@
 #include "Controller.h"
 #include "Time.h"
 #include "Engine/SceneManager.h"
+#include "OBB.h"
 
 
 using std::vector;
 
 //コンストラクタ
 Syari::Syari(GameObject* parent)
-    :GameObject(parent, "Syari"), hModel_(-1), mode(1), axisPos(0.5f, 0.5f, 1.0f),
+    :GameObject(parent, "Syari"), hModel_(-1), mode(1), axisPos(0,0,0),
     prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr), isGround(false), prevBonePos(), countTime(0)
 {
 }
@@ -702,16 +669,6 @@ void Syari::Initialize()
     hModel_ = Model::Load("syari.fbx");
     //hModel_ = Model::Load("GodSyari.fbx");
     assert(hModel_ >= 0);
-
-    //頂点の座標をvVertexPosに入れる
-    vVertexPos.push_back(upRightFrontPos);
-    vVertexPos.push_back(upRightBackPos);
-    vVertexPos.push_back(upLeftFrontPos);
-    vVertexPos.push_back(upLeftBackPos);
-    vVertexPos.push_back(downRightFrontPos);
-    vVertexPos.push_back(downRightBackPos);
-    vVertexPos.push_back(downLeftFrontPos);
-    vVertexPos.push_back(downLeftBackPos);
 
     //子オブジェクトの生成
     Instantiate<Maguro>(this);
@@ -1103,10 +1060,6 @@ void Syari::Update()
     //            }
     //    }
     //}
-
-
-
-
     ///////////////レイを飛ばし放題//////////////
 
     //各頂点の位置を調べる
@@ -1155,18 +1108,51 @@ void Syari::Update()
     }
 
     /////////////////////////////////////////////
+    //OBB syariOBB;
+    //XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
 
+    //syariOBB.SetOBBAll(vPos,);
+
+    ////床のOBB衝突判定
+    //RayCastData syariOBBData;
+    //syariOBBData.start = transform_.position_;   //レイの発射位置
+    //syariOBBData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
+    //Model::RayCast(hGroundModel, &syariOBBData); //レイを発射
+    //OBBvsPlane();
+
+    XMMATRIX m =
+        XMMatrixTranslation(axisPos.x, axisPos.y, axisPos.z) *
+        XMMatrixRotationZ(XMConvertToRadians((int)transform_.rotate_.z % 360)) *
+        XMMatrixRotationY(XMConvertToRadians((int)transform_.rotate_.y % 360)) *
+        XMMatrixRotationX(XMConvertToRadians((int)transform_.rotate_.x % 360)) *
+        XMMatrixTranslation(-(axisPos.x), -(axisPos.y), -(axisPos.z));//軸でrotate_度回転させる行列
+
+    XMFLOAT3 fBoneDir[BONE_DIRECTION_ARRAY_SIZE] = 
+    {
+        {SYARI_SIZE_X, 0, 0},
+        {SYARI_SIZE_X, 0, 0},
+
+    }
+    XMVECTOR vBoneDir[BONE_DIRECTION_ARRAY_SIZE];
+
+
+    for (int i = 0; i < BONE_DIRECTION_ARRAY_SIZE; i++)
+    {
+        vBoneDir[i] = XMVector3TransformCoord(vBoneDir[i], m);
+    }
+   XMStoreFloat3()
+
+    RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBoxを探す（一番下の頂点に）
+    BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBoxを探す（transform_.positionに）
+    /*pRedBox->SetPosition(boneDir[0]);
+    pBlueBox->SetPosition(boneDir[1]);*/
+   
     //ゴールしたら
     if (GoalData.hit)
     {
         SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
         pSceneManager->ChangeScene(SCENE_ID_GOAL);
     }
-
-    RedBox* pRedBox = (RedBox*)FindObject("RedBox");    //RedBoxを探す（一番下の頂点に）
-    BlueBox* pBlueBox = (BlueBox*)FindObject("BlueBox");//BlueBoxを探す（transform_.positionに）
-    pRedBox->SetPosition(vertexBonePos[foremost]);
-    pBlueBox->SetPosition(vertexBonePos[innermost]);
 
     //ポリラインに現在の位置を伝える
     pLine->AddPosition(transform_.position_);
@@ -1310,3 +1296,38 @@ void Syari::Jump()
         accel -= SPEED_OF_JUMP;
     }
 }
+
+
+//// OBB vs Plane
+//bool Syari::OBBvsPlane(OBB& obb, XMFLOAT3 pos, XMVECTOR nomal, float* Len = 0)
+//{
+//    // 平面の法線に対するOBBの射影線の長さを算出
+//    FLOAT r = 0.0f;          // 近接距離
+//    XMVECTOR PlaneNormal; // 平面の法線ベクトル
+//    plane.GetNormal_W(&PlaneNormal);
+//    int i;
+//    for (i = 0; i < 3; i++) {
+//        XMVECTOR Direct = obb.GetDirect(i); // OBBの1つの軸ベクトル
+//        r += fabs(XMVectorGetX(XMVector3Dot((Direct * obb.GetLen_W(i)), PlaneNormal)));
+//    }
+//
+//    // 平面とOBBの距離を算出
+//    XMVECTOR ObbPos = obb.GetPos_W();
+//    XMVECTOR PlanePos = plane.GetPos_W();
+//    FLOAT s = XMVectorGetX((XMVector3Dot((ObbPos - PlanePos), PlaneNormal)));
+//
+//    // 戻し距離を算出
+//    if (Len != NULL) {
+//        if (s > 0)
+//            *Len = r - fabs(s);
+//        else
+//            *Len = r + fabs(s);
+//    }
+//
+//    // 衝突判定
+//    if (fabs(s) - r < 0.0f)
+//        return true; // 衝突している
+//
+//    return false; // 衝突していない
+//}
+
