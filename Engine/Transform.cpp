@@ -45,22 +45,20 @@ XMMATRIX Transform::GetWorldMatrix()
 	switch (transMode)
 	{
 	case TRANS_NORMAL_MODE :
+		pravTransMode = TRANS_NORMAL_MODE;
 		if (pParent_)
 		{
-			pravTransMode = TRANS_NORMAL_MODE;
 			return  matScale_ * matRotate_ * matTranslate_ * pParent_->GetWorldMatrix();
 		}
-		pravTransMode = TRANS_NORMAL_MODE;
 		return  matScale_ * matRotate_ * matTranslate_;
 
 	case TRANS_AXIS_MODE :
+		pravTransMode = TRANS_AXIS_MODE;
 		if (pParent_)
 		{
-			pravTransMode = TRANS_AXIS_MODE;
 			return  matScale_ * XMMatrixTranslation(axisMatrix_.x, axisMatrix_.y, axisMatrix_.z) * matRotate_
 				* XMMatrixTranslation(-(axisMatrix_.x), -(axisMatrix_.y), -(axisMatrix_.z)) * matTranslate_ * pParent_->GetWorldMatrix();
 		}
-		pravTransMode = TRANS_AXIS_MODE;
 		return  matScale_ * matRotate_ * matTranslate_;
 
 	case TRANS_CHANGEPARENT_MODE :

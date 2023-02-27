@@ -5,61 +5,39 @@ void OBB::SetPos(XMVECTOR position)
 	pos = position;
 }
 
-void OBB::SetNormalDirect(XMVECTOR direct1, XMVECTOR direct2, XMVECTOR direct3)
+void OBB::SetNormalDirect(std::vector<XMVECTOR> direct)
 {
-	normalDirect[0] = direct1;
-	normalDirect[1] = direct2;
-	normalDirect[2] = direct3;
+	normalDirect = direct;
 }
 
-void OBB::SetLength(float length1, float length2, float length3)
+void OBB::SetLength(std::vector<float> length)
 {
-	fLength[0] = length1;
-	fLength[1] = length2;
-	fLength[2] = length3;
+	fLength = length;
 }
 
-void OBB::SetOBBAll(XMVECTOR position, XMVECTOR direct1, XMVECTOR direct2, XMVECTOR direct3, float length1, float length2, float length3)
+void OBB::SetOBBAll(XMVECTOR position, std::vector<XMVECTOR> direct, std::vector<float> length)
 {
 	pos = position;
-
-	normalDirect[0] = direct1;
-	normalDirect[1] = direct2;
-	normalDirect[2] = direct3;
-
-	fLength[0] = length1;
-	fLength[1] = length2;
-	fLength[2] = length3;
+	normalDirect = direct;
+	fLength = length;
 }
 
 XMVECTOR OBB::GetDirect(int elem)
 {
-	switch (elem)
+	if (normalDirect.size() > elem && 0 <= elem)
 	{
-	case 0:
-		return normalDirect[0];
-	case 1:
-		return normalDirect[1];
-	case 2:
-		return normalDirect[2];
-	default:
-		return {0,0,0};
+		return normalDirect[elem];
 	}
+	return XMVectorZero();
 }
 
 float OBB::GetLen_W(int elem)
 {
-	switch (elem)
+	if (fLength.size() > elem && 0 <= elem)
 	{
-	case 0:
-		return fLength[0];
-	case 1:
-		return fLength[1];
-	case 2:
-		return fLength[2];
-	default:
-		return 0;
+		return fLength[elem];
 	}
+	return -1;
 }
 
 XMVECTOR OBB::GetPos_W()

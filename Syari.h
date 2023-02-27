@@ -236,7 +236,7 @@ class OBB;
 static const float SYARI_SIZE_X = 0.5f; //シャリのXのサイズ（1倍）
 static const float SYARI_SIZE_Y = 0.5f; //シャリのYのサイズ（1倍）
 static const float SYARI_SIZE_Z = 1.0f; //シャリのZのサイズ（1倍）
-const int BONE_DIRECTION_ARRAY_SIZE = 3;
+const int BONE_DIRECTION_ARRAY_SIZE = 6;
 
 using std::vector;
 
@@ -307,7 +307,7 @@ class Syari : public GameObject
     const float SYARI_SPEED = 0.25f;//シャリのスピード
     const float ROTATE_SPEED = 0.2f; //シャリの回転のスピード
     const float FALL_SPEED = 0.02f; //落ちるスピード
-    const float SPEED_LIMIT = 2.0f;  //落下の速度限界
+    const float SPEED_LIMIT = 0.5f;  //落下の速度限界 2->0.5
     const float JUMP_SPEED = 1.0f; //ジャンプのスピード
     const float SPEED_OF_JUMP = 0.4f; //跳躍速度
 
@@ -392,4 +392,7 @@ public:
     /// OBBと平面の衝突判定
     /// </summary>
     bool OBBvsPlane(OBB& obb, XMFLOAT3 pos, XMVECTOR nomal, float* Len = 0);
+     
+    //シャリの各軸方向のベクトルを取得する関数
+
 };
