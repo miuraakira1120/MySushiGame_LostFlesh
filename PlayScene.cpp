@@ -26,7 +26,7 @@ void PlayScene::Initialize()
 	Instantiate<Goal>(this);
 	Instantiate<RedBox>(this);
 	Instantiate<BlueBox>(this);
-	//Instantiate<SalmonRoe>(this);
+	Instantiate<SalmonRoe>(this);
 
 
 	/*Camera::SetPosition(XMFLOAT3(0, 10, -15));

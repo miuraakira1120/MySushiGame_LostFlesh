@@ -44,12 +44,16 @@ void Controller::Update()
     }
     if (Input::IsKey(DIK_S) && transform_.rotate_.x > DOWN_ANGLE_LIMIT)
     {
-            transform_.rotate_.x -= CAMERA_SPEED; 
+        transform_.rotate_.x -= CAMERA_SPEED; 
     }
     if (Input::IsKey(DIK_W) && transform_.rotate_.x < UP_ANGLE_LIMIT)
     {
-            transform_.rotate_.x += CAMERA_SPEED; 
+        transform_.rotate_.x += CAMERA_SPEED; 
     }
+
+    XMFLOAT3 stickR = { Input::GetPadStickR().y, Input::GetPadStickR().x, 0 };
+    transform_.rotate_ = Transform::Float3Add(Transform::Float3Mul( stickR, PAD_SPEED, PAD_SPEED, PAD_SPEED), transform_.rotate_);
+
     Camera::SetTarget(transform_.position_);
 }
 

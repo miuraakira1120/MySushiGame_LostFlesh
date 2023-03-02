@@ -43,7 +43,7 @@ void Syari::Initialize()
     Instantiate<Maguro>(this);
 
     //当たり判定の生成
-    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 2));
+    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
     AddCollider(collision);
 
     //transform_.position_.y = -40;
@@ -73,7 +73,7 @@ void Syari::Update()
 
     vMove = { 0,0,0,0 };
 
-    MoveMouse();
+    //MoveMouse();
     //キー入力をする
     KeyOperation();
 
@@ -248,7 +248,7 @@ void Syari::Update()
     for (int i = 0; i < VERTEX_MAX; i++)
     {
         RayCastData nowFrontPosDataAll;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-        nowFrontPosDataAll.start = Transform::Float3Add(vertexBonePos[i], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+        nowFrontPosDataAll.start = Transform::Float3Add(vertexBonePos[i], fDir)/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;//レイの方向
         nowFrontPosDataAll.dir = XMFLOAT3(0, 0, -1);       //レイの方向
         Model::RayCast(hGroundModel, &nowFrontPosDataAll); //レイを発射
         if (nowFrontPosDataAll.dist < shortDistance[INNERMOST].dist)
@@ -291,17 +291,17 @@ void Syari::Update()
     //    isGround = true;
     //}
 
-     //重力
-    if (SPEED_LIMIT >= accel)
-    {
-        accel += FALL_SPEED;
-        transform_.position_.y -= accel;
-    }
-    else
-    {
-        transform_.position_.y -= SPEED_LIMIT;
-    }
-    
+    // //重力
+    //if (SPEED_LIMIT >= accel)
+    //{
+    //    accel += FALL_SPEED;
+    //    transform_.position_.y -= accel;
+    //}
+    //else
+    //{
+    //    transform_.position_.y -= SPEED_LIMIT;
+    //}
+    //
     ///////////////レイを飛ばし放題//////////////
 
     //各頂点の位置を調べる
@@ -356,7 +356,7 @@ void Syari::Update()
     rotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
     rotateY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
     rotateZ = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
-    XMMATRIX m = rotateZ * rotateX * rotateY;
+    XMMATRIX m = rotateZ * rotateY * rotateX;
 
     vector<XMVECTOR> boneDirVec;
     XMFLOAT3 fBoneDir[BONE_DIRECTION_ARRAY_SIZE] =
@@ -364,10 +364,8 @@ void Syari::Update()
         {SYARI_SIZE_X, 0, 0},
         {0, SYARI_SIZE_Y, 0},
         {0, 0, SYARI_SIZE_Z},
-        {-SYARI_SIZE_X, 0, 0},
-        {0, -SYARI_SIZE_Y, 0},
-        {0, 0, -SYARI_SIZE_Z},
     };
+
 
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
     for (int i = 0; i < BONE_DIRECTION_ARRAY_SIZE; i++)
@@ -380,24 +378,100 @@ void Syari::Update()
         boneDirVec.push_back(vBoneDir - vPos);
     }
 
+    XMFLOAT3 fBoneDirVec;
+    XMStoreFloat3(&fBoneDirVec, -boneDirVec[1]);
+    RayCastData GroundData;                       //シャリの位置からレイを飛ばして、ゴールとぶつかるかを調べる
+    GroundData.start = transform_.position_;      //レイの発射位置
+    GroundData.start.y += 3;
+    GroundData.dir = fBoneDirVec;          //レイの方向
+    Model::RayCast(hGroundModel, &GroundData);      //レイを発射
+
+    XMVECTOR nor = XMVector3Normalize(GroundData.normal); //法線
+    XMVECTOR up = XMVector3Normalize(boneDirVec[1]);  //上ベクトル
+
+    if (XMVectorGetX(nor) != XMVectorGetX(up) || XMVectorGetY(nor) != XMVectorGetY(up) || XMVectorGetZ(nor) != XMVectorGetZ(up))
+    {
+        //ベクトル間のラジアン角度求める
+        float dot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(nor), XMVector3Normalize(up)));
+
+        //外積求める
+        XMVECTOR cross = XMVector3Cross(nor, up);
+
+        if (dot >= -1 && dot != 0 && dot <= 1)
+        {
+            //回転行列求める
+            transform_.matRotate_ = XMMatrixRotationAxis(cross, -acos(dot));
+        }
+
+    }
+
+ 
     vector<float> fLength;
     for (int i = 0; i < fLength.size() - 1; i++)
     {
         fLength.push_back(XMVectorGetX(XMVector3Length(boneDirVec[i])));
     }
 
+    //シャリのOBBを設定
     OBB syariOBB;
     syariOBB.SetOBBAll(vPos, boneDirVec, fLength);
-
-    //床のOBB衝突判定
-    RayCastData syariOBBData;
-    syariOBBData.start = transform_.position_;   //レイの発射位置
-    syariOBBData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
-    Model::RayCast(hGroundModel, &syariOBBData); //レイを発射
-    float length;
-    if (OBBvsPlane(syariOBB, syariOBBData.pos, syariOBBData.normal, &length))
+    for (int i = 0; i < DIRECTION_MAX; i++)
     {
-        transform_.position_.y += length;
+        //床のOBB衝突判定
+        RayCastData syariOBBData;
+        syariOBBData.start = transform_.position_;   //レイの発射位置
+        syariOBBData.dir = direction[i];       //レイの方向
+        Model::RayCast(hGroundModel, &syariOBBData); //レイを発射
+        float length;
+        if (OBBvsPlane(syariOBB, syariOBBData.pos, syariOBBData.normal, &length))
+        {
+            //switch (i)
+            //{
+            //case TOP :
+            //    //めり込みを直す
+            //    transform_.position_.y -= length;
+            //    break;
+            //case BOTOM:
+            //    //接地フラグを真にする
+            //    isGround = true;
+            //    accel = 0;
+            //    //めり込みを直す
+            //    transform_.position_.y += length;
+            //    break;
+
+            //case LEFT :
+            //    //めり込みを直す
+            //    transform_.position_.x -= length;
+            //    break;
+
+            //case RIGHT :
+            //    //めり込みを直す
+            //    transform_.position_.x += length;
+            //    break;
+
+            //case FRONT :
+            //    //めり込みを直す
+            //    transform_.position_.z += length;
+            //    break;
+
+            //case BACK:
+            //    //めり込みを直す
+            //    transform_.position_.z -= length;
+            //    break;
+
+            //default:
+            //    break;
+            //}
+            
+        }
+        else
+        {
+        //    if (i == BOTOM)
+        //    {
+        //        //接地フラグを偽にする
+        //        isGround = false;
+        //    }
+        }
     }
 
     //ゴールしたら
@@ -456,38 +530,26 @@ void Syari::KeyOperation()
         pSceneManager->ChangeScene(SCENE_ID_GOAL);
     }
 #endif
-    //ENTERキーを押したとき
-    if (Input::IsKeyDown(DIK_RETURN))
-    {
-        switch (mode)
-        {
-        case 0:
-            mode += 1;
-            break;
-        case 1:
-            mode -= 1;
-            break;
-        default:
-            break;
-        }
-    }
+    ////ENTERキーを押したとき
+    //if (Input::IsKeyDown(DIK_RETURN))
+    //{
+    //    switch (mode)
+    //    {
+    //    case 0:
+    //        mode += 1;
+    //        break;
+    //    case 1:
+    //        mode -= 1;
+    //        break;
+    //    default:
+    //        break;
+    //    }
+    //}
     ////////移動/////////////
 
     //左マウスキーを押したとき
-    if (Input::IsMouseButton(0))
+    if (Input::IsMouseButton(0) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
     {
-        //    Controller* pController = (Controller*)FindObject("Controller");
-        //    transform_.rotate_.y = pController->GetRotate().y;
-        //    XMFLOAT3 move = { 0,0,0.3f };//プレイヤーの移動ベクトル
-        //    XMVECTOR vMove = XMLoadFloat3(&move);//移動ベクトルの型をXMVECTORに変換
-        //    XMMATRIX mRotate = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-        //    vMove -= XMVector3TransformCoord(vMove, mRotate);
-        //    //移動
-        //    XMVECTOR vPos;
-        //    vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
-        //    vPos += vMove;
-        //    XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
-
         Controller* pController = (Controller*)FindObject("Controller");
         transform_.rotate_.y = pController->GetRotate().y;
         XMFLOAT3 move = { 0,0,0.3f };//プレイヤーの移動ベクトル
@@ -503,8 +565,8 @@ void Syari::KeyOperation()
         XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
     }
 
-    //左マウスキーを押したとき
-    if (Input::IsMouseButton(1))
+    //右マウスキーを押したとき
+    if (Input::IsMouseButton(1) || Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
     {
         Controller* pController = (Controller*)FindObject("Controller");
         transform_.rotate_.y = pController->GetRotate().y;
@@ -514,17 +576,13 @@ void Syari::KeyOperation()
         vMove = XMVector3TransformCoord(vMove, mRotate);
         vMove *= 1;
         XMStoreFloat3(&fMove, vMove);
-        //XMVECTOR vPos;
-        //vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
-        //vPos += vMove;
-        //XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
-    }
-    //Sキーを押したとき
-    if (Input::IsKey(DIK_S))
-    {
+        XMVECTOR vPos;
+        vPos = XMLoadFloat3(&transform_.position_);//シャリの現在地をXMVECTORに変換
+        vPos += vMove;
+        XMStoreFloat3(&transform_.position_, vPos);//現在地をtransform_.position_に送る
     }
     //ジャンプする
-    if (Input::IsKey(DIK_SPACE))
+    if (Input::IsKey(DIK_SPACE) || Input::IsPadButton(XINPUT_GAMEPAD_B))
     {
         Jump();
     }
@@ -549,7 +607,6 @@ void Syari::Jump()
         accel -= SPEED_OF_JUMP;
     }
 }
-
 
 // OBB vs Plane
 bool Syari::OBBvsPlane(OBB& obb, XMFLOAT3 planePos, XMVECTOR planeNomal, float* Len)
@@ -580,5 +637,15 @@ bool Syari::OBBvsPlane(OBB& obb, XMFLOAT3 planePos, XMVECTOR planeNomal, float* 
         return true; // 衝突している
 
     return false; // 衝突していない
+}
+
+//何かに当たった
+void Syari::OnCollision(GameObject* pTarget)
+{
+    //弾に当たったとき
+    if (pTarget->GetObjectName() == "Ball")
+    {
+
+    }
 }
 

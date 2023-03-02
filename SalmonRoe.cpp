@@ -35,6 +35,8 @@ void SalmonRoe::Initialize()
         //‚»‚Ì•ªˆÊ’u‚ğ‰º‚°‚é
         transform_.position_.y -= data.dist - SALMONROE_SIZE_Y;
     }
+
+    transform_.position_.x = 4;
 }
 
 //XV

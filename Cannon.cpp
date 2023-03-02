@@ -31,13 +31,13 @@ void Cannon::Initialize()
 //XV
 void Cannon::Update()
 {
-    if (timer >=60)
+    if (timer++ >=60)
     {
         XMFLOAT3 CannonShotPos = Model::GetBonePosition(hModel_, "Cannon_ShotPos");
         XMFLOAT3 CannonRoot = Model::GetBonePosition(hModel_, "Cannon_Root");
         Ball* pBall = Instantiate<Ball>(this->GetParent()->GetParent());
-        pBall->SetPosition(CannonRoot);
-        pBall->SetPosition(Transform::Float3Add(this->GetParent()->GetPosition(), CannonRoot));
+        pBall->SetPosition(CannonShotPos);
+        //pBall->SetPosition(Transform::Float3Add(this->GetParent()->GetPosition(), CannonRoot));
         XMVECTOR vCannonFront = XMLoadFloat3(&CannonShotPos);
         XMVECTOR vCannonBack = XMLoadFloat3(&CannonRoot);
 
@@ -52,9 +52,8 @@ void Cannon::Update()
 
         timer = 0;
     }
-    timer++;
-   /* Syari* pSyari = (Syari*)FindObject("Syari");
-    transform_.position_ = pSyari->GetPosition();*/
+    //Syari* pSyari = (Syari*)FindObject("Syari");
+    //transform_.position_ = pSyari->GetPosition();
 }
 
 //•`‰æ

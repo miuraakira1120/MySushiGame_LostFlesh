@@ -6,6 +6,7 @@ class Controller : public GameObject
     const float CAMERA_SPEED = 3.0f;
     const float UP_ANGLE_LIMIT = 1000;
     const float DOWN_ANGLE_LIMIT = -1000;
+    const float PAD_SPEED = 3.0f;
     int hPict_;    //画像番号
 public:
     //コンストラクタ
