@@ -24,6 +24,9 @@ void Ball::Initialize()
     //当たり判定を追加
     SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.0f);
     AddCollider(collision);
+
+    vMoved = {0,0,0,0};
+    prevPos = transform_.position_;
 }
 
 //更新
@@ -37,25 +40,25 @@ void Ball::Update()
     posLowData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
     Model::RayCast(hGroundModel, &posLowData); //レイを発射
 
-    RayCastData posRightData;
-    posRightData.start = transform_.position_;   //レイの方向
-    posRightData.dir = XMFLOAT3(1, 0, 0);       //レイの方向
-    Model::RayCast(hGroundModel, &posRightData); //レイを発射
+    //RayCastData posRightData;
+    //posRightData.start = transform_.position_;   //レイの方向
+    //posRightData.dir = XMFLOAT3(1, 0, 0);       //レイの方向
+    //Model::RayCast(hGroundModel, &posRightData); //レイを発射
 
-    RayCastData posLeftData;
-    posLeftData.start = transform_.position_;   //レイの方向
-    posLeftData.dir = XMFLOAT3(-1, 0, 0);       //レイの方向
-    Model::RayCast(hGroundModel, &posLeftData); //レイを発射
+    //RayCastData posLeftData;
+    //posLeftData.start = transform_.position_;   //レイの方向
+    //posLeftData.dir = XMFLOAT3(-1, 0, 0);       //レイの方向
+    //Model::RayCast(hGroundModel, &posLeftData); //レイを発射
 
-    RayCastData posFrontData;
-    posFrontData.start = transform_.position_;   //レイの方向
-    posFrontData.dir = XMFLOAT3(0, 0, -1);       //レイの方向
-    Model::RayCast(hGroundModel, &posFrontData); //レイを発射
+    //RayCastData posFrontData;
+    //posFrontData.start = transform_.position_;   //レイの方向
+    //posFrontData.dir = XMFLOAT3(0, 0, -1);       //レイの方向
+    //Model::RayCast(hGroundModel, &posFrontData); //レイを発射
 
-    RayCastData posBackData;
-    posBackData.start = transform_.position_;   //レイの方向
-    posBackData.dir = XMFLOAT3(0, 0, 1);       //レイの方向
-    Model::RayCast(hGroundModel, &posBackData); //レイを発射
+    //RayCastData posBackData;
+    //posBackData.start = transform_.position_;   //レイの方向
+    //posBackData.dir = XMFLOAT3(0, 0, 1);       //レイの方向
+    //Model::RayCast(hGroundModel, &posBackData); //レイを発射
 
     transform_.position_ = Transform::Float3Add(transform_.position_, fMove);
     //もし下に地面があったら
@@ -89,24 +92,29 @@ void Ball::Update()
 
    isPrevRayHit = posLowData.hit;
 
-   if (posRightData.hit && posRightData.dist < BALL_SIZE)
-   {
-       fMove.x *= -1;
-   }
-   if (posLeftData.hit && posLeftData.dist < BALL_SIZE)
-   {
-       fMove.x *= -1;
-   }
-   if (posFrontData.hit && posFrontData.dist < BALL_SIZE)
-   {
-       fMove.z *= -1;
-   }
-   if (posBackData.hit && posBackData.dist < BALL_SIZE)
-   {
-       fMove.z *= -1;
-   }
+   //if (posRightData.hit && posRightData.dist < BALL_SIZE)
+   //{
+   //    fMove.x *= -1;
+   //}
+   //if (posLeftData.hit && posLeftData.dist < BALL_SIZE)
+   //{
+   //    fMove.x *= -1;
+   //}
+   //if (posFrontData.hit && posFrontData.dist < BALL_SIZE)
+   //{
+   //    fMove.z *= -1;
+   //}
+   //if (posBackData.hit && posBackData.dist < BALL_SIZE)
+   //{
+   //    fMove.z *= -1;
+   //}
 
-  
+   XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+   XMVECTOR vPrevPos = XMLoadFloat3(&prevPos);
+   vMoved = vPos - vPrevPos;
+   SetMoved(vMoved);
+
+   prevPos = transform_.position_;
 
 }
 

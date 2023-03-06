@@ -32,10 +32,6 @@ void Maguro::Initialize()
     hModel_ = Model::Load("Maguro.fbx");
     assert(hModel_ >= 0);
 
-    //当たり判定の生成
-    BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 0.5f, 3));
-    AddCollider(collision);
-
     pParticle_ = Instantiate<Particle>(this);
 }
 
@@ -67,14 +63,19 @@ void Maguro::Update()
     }
 
     RayCastData nowLowPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
-    nowLowPosData.start = vertexBonePos[lowest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    nowLowPosData.start = { vertexBonePos[lowest].x,vertexBonePos[lowest].y + 3,vertexBonePos[lowest].z };  /*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
     nowLowPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
     Model::RayCast(hGroundModel, &nowLowPosData); //レイを発射
 
-    if (!nowLowPosData.hit)
+    RayCastData nowHightPosData;                    //一番低い角からレイを飛ばして、床とぶつかるかを調べる
+    nowHightPosData.start = vertexBonePos[highest]/*XMFLOAT3(prevPos.x, 0.0f, prevPos.z)*/;                //レイの方向
+    nowHightPosData.dir = XMFLOAT3(0, -1, 0);       //レイの方向
+    Model::RayCast(hGroundModel, &nowHightPosData); //レイを発射
+
+    if (nowLowPosData.pos.y >= vertexBonePos[lowest].y)
     {
-       /* SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);*/
+       SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+       pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
     }
 
     //シャリの物理演算
@@ -123,24 +124,34 @@ RayCastData Maguro::DoRay(XMFLOAT3 start, XMFLOAT3 dir, int hModel)
 void Maguro::PhysicalOperation()
 {
     RayCastData syariData = DoRay(GetParentPos(), XMFLOAT3(0, -1, 0), hSyariModel);
+
+    XMFLOAT3 syariUpDistanceDifference = pSyari->GetUpDistanceDifference();
     //マグロがシャリの上に乗っていたら
     //if (!syariData.hit)
     {
-        if ((int)pSyari->GetRotate().z % ROTATE_MAX > FALL_ANGLE)
+        //右と手前のほう高ければ＋
+        //左の奥ほう高ければ－
+        if (syariUpDistanceDifference.z > FALL_ANGLE || syariUpDistanceDifference.z < FALL_ANGLE)
         {
-            transform_.position_.x -= FALL_SPEED * ((int)pSyari->GetRotate().z % ROTATE_MAX);
+            if (syariUpDistanceDifference.z > FALL_ANGLE > 0)
+            {
+                transform_.position_.x += FALL_SPEED * abs(syariUpDistanceDifference.z);
+            }
+            else
+            {
+                transform_.position_.x -= FALL_SPEED * abs(syariUpDistanceDifference.z);
+            }
         }
-        if ((int)pSyari->GetRotate().z % ROTATE_MAX < -FALL_ANGLE)
+        if (syariUpDistanceDifference.x > FALL_ANGLE || syariUpDistanceDifference.x < FALL_ANGLE)
         {
-            transform_.position_.x -= FALL_SPEED * ((int)pSyari->GetRotate().z % ROTATE_MAX);
-        }
-        if ((int)pSyari->GetRotate().x % ROTATE_MAX > FALL_ANGLE)
-        {
-            transform_.position_.z += FALL_SPEED * ((int)pSyari->GetRotate().x % ROTATE_MAX);
-        }
-        if ((int)pSyari->GetRotate().x % ROTATE_MAX < -FALL_ANGLE)
-        {
-            transform_.position_.z += FALL_SPEED * ((int)pSyari->GetRotate().x % ROTATE_MAX);
+            if (syariUpDistanceDifference.x > FALL_ANGLE > 0)
+            {
+                transform_.position_.z -= FALL_SPEED * abs(syariUpDistanceDifference.x);
+            }
+            else
+            {
+                transform_.position_.z += FALL_SPEED * abs(syariUpDistanceDifference.x);
+            }
         }
     }
 
@@ -148,6 +159,7 @@ void Maguro::PhysicalOperation()
 
     if (abs(transform_.position_.x) > SYARI_SIZE_X || abs(transform_.position_.z) > SYARI_SIZE_Z)
     {
+
         //落下してくれ
         transform_.position_.y -= 0.1;
     }

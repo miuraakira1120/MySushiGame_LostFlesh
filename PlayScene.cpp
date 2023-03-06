@@ -23,10 +23,8 @@ void PlayScene::Initialize()
 	Instantiate<Syari>(this);
 	Instantiate<Controller>(this);
 	Instantiate<Stage>(this);
-	Instantiate<Goal>(this);
 	Instantiate<RedBox>(this);
 	Instantiate<BlueBox>(this);
-	Instantiate<SalmonRoe>(this);
 
 
 	/*Camera::SetPosition(XMFLOAT3(0, 10, -15));

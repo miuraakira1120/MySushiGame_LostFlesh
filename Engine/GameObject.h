@@ -34,6 +34,9 @@ protected:
 	//オブジェクトのタグ
 	std::string	   			 tag_;
 
+	//前フレームからの移動ベクトル
+	XMVECTOR vMoved;
+
 public:
 	//コンストラクタ
 	GameObject();
@@ -136,6 +139,8 @@ public:
 	XMFLOAT3 GetWorldRotate() { return Transform::Float3Add(GetParent()->transform_.rotate_, transform_.rotate_); }
 	XMFLOAT3 GetWorldScale() { return Transform::Float3Add(GetParent()->transform_.scale_, transform_.scale_); }
 	std::string GetTag() { return tag_; }
+	XMVECTOR GetMoved() {return vMoved ;}
+
 	void SetPosition(XMFLOAT3 position) { transform_.position_ = position; }
 	void SetPosition(float x, float y, float z) { SetPosition(XMFLOAT3( x, y, z )); }
 	void SetRotate(XMFLOAT3 rotate) { transform_.rotate_ = rotate; }
@@ -146,14 +151,13 @@ public:
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 	void SetTag(std::string tag) { tag_ = tag; }
-
+	void SetMoved(XMVECTOR moved) { vMoved = moved; }
 
 private:
 
 	//オブジェクト削除（再帰）
 	//引数：obj　削除するオブジェクト
 	void KillObjectSub(GameObject* obj);
-
 
 private:
 	//フラグ

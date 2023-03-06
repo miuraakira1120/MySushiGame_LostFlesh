@@ -20,12 +20,11 @@ void GoalScene::Initialize()
 //XV
 void GoalScene::Update()
 {
-	if (Input::IsKeyDown(DIK_RETURN))
+	if (Input::IsKeyDown(DIK_RETURN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_START);
 	}
-
 }
 
 //•`‰æ

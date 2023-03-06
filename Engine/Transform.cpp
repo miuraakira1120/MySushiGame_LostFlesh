@@ -11,7 +11,7 @@ Transform::Transform() : pParent_(nullptr)
 	matRotate_ = XMMatrixIdentity();
 	matScale_ = XMMatrixIdentity();
 	axisMatrix_ = { 0.0f , 0.0f, 0.0f };
-	transMode = 0;
+	transMode = TRANS_NORMAL_MODE;
 	parentNum = 0;
 	transParentTmp = this;
 	pravTransMode = -1;
@@ -80,6 +80,14 @@ XMMATRIX Transform::GetWorldMatrix()
 		pravTransMode = TRANS_CHANGEPARENT_MODE;
 		return  returnMatrix;
 
+	case TRANS_NONROTATE :
+		pravTransMode = TRANS_NONROTATE;
+		if (pParent_)
+		{
+			return  matScale_ * changeMatRotate_ * matTranslate_ * pParent_->GetWorldMatrix();
+		}
+		return  matScale_ * matRotate_ * matTranslate_;
+		break;
 	default:
 		break;
 	}
@@ -135,5 +143,10 @@ void Transform::ArbRotationAxisR(XMFLOAT3* pos, float rad, XMVECTOR axis, XMVECT
 
 	//pos‚Ì’l‚ğXV
 	XMStoreFloat3(pos, ans);
+}
+
+void Transform::SetRotateMode(TransMode mode)
+{
+	transMode = mode;
 }
 

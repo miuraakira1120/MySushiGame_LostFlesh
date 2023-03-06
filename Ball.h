@@ -16,6 +16,10 @@ class Ball : public GameObject
     float accel;//今どれだけ加速するか
     bool isPrevRayHit;
     int count;
+
+    XMVECTOR vMoved;
+
+    XMFLOAT3 prevPos;//
 public:
     //コンストラクタ
     Ball(GameObject* parent);
@@ -38,4 +42,5 @@ public:
     //セッター
     void SetMove(XMFLOAT3 move);
     void SetPosition(XMFLOAT3 pos);
+
 };

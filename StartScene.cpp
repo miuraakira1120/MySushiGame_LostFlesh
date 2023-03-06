@@ -20,7 +20,7 @@ void StartScene::Initialize()
 //XV
 void StartScene::Update()
 {
-	if (Input::IsMouseButtonDown(0))
+	if (Input::IsMouseButtonDown(0) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_PLAY);

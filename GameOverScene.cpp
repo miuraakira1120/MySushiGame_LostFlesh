@@ -1,5 +1,7 @@
 #include "GameOverScene.h"
 #include "Engine/Image.h"
+#include "Engine/Input.h"
+#include "Engine/SceneManager.h"
 
 
 //コンストラクタ
@@ -19,6 +21,16 @@ void GameOverScene::Initialize()
 //更新
 void GameOverScene::Update()
 {
+	if (Input::IsKeyDown(DIK_RETURN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_Y))
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_START);
+	}
+	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_PLAY);
+	}
 }
 
 //描画

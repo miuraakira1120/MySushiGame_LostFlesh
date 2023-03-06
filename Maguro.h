@@ -12,9 +12,9 @@ class Maguro : public GameObject
     const float MAGURO_SIZE_Y = 0.25f; //マグロのYのサイズ（1倍）
     const float MAGURO_SIZE_Z = 1.5f;  //マグロのZのサイズ（1倍）
 
-    const float FALL_ANGLE = 5.0f;    //落ちる角度
+    const float FALL_ANGLE = 0.1f;    //落ちる角度
     const short ROTATE_MAX = 360;      //回転の最大
-    const float FALL_SPEED = 0.2f * 0.01f;     //落ちるスピード
+    const float FALL_SPEED = 0.2f * 0.03f;     //落ちるスピード
 
     const std::string vertexName[8] = {
        "Vertex_Hight_Right_Front",

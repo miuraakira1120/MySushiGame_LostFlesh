@@ -9,6 +9,8 @@
 #define VERTEX_VLU 8
 
 class OBB;
+class RedBox;
+class BlueBox;
 
 static const float SYARI_SIZE_X = 0.5f; //シャリのXのサイズ（1倍）
 static const float SYARI_SIZE_Y = 0.5f; //シャリのYのサイズ（1倍）
@@ -49,10 +51,14 @@ class Syari : public GameObject
         RIGHT,
         FRONT,
         BACK,
+        DOWN_RIGHT_FRONT,
+        DOWN_RIGHT_BACK,
+        DOWN_LEFT_FRONT,
+        DOWN_LEFT_BACK,
         DIRECTION_MAX
     };
 
-    const XMFLOAT3 direction[6] = {
+     XMFLOAT3 direction[6] = {
         {  0,  1,  0  }, //上
         {  0, -1,  0  }, //下
         { -1,  0,  0  }, //左
@@ -84,7 +90,7 @@ class Syari : public GameObject
     const float SYARI_SPEED = 0.25f;//シャリのスピード
     const float ROTATE_SPEED = 0.2f; //シャリの回転のスピード
     const float FALL_SPEED = 0.02f; //落ちるスピード
-    const float SPEED_LIMIT = 1.0f;  //落下の速度限界 2->0.5
+    const float SPEED_LIMIT = 0.5f;  //落下の速度限界 2->0.5
     const float JUMP_SPEED = 1.0f; //ジャンプのスピード
     const float SPEED_OF_JUMP = 0.4f; //跳躍速度
 
@@ -105,7 +111,7 @@ class Syari : public GameObject
     XMFLOAT3 prevPos;//1f前の自分の位置
     XMFLOAT3 prevBonePos[VERTEX_MAX]; //1f前の角の位置
     bool isGround;   //地面に設置しているか
-
+    XMFLOAT3 upDistanceDifference;
 
     //ゲージオブジェクト
     Gauge* pGauge_;
@@ -115,7 +121,7 @@ class Syari : public GameObject
     XMVECTOR vMove;
     XMFLOAT3 fMove;
 
-
+    XMVECTOR flipped;
 public:
     float accel;//今どれだけ加速するか
     XMFLOAT3 fupRightFrontPos;
@@ -138,12 +144,6 @@ public:
     //開放
     void Release() override;
 
-    //positionのゲッター
-    XMFLOAT3 GetPosition();
-
-    //rotateのゲッター
-    XMFLOAT3 GetRotate();
-
     int GetModelHandle() { return hModel_; }
 
     /// <summary>
@@ -153,6 +153,9 @@ public:
 
     //ジャンプする
     void Jump();
+
+    //移動する関数
+    void Move();
 
     /// <summary>
     /// 今空中にいるかどうか調べる関数
@@ -174,5 +177,11 @@ public:
     //何かに当たった
     //引数：pTarget 当たった相手
     void OnCollision(GameObject* pTarget) override;
+
+    /////セッター
+    void SetFlipped(XMVECTOR fl);
+
+    //ゲッター
+    XMFLOAT3 GetUpDistanceDifference();
 
 };

@@ -8,6 +8,7 @@ enum TransMode
 	TRANS_NORMAL_MODE,			//基本的な座標
 	TRANS_AXIS_MODE,			//軸を移動して回転するか
 	TRANS_CHANGEPARENT_MODE,	//親を変えて移動
+	TRANS_NONROTATE,			//rotate_を使わずに回転
 	TRANS_MAX,
 };
 
@@ -17,11 +18,12 @@ enum TransMode
 class Transform
 {
 private:
-	unsigned int transMode;			//軸を移動して回転するか
+	TransMode transMode;		//今のTransMode
 	
 public:
 	XMMATRIX matTranslate_;		//移動行列
-	XMMATRIX matRotate_;		//回転行列	
+	XMMATRIX matRotate_;		//回転行列
+	XMMATRIX changeMatRotate_;	//TRANS_NONROTATEの時の回転行列	
 	XMMATRIX matScale_;			//拡大行列
 	XMFLOAT3 position_;			//位置
 	XMFLOAT3 rotate_;			//向き
@@ -32,6 +34,7 @@ public:
 	unsigned int parentNum;		//親をどれくらいさかのぼるか
 	unsigned int NumberOfLoops;	//何回ループしたか
 	unsigned int pravTransMode;	//1フレーム前のTransMode
+	
 
 	//コンストラクタ
 	Transform();
@@ -135,5 +138,8 @@ public:
 	/// <param name="axis">原点以外の軸となる位置ベクトル</param>
 	/// <param name="end">軸のもう一端の位置ベクトル(無指定で原点になる)</param>
 	void ArbRotationAxisR(XMFLOAT3* pos, float rad, XMVECTOR axis, XMVECTOR end = { 0,0,0,0 });
+
+	//回転のモードを変える
+	void SetRotateMode(TransMode mode);
 };
 
