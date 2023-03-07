@@ -1,18 +1,19 @@
+#pragma once
+
 #include <vector>
 #include <DirectXMath.h>
-#include <directxmath.h>
-
 
 using namespace DirectX;
 
-
 class OBB
 {
-	XMVECTOR pos;				   // 位置
-	std::vector<XMVECTOR> normalDirect;	   // 方向ベクトル
-	std::vector<float> fLength;              // 各軸方向の長さ
+	XMVECTOR pos;							// 位置
+	std::vector<XMVECTOR> normalDirect;		// 方向ベクトル
+	std::vector<float> fLength;             // 各軸方向の長さ
 
 public:
+	OBB();
+	~OBB();
 	void SetPos(XMVECTOR position);
 	void SetNormalDirect(std::vector<XMVECTOR> direct);
 	void SetLength(std::vector<float> length);

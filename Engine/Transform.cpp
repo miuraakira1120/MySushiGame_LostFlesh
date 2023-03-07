@@ -11,10 +11,13 @@ Transform::Transform() : pParent_(nullptr)
 	matRotate_ = XMMatrixIdentity();
 	matScale_ = XMMatrixIdentity();
 	axisMatrix_ = { 0.0f , 0.0f, 0.0f };
-	transMode = TRANS_NORMAL_MODE;
+	transMode = TransMode::TRANS_NORMAL_MODE;
 	parentNum = 0;
 	transParentTmp = this;
-	pravTransMode = -1;
+	pravTransMode = TransMode::TRANS_NORMAL_MODE;
+	matRotate_ = XMMatrixIdentity();
+	NumberOfLoops = -1;
+	changeMatRotate_ = XMMatrixIdentity();
 }
 
 
@@ -44,16 +47,16 @@ XMMATRIX Transform::GetWorldMatrix()
 	Calclation();
 	switch (transMode)
 	{
-	case TRANS_NORMAL_MODE :
-		pravTransMode = TRANS_NORMAL_MODE;
+	case TransMode::TRANS_NORMAL_MODE :
+		pravTransMode = TransMode::TRANS_NORMAL_MODE;
 		if (pParent_)
 		{
 			return  matScale_ * matRotate_ * matTranslate_ * pParent_->GetWorldMatrix();
 		}
 		return  matScale_ * matRotate_ * matTranslate_;
 
-	case TRANS_AXIS_MODE :
-		pravTransMode = TRANS_AXIS_MODE;
+	case TransMode::TRANS_AXIS_MODE :
+		pravTransMode = TransMode::TRANS_AXIS_MODE;
 		if (pParent_)
 		{
 			return  matScale_ * XMMatrixTranslation(axisMatrix_.x, axisMatrix_.y, axisMatrix_.z) * matRotate_
@@ -61,8 +64,8 @@ XMMATRIX Transform::GetWorldMatrix()
 		}
 		return  matScale_ * matRotate_ * matTranslate_;
 
-	case TRANS_CHANGEPARENT_MODE :
-		for (int i = 0; i < parentNum + 1; i++)
+	case TransMode::TRANS_CHANGEPARENT_MODE :
+		for (int i = 0; i < (signed int)parentNum + 1; i++)
 		{
 			if (transParentTmp->pParent_ != nullptr)
 			{
@@ -73,40 +76,39 @@ XMMATRIX Transform::GetWorldMatrix()
 		//NumberOfLoops‚ÌƒŠƒZƒbƒg
 		transParentTmp = this;
 		NumberOfLoops = 0;
-		if (pravTransMode != TRANS_CHANGEPARENT_MODE)
+		if (pravTransMode != TransMode::TRANS_CHANGEPARENT_MODE)
 		{
 			rotate_ = pParent_->rotate_;
 		}
-		pravTransMode = TRANS_CHANGEPARENT_MODE;
+		pravTransMode = TransMode::TRANS_CHANGEPARENT_MODE;
 		return  returnMatrix;
 
-	case TRANS_NONROTATE :
-		pravTransMode = TRANS_NONROTATE;
+	case TransMode::TRANS_NONROTATE :
+		pravTransMode = TransMode::TRANS_NONROTATE;
 		if (pParent_)
 		{
 			return  matScale_ * changeMatRotate_ * matTranslate_ * pParent_->GetWorldMatrix();
 		}
 		return  matScale_ * matRotate_ * matTranslate_;
 		break;
-	default:
-		break;
 	}
+	return XMMatrixIdentity();
 }
 
 void Transform::MoveAxisRotate()
 {
-	transMode = TRANS_AXIS_MODE;
+	transMode = TransMode::TRANS_AXIS_MODE;
 }
 
 void Transform::ChangeParentRotate(int parentNum_)
 {
-	transMode = TRANS_CHANGEPARENT_MODE;
+	transMode = TransMode::TRANS_CHANGEPARENT_MODE;
 	parentNum = parentNum_;
 }
 
 void Transform::NomalAxisRotate()
 {
-	transMode = TRANS_NORMAL_MODE;
+	transMode = TransMode::TRANS_NORMAL_MODE;
 }
 
 void Transform::SetAxisTrans(XMFLOAT3 mat)

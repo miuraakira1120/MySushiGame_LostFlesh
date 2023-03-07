@@ -12,8 +12,8 @@
 //コンストラクタ
 Crab::Crab(GameObject* parent)
     :GameObject(parent, "Crab"), hModel_(-1), fallFlag(false),
-    prevPos(0.0f, 0.0f, 0.0f), pSyari(nullptr), pStage(nullptr), hSyariModel(0),
-    hGroundModel(0)
+    prevPos(0.0f, 0.0f, 0.0f), pSyari(nullptr), pStage(nullptr), hSyariModel(-1),
+    hGroundModel(-1),pParticle_(nullptr),vertexBonePos()
 {
 }
 
@@ -144,12 +144,10 @@ void Crab::PhysicalOperation()
         }
     }
 
-    XMFLOAT3 fSyariToCrabVec;
-
     if (abs(transform_.position_.x) > SYARI_SIZE_X || abs(transform_.position_.z) > SYARI_SIZE_Z)
     {
         //落下してくれ
-        transform_.position_.y -= 0.1;
+        transform_.position_.y -= 0.1f;
     }
     //下にシャリがなかったら
 }

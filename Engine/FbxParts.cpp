@@ -8,7 +8,9 @@
 FbxParts::FbxParts():
 	ppIndexBuffer_(nullptr), pMaterial_(nullptr), 
 	pVertexBuffer_(nullptr), pConstantBuffer_(nullptr),
-	pVertexData_(nullptr), ppIndexData_(nullptr)
+	pVertexData_(nullptr), ppIndexData_(nullptr),ppCluster_(nullptr),
+	vertexCount_(),polygonCount_(),polygonVertexCount_(),pWeightArray_(nullptr),
+	pSkinInfo_(nullptr),pBoneArray_(nullptr),numBone_(),materialCount_(),indexCount_()
 {
 }
 
@@ -220,7 +222,7 @@ void FbxParts::InitIndex(fbxsdk::FbxMesh * mesh)
 	for (DWORD i = 0; i < materialCount_; i++)
 	{
 		count = 0;
-		DWORD *pIndex = new DWORD[polygonCount_ * 3];
+		DWORD *pIndex = new DWORD[(long long)polygonCount_ * 3];
 		ZeroMemory(&pIndex[i], sizeof(pIndex[i]));
 
 		// ƒ|ƒŠƒSƒ“‚ð\¬‚·‚éŽOŠpŒ`•½–Ê‚ªA
@@ -292,8 +294,8 @@ void FbxParts::InitSkelton(FbxMesh * pMesh)
 	{
 		// ŽOŠpŒ`ƒ|ƒŠƒSƒ“‚É‡‚í‚¹‚ÄA’¸“_‚Æƒ|ƒŠƒSƒ“‚ÌŠÖ˜Aî•ñ‚ð\’z‚·‚é
 		// ‘’¸“_”ƒ|ƒŠƒSƒ“”~‚R’¸“_
-		polyTable[i].polyIndex = new int[polygonCount_ * 3];
-		polyTable[i].vertexIndex = new int[polygonCount_ * 3];
+		polyTable[i].polyIndex = new int[(long long)polygonCount_ * 3];
+		polyTable[i].vertexIndex = new int[(long long)polygonCount_ * 3];
 		polyTable[i].numRef = 0;
 		ZeroMemory(polyTable[i].polyIndex, sizeof(int)* polygonCount_ * 3);
 		ZeroMemory(polyTable[i].vertexIndex, sizeof(int)* polygonCount_ * 3);

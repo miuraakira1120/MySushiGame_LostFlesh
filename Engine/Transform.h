@@ -3,7 +3,7 @@
 
 using namespace DirectX;
 
-enum TransMode
+enum class TransMode
 {
 	TRANS_NORMAL_MODE,			//基本的な座標
 	TRANS_AXIS_MODE,			//軸を移動して回転するか
@@ -33,7 +33,7 @@ public:
 	Transform* transParentTmp;	//親をさかのぼるために使うポインタ変数
 	unsigned int parentNum;		//親をどれくらいさかのぼるか
 	unsigned int NumberOfLoops;	//何回ループしたか
-	unsigned int pravTransMode;	//1フレーム前のTransMode
+	TransMode pravTransMode;	//1フレーム前のTransMode
 	
 
 	//コンストラクタ
@@ -122,7 +122,7 @@ public:
 		float abX = a.x - b.x;
 		float abY = a.y - b.y;
 		float abZ = a.z - b.z;
-		return sqrt((abX * abX) + (abY + abY) + (abZ + abZ));
+		return sqrtf((abX * abX) + (abY + abY) + (abZ + abZ));
 	}
 
 	/// <summary>原点を通る任意軸回転</summary>

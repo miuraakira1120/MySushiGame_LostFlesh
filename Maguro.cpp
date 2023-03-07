@@ -12,8 +12,8 @@
 //コンストラクタ
 Maguro::Maguro(GameObject* parent)
     :GameObject(parent, "Maguro"), hModel_(-1),fallFlag(false),
-    prevPos(0.0f,0.0f,0.0f), pSyari(nullptr),pStage(nullptr), hSyariModel(0), 
-    hGroundModel(0)
+    prevPos(0.0f,0.0f,0.0f), pSyari(nullptr),pStage(nullptr), hSyariModel(-1), 
+    hGroundModel(-1),vertexBonePos(),pParticle_(nullptr)
 {
 }
 
@@ -133,7 +133,7 @@ void Maguro::PhysicalOperation()
         //左の奥ほう高ければ－
         if (syariUpDistanceDifference.z > FALL_ANGLE || syariUpDistanceDifference.z < FALL_ANGLE)
         {
-            if (syariUpDistanceDifference.z > FALL_ANGLE > 0)
+            if (syariUpDistanceDifference.z > FALL_ANGLE && FALL_ANGLE > 0)
             {
                 transform_.position_.x += FALL_SPEED * abs(syariUpDistanceDifference.z);
             }
@@ -144,7 +144,7 @@ void Maguro::PhysicalOperation()
         }
         if (syariUpDistanceDifference.x > FALL_ANGLE || syariUpDistanceDifference.x < FALL_ANGLE)
         {
-            if (syariUpDistanceDifference.x > FALL_ANGLE > 0)
+            if (syariUpDistanceDifference.x > FALL_ANGLE && FALL_ANGLE > 0)
             {
                 transform_.position_.z -= FALL_SPEED * abs(syariUpDistanceDifference.x);
             }
@@ -155,13 +155,11 @@ void Maguro::PhysicalOperation()
         }
     }
 
-    XMFLOAT3 fSyariToMaguroVec;
-
     if (abs(transform_.position_.x) > SYARI_SIZE_X || abs(transform_.position_.z) > SYARI_SIZE_Z)
     {
 
         //落下してくれ
-        transform_.position_.y -= 0.1;
+        transform_.position_.y -= 0.1f;
     }
         //下にシャリがなかったら
 }

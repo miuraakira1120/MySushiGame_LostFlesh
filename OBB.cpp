@@ -1,5 +1,14 @@
 #include "OBB.h"
 
+OBB::OBB()
+	:pos(XMVectorZero()), normalDirect(), fLength()
+{
+}
+
+OBB::~OBB()
+{
+}
+
 void OBB::SetPos(XMVECTOR position)
 {
 	pos = position;

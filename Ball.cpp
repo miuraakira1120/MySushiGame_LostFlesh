@@ -6,7 +6,8 @@
 
 //コンストラクタ
 Ball::Ball(GameObject* parent)
-    :GameObject(parent, "Ball"), hModel_(-1),fMove(), isPrevRayHit(true),count(0)
+    :GameObject(parent, "Ball"), hModel_(-1),fMove(), isPrevRayHit(true),
+    count(0),accel(0),isGround(false),prevPos(0,0,0),vMoved(XMVectorZero())
 {
 }
 

@@ -4,7 +4,7 @@
 //◆◆◆を管理するクラス
 class SalmonRoe : public GameObject
 {
-    const float SALMONROE_SIZE_Y = 0.6;
+    const float SALMONROE_SIZE_Y = 0.6f;
     int hModel_;    //モデル番号
 public:
     //コンストラクタ
