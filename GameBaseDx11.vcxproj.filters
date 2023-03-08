@@ -120,13 +120,12 @@
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Gauge.cpp" />
-    <ClCompile Include="Engine\ModelManager.cpp">
+    <ClCompile Include="Engine\ObjectManager.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="PoryLine.cpp" />
-    <ClCompile Include="Neta.cpp" />
     <ClCompile Include="Crab.cpp" />
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Ball.cpp" />
@@ -138,14 +137,8 @@
     <ClCompile Include="GameOverScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="DarwManager.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
       <Filter>02Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="TestScene.cpp">
-      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="StartScene.cpp">
       <Filter>Scene</Filter>
@@ -154,6 +147,10 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="OBB.cpp" />
+    <ClCompile Include="Neta.cpp" />
+    <ClCompile Include="DarwManager.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -250,13 +247,12 @@
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Gauge.h" />
-    <ClInclude Include="Engine\ModelManager.h">
+    <ClInclude Include="Engine\ObjectManager.h">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="PoryLine.h" />
-    <ClInclude Include="Neta.h" />
     <ClInclude Include="Crab.h" />
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Ball.h" />
@@ -268,14 +264,8 @@
     <ClInclude Include="GameOverScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="DarwManager.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>02Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="TestScene.h">
-      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="StartScene.h">
       <Filter>Scene</Filter>
@@ -284,6 +274,10 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="OBB.h" />
+    <ClInclude Include="Neta.h" />
+    <ClInclude Include="DarwManager.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

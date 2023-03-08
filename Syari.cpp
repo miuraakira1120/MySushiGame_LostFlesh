@@ -18,7 +18,6 @@
 #include "Ball.h"
 
 #include <functional>
-#include <map>
 
 using std::vector;
 
@@ -311,26 +310,18 @@ void Syari::Update()
     OBB syariOBB;
     syariOBB.SetOBBAll(vPos, boneDirVec, fLength);
 
-    float length;
-
-    std::vector<std::function<void()>> func = {
-        [&] {transform_.position_.y -= length; },
-        [&] {isGround = true; accel = 0; transform_.position_.y += length; },
-        [&] {transform_.position_.x += length; },
-        [&] {transform_.position_.x -= length; },
-        [&] {transform_.position_.z += length; },
-        [&] {transform_.position_.z -= length; },
+    static std::vector<std::function<void(float)>> func = {
+        [&] (float leng){transform_.position_.y -= leng; },
+        [&](float leng) {isGround = true; accel = 0; transform_.position_.y += leng; },
+        [&](float leng) {transform_.position_.x += leng; },
+        [&](float leng) {transform_.position_.x -= leng; },
+        [&](float leng) {transform_.position_.z += leng; },
+        [&](float leng) {transform_.position_.z -= leng; },
     };
-
-    std::map<int, std::function<void()>> mp;
-
-    for (int j = 0; j < DIRECTION_MAX; j++)
-    {
-        mp.insert({ j, func[j] });
-    }
 
     for (int i = 0; i < DIRECTION_MAX; i++)
     {
+        float length;
         //床のOBB衝突判定
         RayCastData syariOBBData;
         syariOBBData.start = transform_.position_;   //レイの発射位置
@@ -338,60 +329,13 @@ void Syari::Update()
         Model::RayCast(hGroundModel, &syariOBBData); //レイを発射
         if (syariOBBData.hit && OBBvsPlane(syariOBB, syariOBBData.pos, syariOBBData.normal, &length))
         {
-            /*XMVECTOR normal = XMVector3Normalize(syariOBBData.normal);
-            normal *= length;
-            XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
-            vPos += normal;
-            XMStoreFloat3(&transform_.position_, vPos);*/
-
-            mp[i]();
-
-            //switch (i)
-            //{
-            //case TOP:
-            //    //めり込みを直す
-            //    transform_.position_.y -= length;
-            //    break;
-            //case BOTOM:
-            //    //接地フラグを真にする
-            //    isGround = true;
-            //    accel = 0;
-            //    //めり込みを直す
-            //    transform_.position_.y += length;
-            //    break;
-
-            //case LEFT:
-            //    //めり込みを直す
-            //    transform_.position_.x += length;
-            //    break;
-
-            //case RIGHT:
-            //    //めり込みを直す
-            //    transform_.position_.x -= length;
-            //    break;
-
-            //case FRONT:
-            //    //めり込みを直す
-            //    transform_.position_.z += length;
-            //    break;
-
-            //case BACK:
-            //    //めり込みを直す
-            //    transform_.position_.z -= length;
-            //    break;
-            //default:
-            //    break;
-            //}
-
+            func[i](length);
         }
-            //else
-            //{
-            //    if (i == BOTOM)
-            //    {
-            //        //接地フラグを偽にする
-            //        isGround = false;
-            //    }
-            //}
+        else if (i == BOTOM)
+        {
+            //接地フラグを偽にする
+            isGround = false;
+        }
 
         //各頂点の位置を調べる
         for (int j = 0; j < VERTEX_MAX; j++)
@@ -423,7 +367,11 @@ void Syari::Update()
             prevBonePos[j] = vertexBonePos[j];
         }
     }
+
+    void(Syari::*j)() = &Syari::Jump;
+    (this->*j)();
 }
+
     
 
 //描画
@@ -571,4 +519,3 @@ XMFLOAT3 Syari::GetUpDistanceDifference()
 {
     return upDistanceDifference;
 }
-
