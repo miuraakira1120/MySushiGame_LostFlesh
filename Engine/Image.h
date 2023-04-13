@@ -88,4 +88,26 @@ namespace Image
 	//引数：handle	知りたい画像の番号
 	//戻値：ワールド行列
 	XMMATRIX GetMatrix(int handle);
+
+	/// <summary>
+	/// ウィンドウ全体にピッタリ敷き詰める行列を設定
+	/// </summary>
+	/// <param name="handle">設定したい画像の番号</param>
+	void SetTransformFullSize(int handle);
+
+	/// <summary>
+	/// 画像サイズの取得
+	/// </summary>
+	/// <param name="handle">設定したい画像の番号</param>
+	/// <returns>画像サイズ</returns>
+	XMFLOAT3 GetTextureSize(int handle);
+
+	/// <summary>
+	/// マウスが画像に当たっているかどうかの判定
+	/// </summary>
+	/// <param name="imagePos"></param>
+	/// <param name="imageSize"></param>
+	/// <param name="mousePos"></param>
+	/// <returns></returns>
+	bool OnMouseOver(int handle);
 }

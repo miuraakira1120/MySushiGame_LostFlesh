@@ -19,8 +19,7 @@ const int BONE_DIRECTION_ARRAY_SIZE = 6;
 
 using std::vector;
 
-
-enum Ver
+static enum Ver
 {
     UP_RIGHT_FRONT = 0,
     UP_RIGHT_BACK,
@@ -52,6 +51,10 @@ class Syari : public GameObject
         RIGHT,
         FRONT,
         BACK,
+        DOWN_RIGHT_FRONT,
+        DOWN_RIGHT_BACK,
+        DOWN_LEFT_FRONT,
+        DOWN_LEFT_BACK,
         DIRECTION_MAX
     };
 

@@ -1,5 +1,4 @@
 ﻿#include <DirectXMath.h>
-#include <directxmath.h>
 #include <vector>
 #include "Syari.h"
 #include "Engine/Model.h"
@@ -9,6 +8,7 @@
 #include "BlueBox.h"
 #include "Engine/Camera.h"
 #include "Maguro.h"
+#include <directxmath.h>
 #include "Engine/BoxCollider.h"
 #include "Goal.h"
 #include "Controller.h"
@@ -17,7 +17,6 @@
 #include "OBB.h"
 #include "Ball.h"
 
-#include <functional>
 
 using std::vector;
 
@@ -164,11 +163,11 @@ void Syari::Update()
 
     XMFLOAT3 fFlipped;
     XMStoreFloat3(&fFlipped, flipped);
-    transform_.position_ = Transform::Float3Add(transform_.position_, fFlipped);
+    transform_.position_ = Transform::Float3Add( transform_.position_, fFlipped);
     flipped = XMVectorSet(0, 0, 0, 0);
-
+    
     ///////////////レイを飛ばし放題//////////////
-
+    
 
     //各頂点の位置を調べる
     for (int i = 0; i < VERTEX_MAX; i++)
@@ -208,18 +207,17 @@ void Syari::Update()
     }
 
     /////////////////////////////////////////////
-
-    transform_.SetRotateMode(TransMode::TRANS_NONROTATE);
+   
+    transform_.SetRotateMode(TRANS_NONROTATE);
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
     //各軸に対するベクトルを求める
     XMMATRIX rotateX, rotateY, rotateZ;
     rotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
     rotateY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
     rotateZ = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
-    //XMMATRIX m = rotateZ * rotateX * rotateY;
-    XMMATRIX m = rotateX * rotateY * rotateZ;
+    XMMATRIX m = rotateZ * rotateX * rotateY;
 
-    XMFLOAT3 fUpVec = { 0, SYARI_SIZE_Y, 0 };
+    XMFLOAT3 fUpVec = { 0, SYARI_SIZE_Y, 0 }; 
     XMVECTOR vUpVec = XMLoadFloat3(&fUpVec);
     vUpVec = XMVector3TransformCoord(vUpVec, m);	//ベクトルvBoneDirを行列ｍで変形
     vUpVec += vPos;
@@ -227,7 +225,7 @@ void Syari::Update()
     vUpVec -= vPos;
 
     XMFLOAT3 fBoneDirVec;
-    XMStoreFloat3(&fBoneDirVec, -vUpVec);
+    XMStoreFloat3(&fBoneDirVec, - vUpVec);
     RayCastData GroundData;                       //シャリの位置からレイを飛ばして、ゴールとぶつかるかを調べる
     GroundData.start = transform_.position_;      //レイの発射位置
     GroundData.dir = fBoneDirVec;          //レイの方向
@@ -244,7 +242,7 @@ void Syari::Update()
         //外積求める
         XMVECTOR cross = XMVector3Cross(nor, up);
 
-        if (dot > -1 && dot != 0 && dot <= 1)
+        if (dot >= -1 && dot != 0 && dot <= 1)
         {
             XMMATRIX y;
             y = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
@@ -279,7 +277,7 @@ void Syari::Update()
 
         boneDirVec.push_back(vBoneDir - vPos);
     }
-
+ 
     vector<float> fLength;
     for (int i = 0; i < fLength.size() - 1; i++)
     {
@@ -300,79 +298,102 @@ void Syari::Update()
         {  1,  0,  0  }, //右
         {  0 , 0, -1  }, //手前
         {  0,  0,  1  }, //奥
-        /*{ Transform::Float3Sub(vertexBonePos[DOWN_RIGHT_FRONT], transform_.position_)},
+        { Transform::Float3Sub(vertexBonePos[DOWN_RIGHT_FRONT], transform_.position_)},
         { Transform::Float3Sub(vertexBonePos[DOWN_RIGHT_BACK], transform_.position_)},
         { Transform::Float3Sub(vertexBonePos[DOWN_LEFT_FRONT], transform_.position_)},
-        { Transform::Float3Sub(vertexBonePos[DOWN_LEFT_BACK], transform_.position_)}*/
+        { Transform::Float3Sub(vertexBonePos[DOWN_LEFT_BACK], transform_.position_)}
     };
 
     //シャリのOBBを設定
     OBB syariOBB;
     syariOBB.SetOBBAll(vPos, boneDirVec, fLength);
-
-    static std::vector<std::function<void(float)>> func = {
-        [&] (float leng){transform_.position_.y -= leng; },
-        [&](float leng) {isGround = true; accel = 0; transform_.position_.y += leng; },
-        [&](float leng) {transform_.position_.x += leng; },
-        [&](float leng) {transform_.position_.x -= leng; },
-        [&](float leng) {transform_.position_.z += leng; },
-        [&](float leng) {transform_.position_.z -= leng; },
-    };
-
     for (int i = 0; i < DIRECTION_MAX; i++)
     {
-        float length;
         //床のOBB衝突判定
         RayCastData syariOBBData;
         syariOBBData.start = transform_.position_;   //レイの発射位置
         syariOBBData.dir = direction[i];       //レイの方向
         Model::RayCast(hGroundModel, &syariOBBData); //レイを発射
+        float length;
         if (syariOBBData.hit && OBBvsPlane(syariOBB, syariOBBData.pos, syariOBBData.normal, &length))
         {
-            func[i](length);
+            switch (i)
+            {
+            case TOP :
+                //めり込みを直す
+                transform_.position_.y -= length;
+                break;
+            case BOTOM:
+                //接地フラグを真にする
+                isGround = true;
+                accel = 0;
+                //めり込みを直す
+                transform_.position_.y += length;
+                break;
+
+            case LEFT :
+                //めり込みを直す
+                transform_.position_.x += length;
+                break;
+
+            case RIGHT :
+                //めり込みを直す
+                transform_.position_.x -= length;
+                break;
+
+            case FRONT :
+                //めり込みを直す
+                transform_.position_.z += length;
+                break;
+
+            case BACK:
+                //めり込みを直す
+                transform_.position_.z -= length;
+                break; 
+            default:
+                break;
+            }
         }
-        else if (i == BOTOM)
+        else
         {
-            //接地フラグを偽にする
-            isGround = false;
-        }
-
-        //各頂点の位置を調べる
-        for (int j = 0; j < VERTEX_MAX; j++)
-        {
-            vertexBonePos[j] = Model::GetBonePosition(hModel_, vertexName[j]);
-        }
-
-        upDistanceDifference =
-        {
-            vertexBonePos[UP_RIGHT_FRONT].y - vertexBonePos[UP_RIGHT_BACK].y,
-            0.0f,
-            vertexBonePos[UP_RIGHT_FRONT].y - vertexBonePos[UP_LEFT_FRONT].y
-        };
-
-        //ゴールしたら
-        if (GoalData.hit && GoalData.dist <= SYARI_SIZE_Y)
-        {
-            SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-            pSceneManager->ChangeScene(SCENE_ID_GOAL);
-        }
-
-        //ポリラインに現在の位置を伝える
-        pLine->AddPosition(transform_.position_);
-
-        //動かす前の位置を保存しておく
-        prevPos = transform_.position_;
-        for (int j = 0; j < VERTEX_MAX; j++)
-        {
-            prevBonePos[j] = vertexBonePos[j];
+            if (i == BOTOM)
+            {
+                //接地フラグを偽にする
+                isGround = false;
+            }
         }
     }
+   
+    //各頂点の位置を調べる
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
+    }
 
-    void(Syari::*j)() = &Syari::Jump;
-    (this->*j)();
+    upDistanceDifference =
+    { 
+        vertexBonePos[UP_RIGHT_FRONT].y - vertexBonePos[UP_RIGHT_BACK].y,
+        0.0f,
+        vertexBonePos[UP_RIGHT_FRONT].y - vertexBonePos[UP_LEFT_FRONT].y 
+    };
+
+    //ゴールしたら
+    if (GoalData.hit && GoalData.dist <= SYARI_SIZE_Y)
+    {
+        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+        pSceneManager->ChangeScene(SCENE_ID_GOAL);
+    }
+
+    //ポリラインに現在の位置を伝える
+    pLine->AddPosition(transform_.position_);
+
+    //動かす前の位置を保存しておく
+    prevPos = transform_.position_;
+    for (int i = 0; i < VERTEX_MAX; i++)
+    {
+        prevBonePos[i] = vertexBonePos[i];
+    }
 }
-
-    
 
 //描画
 void Syari::Draw()
@@ -519,3 +540,4 @@ XMFLOAT3 Syari::GetUpDistanceDifference()
 {
     return upDistanceDifference;
 }
+

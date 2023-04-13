@@ -4,7 +4,7 @@
 
 class Stage;
 class Syari;
-struct RayCastData;
+class RayCastData;
 
 class Crab : public GameObject
 {

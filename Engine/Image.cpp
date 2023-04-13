@@ -1,5 +1,6 @@
 #include "Global.h"
 #include "Image.h"
+#include "Input.h"
 
 //3D‰æ‘œ‚ðŠÇ—‚·‚é
 namespace Image
@@ -190,6 +191,46 @@ namespace Image
 			return XMMatrixIdentity();
 		}
 		return _datas[handle]->transform.GetWorldMatrix();
+	}
+
+	void SetTransformFullSize(int handle)
+	{
+		if (handle < 0 || handle >= _datas.size()) {
+			return;
+		}
+		auto textureSize = _datas[handle]->pSprite->GetTextureSize();
+		const auto winW = Direct3D::screenWidth_;
+		const auto winH = Direct3D::screenWidth_;
+
+		Transform transform;
+		transform.scale_.x *= winW / textureSize.x;
+		transform.scale_.y *= winH / textureSize.y;
+
+		_datas[handle]->transform = transform;
+		_datas[handle]->transform = transform;
+		_datas[handle]->transform = transform;
+	}
+
+	//‰æ‘œƒTƒCƒY‚ÌŽæ“¾
+	XMFLOAT3 GetTextureSize(const int handle)
+	{
+		return _datas[handle]->pSprite->GetTextureSize();
+	}
+
+	bool OnMouseOver(int handle)
+	{
+		UINT wid = (UINT)(_datas[handle]->pSprite->GetTextureSize().x * _datas[handle]->transform.scale_.x / 2);
+		UINT hgt = (UINT)(_datas[handle]->pSprite->GetTextureSize().y * _datas[handle]->transform.scale_.y / 2);
+		float Left = (_datas[handle]->transform.position_.x + 1) * (Direct3D::screenWidth_ / 2.0f) - wid;
+		float Right = (_datas[handle]->transform.position_.x + 1) * (Direct3D::screenWidth_ / 2.0f) + wid;
+		float Top = (-_datas[handle]->transform.position_.y + 1) * (Direct3D::screenHeight_ / 2.0f) - hgt;
+		float Bottom = (-_datas[handle]->transform.position_.y + 1) * (Direct3D::screenHeight_ / 2.0f) + hgt;
+		if (Left <= Input::GetMousePosition().x && Input::GetMousePosition().x <= Right &&
+			Top <= Input::GetMousePosition().y && Input::GetMousePosition().y <= Bottom)
+		{
+			return true;
+		}
+		return false;
 	}
 }
 

@@ -33,7 +33,7 @@ void PoryLine::AddPosition(XMFLOAT3 pos)
 	XMVECTOR vCamPos = XMLoadFloat3(&camPos);
 
 	//頂点データを作るための配列を準備
-	VERTEX1* vertices = new VERTEX1[(long long)LENGTH_ * 2];
+	VERTEX1* vertices = new VERTEX1[LENGTH_ * 2];
 
 	//頂点データを作る
 	int index = 0;
@@ -148,7 +148,7 @@ void PoryLine::Draw()
 	Direct3D::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	//描画（インデックスバッファいらないタイプ）
-	Direct3D::pContext_->Draw((UINT)((positions_.size() - 1) * 2), 0);
+	Direct3D::pContext_->Draw((positions_.size() - 1) * 2, 0);
 
 	//頂点データの並び方を指定を戻す
 	Direct3D::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

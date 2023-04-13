@@ -17,7 +17,7 @@ struct RayCastData
 	XMVECTOR	normal;	//ñ@ê¸
 	XMFLOAT3	pos;	//ìñÇΩÇ¡ÇΩà íu
 
-	RayCastData() : start(0, 0, 0), dir(0, 0, 0), dist(99999.0f), hit(false), normal(XMVectorZero()), pos(0, 0, 0){}
+	RayCastData() { dist = 99999.0f; }
 };
 
 //-----------------------------------------------------------

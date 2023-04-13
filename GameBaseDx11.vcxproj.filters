@@ -30,6 +30,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{92222d39-8410-49a8-8f4a-cd055d5360de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01Engine\Button">
+      <UniqueIdentifier>{fbfa3e48-bd78-4aa8-9cd7-38fdbfe27f4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -120,12 +123,13 @@
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Gauge.cpp" />
-    <ClCompile Include="Engine\ObjectManager.cpp">
+    <ClCompile Include="Engine\ModelManager.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="PoryLine.cpp" />
+    <ClCompile Include="Neta.cpp" />
     <ClCompile Include="Crab.cpp" />
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Ball.cpp" />
@@ -137,8 +141,14 @@
     <ClCompile Include="GameOverScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="DarwManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
       <Filter>02Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="StartScene.cpp">
       <Filter>Scene</Filter>
@@ -147,9 +157,12 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="OBB.cpp" />
-    <ClCompile Include="Neta.cpp" />
-    <ClCompile Include="DarwManager.cpp">
-      <Filter>01Engine\ResourceManager</Filter>
+    <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="Button.cpp">
+      <Filter>01Engine\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonManager.cpp">
+      <Filter>01Engine\Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,12 +260,13 @@
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Gauge.h" />
-    <ClInclude Include="Engine\ObjectManager.h">
+    <ClInclude Include="Engine\ModelManager.h">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Billboard.h" />
     <ClInclude Include="PoryLine.h" />
+    <ClInclude Include="Neta.h" />
     <ClInclude Include="Crab.h" />
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Ball.h" />
@@ -264,8 +278,14 @@
     <ClInclude Include="GameOverScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="DarwManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>02Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="StartScene.h">
       <Filter>Scene</Filter>
@@ -274,9 +294,12 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="OBB.h" />
-    <ClInclude Include="Neta.h" />
-    <ClInclude Include="DarwManager.h">
-      <Filter>01Engine\ResourceManager</Filter>
+    <ClInclude Include="Pause.h" />
+    <ClInclude Include="ButtonManager.h">
+      <Filter>01Engine\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>01Engine\Button</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
