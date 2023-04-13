@@ -1,4 +1,5 @@
 #include "ButtonManager.h"
+#include "TestButton.h"
 
 namespace ButtonManager
 {
@@ -17,5 +18,13 @@ namespace ButtonManager
 
         //間隔を空ける
         Transform::Float3Sub(position, interval);
+    }
+
+    //テストボタンの作成
+    GameObject* CreateTestButton(GameObject* pParent, XMFLOAT3 position)
+    {
+        auto* pNewObject = new TestButton(pParent);
+        InstantiateButton(pParent, pNewObject, position, XMFLOAT3(0.0f, 0.0f, 0.0f));
+        return pNewObject;
     }
 }

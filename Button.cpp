@@ -22,6 +22,7 @@ void Button::Event()
 
 //コンストラクタ
 Button::Button(GameObject* parent, const std::string& name)
+    :GameObject(parent, name), hPict_(-1), value_(0.0f), select_(false), operationRight_(true)
 {
 }
 
@@ -76,16 +77,25 @@ void Button::Release()
 }
 
 //画像の設定
-void Button::SetImage(const std::string& path)
+void Button::SetImage(const std::string& name)
 {
+    //画像データのロード
+    hPict_ = Image::Load(name);
+
+    //ロードされたか確認
+    assert(hPict_ >= 0);
 }
 
 //マウスによるボタン操作の権限剥奪
 void Button::NoRight()
 {
+    operationRight_ = false;
+    UnSelect();
 }
 
 //マウスによるボタン操作の権限付与
 void Button::Right()
 {
+    operationRight_ = true;
+    Select();
 }

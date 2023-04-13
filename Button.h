@@ -82,8 +82,8 @@ public:
     /// <summary>
     /// 画像の設定
     /// </summary>
-    /// <param name="path">画像のパス</param>
-    void SetImage(const std::string& path);
+    /// <param name="name">画像の名前</param>
+    void SetImage(const std::string& name);
 
     /// <summary>
     /// マウスによるボタン操作の権限剝奪

@@ -164,6 +164,7 @@
     <ClCompile Include="ButtonManager.cpp">
       <Filter>01Engine\Button</Filter>
     </ClCompile>
+    <ClCompile Include="TestButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -301,6 +302,7 @@
     <ClInclude Include="Button.h">
       <Filter>01Engine\Button</Filter>
     </ClInclude>
+    <ClInclude Include="TestButton.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

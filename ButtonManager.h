@@ -10,5 +10,9 @@ namespace ButtonManager
     /// <param name="position">生成位置</param>
     /// <param name="interval">生成間隔</param>
     void InstantiateButton(GameObject* pParent, GameObject* pChild, XMFLOAT3& position, const XMFLOAT3& interval);
+
+    //テストボタンの作成
+    GameObject* CreateTestButton(GameObject* pParent, XMFLOAT3 position);
+
 };
 
