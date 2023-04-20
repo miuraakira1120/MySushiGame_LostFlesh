@@ -1,4 +1,5 @@
 #include "TestButton.h"
+#include "Engine/SceneManager.h"
 
 //コンストラクタ
 TestButton::TestButton(GameObject* parent)
@@ -15,5 +16,6 @@ void TestButton::Initialize()
 
 void TestButton::Event()
 {
-	int a = 0;
+	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	pSceneManager->ChangeScene(SCENE_ID_PLAY);
 }

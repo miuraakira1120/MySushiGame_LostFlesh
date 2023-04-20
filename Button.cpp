@@ -2,6 +2,7 @@
 #include "Engine/Image.h"
 #include "Engine/Direct3D.h"
 #include "Engine/Input.h"
+#include "Engine/Direct3D.h"
 
 //ëIÇŒÇÍÇƒÇ¢Ç»Ç¢
 void Button::UnSelect()
@@ -40,15 +41,9 @@ void Button::Update()
         //É{É^Éìè„Ç…Ç†ÇÈÇ©
         if (Image::OnMouseOver(hPict_))
         {
-            value_ = 0.2f;
-            move_ += 0.01f;
+            value_ = 0x01;
             Select();
         }
-        else
-        {
-            move_ = 0.f;
-        }
-
     }
 
     if (select_)
@@ -66,6 +61,7 @@ void Button::Update()
 //ï`âÊ
 void Button::Draw()
 {
+
     //ï`âÊ
     Image::SetTransform(hPict_, transform_);
     Image::Draw(hPict_);

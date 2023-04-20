@@ -144,9 +144,6 @@
     <ClCompile Include="DarwManager.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
-      <Filter>02Shader</Filter>
-    </ClCompile>
     <ClCompile Include="TestScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -281,9 +278,6 @@
     </ClInclude>
     <ClInclude Include="DarwManager.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectManager.h">
-      <Filter>02Shader</Filter>
     </ClInclude>
     <ClInclude Include="TestScene.h">
       <Filter>Scene</Filter>

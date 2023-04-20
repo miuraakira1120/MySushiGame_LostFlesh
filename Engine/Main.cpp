@@ -18,6 +18,7 @@
 #include "../DarwManager.h"
 #include "../imgui/imgui_impl_dx11.h"
 #include "../imgui/imgui_impl_win32.h"
+#include "../Pause.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -96,6 +97,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//Timeのイニシャライズ
 	Time::Initialize(FPS);
 
+	//Pauseのイニシャライズ
+	Pause::Initialize();
+
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
@@ -141,34 +145,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				ImGui_ImplDX11_NewFrame();
 				ImGui_ImplWin32_NewFrame();
 				ImGui::NewFrame();
-
-				//{
-				//	static float f = 0.0f;
-				//	static int counter = 0;
-
-				//	ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
-
-				//	ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-				//	ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-
-				//	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-
-				//	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-				//		counter++;
-				//	ImGui::SameLine();
-				//	ImGui::Text("counter = %d", counter);
-
-				//	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-				//	ImGui::End();
-				//}
-				//if (show_another_window)
-				//{
-				//	ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-				//	ImGui::Text("Hello from another window!");
-				//	if (ImGui::Button("Close Me"))
-				//		show_another_window = false;
-				//	ImGui::End();
-				//}
 #endif
 
 				//時間計測関連
@@ -178,9 +154,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//入力（キーボード、マウス、コントローラー）情報を更新
 				Input::Update();
 
-				//全オブジェクトの更新処理
-				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-				pRootObject->UpdateSub();
+				//Pauseを更新
+				Pause::Update();
+
+				//Pauseしていてなかったら
+				if (!Pause::GetPause())
+				{
+					//全オブジェクトの更新処理
+					//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+					pRootObject->UpdateSub();
+				}
 
 				//カメラを更新
 				Camera::Update();
