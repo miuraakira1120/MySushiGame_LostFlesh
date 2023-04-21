@@ -61,10 +61,11 @@ void Button::Update()
 //•`‰æ
 void Button::Draw()
 {
-
+    Direct3D::SetShader(Direct3D::SHADER_FLASH_2D);
     //•`‰æ
     Image::SetTransform(hPict_, transform_);
     Image::Draw(hPict_);
+    //Direct3D::SetShader(Direct3D::SHADER_FLASH_2D);
 }
 
 //‰ð•ú

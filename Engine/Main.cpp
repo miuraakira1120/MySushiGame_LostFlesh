@@ -15,7 +15,6 @@
 #include "../Syari.h"
 #include "../Time.h"
 #include "../Controller.h"
-#include "../DarwManager.h"
 #include "../imgui/imgui_impl_dx11.h"
 #include "../imgui/imgui_impl_win32.h"
 #include "../Pause.h"
@@ -85,10 +84,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//すべてのゲームオブジェクトの親となるオブジェクト
 	RootObject* pRootObject = new RootObject;
 	pRootObject->Initialize();
-
-	//Drawマネージャーのポインタを入れる
-	DrawManager* pDrawManager;
-	pDrawManager = (DrawManager*)pRootObject->FindObject("DrawManager");
 
 	//シーンマネージャーのポインタを入れる
 	SceneManager* pSceneManager;
@@ -179,7 +174,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//pRootObject->DrawSub();
 				
 				//左画面描画
-				if (pDrawManager->GetScreenSeparation() >= 1)
 				{
 					Direct3D::SetViewPort(0);
 
@@ -204,7 +198,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 
 				//右画面描画
-				if (pDrawManager->GetScreenSeparation() >= 2)
 				{
 					Direct3D::SetViewPort(1);
 

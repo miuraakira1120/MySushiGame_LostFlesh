@@ -24,12 +24,10 @@ void StartScene::Initialize()
 //XV
 void StartScene::Update()
 {
-	/*if (Input::IsMouseButtonDown(0) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
-	{
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_PLAY);
-	}*/
-
+	SetCurrentDirectory("Assrets");
+	int isPlaySe_ = GetPrivateProfileInt("Option", "Key", 1, ".\\/Config/test.ini");
+	//filesystem
+	int a = 7;
 }
 
 //•`‰æ

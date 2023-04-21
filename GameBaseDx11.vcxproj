@@ -133,7 +133,6 @@
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Crab.cpp" />
-    <ClCompile Include="DarwManager.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
@@ -167,7 +166,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Imgui_Obj.cpp" />
     <ClCompile Include="Maguro.cpp" />
-    <ClCompile Include="Neta.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pause.cpp" />
@@ -179,9 +177,7 @@
     <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="Syari.cpp" />
     <ClCompile Include="TestButton.cpp" />
-    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Time.cpp" />
-    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
@@ -192,7 +188,6 @@
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Crab.h" />
-    <ClInclude Include="DarwManager.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
     <ClInclude Include="Engine\Camera.h" />
@@ -228,7 +223,6 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Imgui_Obj.h" />
     <ClInclude Include="Maguro.h" />
-    <ClInclude Include="Neta.h" />
     <ClInclude Include="OBB.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pause.h" />
@@ -240,9 +234,7 @@
     <ClInclude Include="StartScene.h" />
     <ClInclude Include="Syari.h" />
     <ClInclude Include="TestButton.h" />
-    <ClInclude Include="TestScene.h" />
     <ClInclude Include="Time.h" />
-    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
@@ -252,6 +244,10 @@
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Flash2D.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

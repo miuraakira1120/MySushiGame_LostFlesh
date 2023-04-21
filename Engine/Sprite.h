@@ -26,7 +26,7 @@ class Sprite
 
 	//【コンスタントバッファー】
 	// GPU(シェーダ側)へ送る数値をまとめた構造体
-	//Simple2D.hlslのグローバル変数と対応させる
+	// Simple2D.hlslのグローバル変数と対応させる
 	struct CONSTANT_BUFFER
 	{
 		XMMATRIX	world;		// 頂点座標変換行列

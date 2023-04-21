@@ -28,7 +28,16 @@ namespace Direct3D
 
 
 	//■シェーダー関連で必要なセット
-	enum SHADER_TYPE{SHADER_3D, SHADER_2D, SHADER_UNLIT, SHADER_BILLBOARD, SHADER_MAX};	//3タイプ（3D用、2D用、当たり判定枠表示用）
+	enum SHADER_TYPE
+	{
+		SHADER_3D = 0, 
+		SHADER_2D, 
+		SHADER_FLASH_2D,
+		SHADER_UNLIT,
+		SHADER_BILLBOARD,
+		SHADER_MAX
+	};	//4タイプ（3D用、2D用、当たり判定枠表示用, ビルボード用）
+
 	enum ViewPos
 	{
 		MAIN_CAM,
@@ -84,7 +93,7 @@ namespace Direct3D
 	void InitShaderBundle();
 
 	//今から描画するShaderBundleを設定
-	//引数：type	SHADER_3D, SHADER_2D, SHADER_UNLITのどれか
+	//引数：type	シェーダーは何を使うか
 	void SetShader(SHADER_TYPE type);
 
 	//ブレンドモードの変更
