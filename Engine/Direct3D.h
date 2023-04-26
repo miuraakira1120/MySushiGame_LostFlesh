@@ -30,10 +30,10 @@ namespace Direct3D
 	//■シェーダー関連で必要なセット
 	enum SHADER_TYPE
 	{
-		SHADER_3D = 0, 
+		SHADER_UNLIT = 0,
+		SHADER_3D, 
 		SHADER_2D, 
 		SHADER_FLASH_2D,
-		SHADER_UNLIT,
 		SHADER_BILLBOARD,
 		SHADER_MAX
 	};	//4タイプ（3D用、2D用、当たり判定枠表示用, ビルボード用）
@@ -91,6 +91,15 @@ namespace Direct3D
 
 	//シェーダー関連で必要なセット準備
 	void InitShaderBundle();
+
+	//DEBUGの当たり判定Shaderの初期化
+	void InitShaderUnlit();
+
+	//Shader2Dの初期化
+	void InitShader2D();
+
+	//Shader3Dの初期化
+	void InitShader3D();
 
 	//今から描画するShaderBundleを設定
 	//引数：type	シェーダーは何を使うか
