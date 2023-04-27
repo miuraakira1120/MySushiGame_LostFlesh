@@ -31,7 +31,7 @@ VS_OUTPUT VS(float4 pos : POSITION, float4 uv : TEXCOORD)
 {
 	VS_OUTPUT output;
 	output.pos = mul(pos, g_matWorld);
-	output.uv = mul(uv, g_matTexture);
+	output.uv = mul(uv + , g_matTexture);
 	return output;
 }
 

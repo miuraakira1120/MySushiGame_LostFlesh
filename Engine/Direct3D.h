@@ -35,6 +35,7 @@ namespace Direct3D
 		SHADER_2D, 
 		SHADER_FLASH_2D,
 		SHADER_BILLBOARD,
+		SHADER_UVSCROLL,
 		SHADER_MAX
 	};	//4タイプ（3D用、2D用、当たり判定枠表示用, ビルボード用）
 
