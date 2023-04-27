@@ -25,6 +25,16 @@ void Button::Event()
 Button::Button(GameObject* parent, const std::string& name)
     :GameObject(parent, name), hPict_(-1), value_(0.0f), select_(false), operationRight_(true)
 {
+    D3D11_BUFFER_DESC cb;
+    cb.ByteWidth = sizeof(ConstantBuffer);
+    cb.Usage = D3D11_USAGE_DYNAMIC;
+    cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    cb.MiscFlags = 0;
+    cb.StructureByteStride = 0;
+
+    // 定数バッファの作成
+    Direct3D::pDevice_->CreateBuffer(&cb, NULL, &pConstantBuffer_);
 }
 
 //更新
@@ -36,12 +46,12 @@ void Button::Update()
         //画面のサイズ
         const XMVECTOR windowSize = XMVectorSet(static_cast<float>(Direct3D::screenWidth_), static_cast<float>(Direct3D::screenHeight_), 0.0f, 0.0f);
 
-        value_ = 0.0f;
+        value_ = FALSE;
 
         //ボタン上にあるか
         if (Image::OnMouseOver(hPict_))
         {
-            value_ = 0x01;
+            value_ = TRUE;
             Select();
         }
     }
@@ -61,11 +71,23 @@ void Button::Update()
 //描画
 void Button::Draw()
 {
-    Direct3D::SetShader(Direct3D::SHADER_FLASH_2D);
+    Direct3D::pContext_->VSSetConstantBuffers(1, 1, pConstantBuffer_.GetAddressOf());
+    Direct3D::pContext_->PSSetConstantBuffers(1, 1, pConstantBuffer_.GetAddressOf());
+
+    // パラメータの受け渡し
+    D3D11_MAPPED_SUBRESOURCE pdata;
+
+    //空の行列
+    //ボタンを白くする値
+    ConstantBuffer cb = { XMMatrixIdentity(),value_ };
+
+    Direct3D::pContext_->Map(pConstantBuffer_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのリソースアクセスを一時止める
+    memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));		                    // リソースへ値を送る
+    Direct3D::pContext_->Unmap(pConstantBuffer_.Get(), 0);									    // GPUからのリソースアクセスを再開
+
     //描画
     Image::SetTransform(hPict_, transform_);
-    Image::Draw(hPict_);
-    //Direct3D::SetShader(Direct3D::SHADER_FLASH_2D);
+    Image::Draw(hPict_, Direct3D::SHADER_FLASH_2D);
 }
 
 //解放

@@ -19,7 +19,7 @@ const int BONE_DIRECTION_ARRAY_SIZE = 6;
 
 using std::vector;
 
-static enum Ver
+static enum  Ver
 {
     UP_RIGHT_FRONT = 0,
     UP_RIGHT_BACK,

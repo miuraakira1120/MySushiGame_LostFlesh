@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
 
+#include "Direct3D.h"
 #include "string"
 #include "Texture.h"
 #include "Transform.h"
@@ -70,7 +71,7 @@ public:
 	//引数：matrix	変換行列（ワールド行列）
 	//引数：rect	画像の切り抜き範囲
 	//引数：alpha	アルファ値（不透明度）
-	void Draw(Transform& transform, RECT rect, float alpha);
+	void Draw(Transform& transform, RECT rect, float alpha, Direct3D::SHADER_TYPE type = Direct3D::SHADER_2D);
 
 
 	//画像サイズの取得

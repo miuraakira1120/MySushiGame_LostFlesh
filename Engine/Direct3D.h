@@ -101,6 +101,15 @@ namespace Direct3D
 	//Shader3Dの初期化
 	void InitShader3D();
 
+	//頂点シェーダーの作成
+	ID3DBlob* CreateVertexSheder(int num);
+
+	//ピクセルシェーダーの作成
+	void CreatePixelSheder(int num);
+
+	//ラスタライザ作成
+	void CreateRasterizer(int num);
+
 	//今から描画するShaderBundleを設定
 	//引数：type	シェーダーは何を使うか
 	void SetShader(SHADER_TYPE type);

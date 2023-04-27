@@ -1,5 +1,4 @@
 #include "Sprite.h"
-#include "Direct3D.h"
 #include "Global.h"
 
 //コンストラクタ
@@ -101,10 +100,10 @@ void Sprite::InitIndex()
 
 
 
-void Sprite::Draw(Transform& transform, RECT rect, float alpha)
+void Sprite::Draw(Transform& transform, RECT rect, float alpha, Direct3D::SHADER_TYPE type)
 {
 	//いろいろ設定
-	Direct3D::SetShader(Direct3D::SHADER_2D);
+	Direct3D::SetShader(type);
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
 	Direct3D::pContext_->IASetVertexBuffers(0, 1, &pVertexBuffer_, &stride, &offset);

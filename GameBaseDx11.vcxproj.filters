@@ -422,5 +422,8 @@
     <FxCompile Include="Assets\Shader\Flash2D.hlsl">
       <Filter>00Shader</Filter>
     </FxCompile>
+    <FxCompile Include="UVScroll.hlsl">
+      <Filter>00Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

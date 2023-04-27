@@ -20,14 +20,13 @@ private:
     struct ConstantBuffer
     {
         XMMATRIX	dummy_;		// 空
-        FLOAT		value_;		// ボタンの状態
-        FLOAT		move_;
+        int		    value_;		// ボタンの状態
     };
 
 private:
 
     int hPict_;								//画像番号
-    float value_;							//状態
+    int value_;							    //状態
     bool select_;							//選ばれているか
     bool operationRight_;				    //操作権利
 

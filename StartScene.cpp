@@ -18,7 +18,7 @@ void StartScene::Initialize()
 	assert(hPict_ >= 0);
 
 	XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
-	ButtonManager::CreateTestButton(this,pos);
+	GameObject* testButton = ButtonManager::CreateTestButton(this,pos);
 }
 
 //XV

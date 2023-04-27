@@ -6,6 +6,7 @@
 #include <string>
 #include "Sprite.h"
 #include "Transform.h"
+#include "Direct3D.h"
 
 //-----------------------------------------------------------
 //2D画像を管理する
@@ -52,7 +53,8 @@ namespace Image
 	//描画
 	//引数：handle	描画したい画像の番号
 	//引数：matrix	ワールド行列
-	void Draw(int handle);
+	//引数：matrix	ワールド行列
+	void Draw(int handle, Direct3D::SHADER_TYPE type = Direct3D::SHADER_2D);
 
 	//任意の画像を開放
 	//引数：handle	開放したいモデルの番号
