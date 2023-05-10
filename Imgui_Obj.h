@@ -7,8 +7,8 @@
 //imgui‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 class Imgui_Obj : public GameObject
 {
-    Maguro* pMaguro;
-    Syari* pSyari;
+    /*Maguro* pMaguro;
+    Syari* pSyari;*/
     Text* pText;
     int gameTimerID;
 

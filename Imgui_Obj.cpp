@@ -5,7 +5,7 @@
 
 //コンストラクタ
 Imgui_Obj::Imgui_Obj(GameObject* parent)
-    :GameObject(parent, "Imgui_Obj"),pMaguro(nullptr),pSyari(nullptr), pText(nullptr)
+    :GameObject(parent, "Imgui_Obj"), pText(nullptr)/*, pMaguro(nullptr), pSyari(nullptr)*/
 {
 }
 
@@ -47,14 +47,31 @@ void Imgui_Obj::Release()
 //オブジェクトを探してポインタに入れる
 void Imgui_Obj::FindAllObject()
 {
-    pMaguro = (Maguro*)FindObject("Maguro");
-    pSyari  = (Syari*)FindObject("Syari");
+   /* pMaguro = (Maguro*)FindObject("Maguro");
+    pSyari  = (Syari*)FindObject("Syari");*/
 }
 
 //Imguiを生成する
 void Imgui_Obj::InstantiateImgui()
 {
+    ImGui::Begin("Test Window");
 
+    ImGui::Text("Hello, world %d", 123);
+
+    if (ImGui::Button("OK")) {
+        printf("Button\n");
+    }
+
+    static char buf[256] = "aaa";
+    if (ImGui::InputText("string", buf, 256)) {
+        printf("InputText\n");
+    }
+
+    static float f = 0.0f;
+    if (ImGui::SliderFloat("float", &f, 0.0f, 1.0f)) {
+        printf("SliderFloat\n");
+    }
+    ImGui::End();
 
     //if (pSyari != nullptr)
     //{

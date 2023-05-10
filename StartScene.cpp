@@ -26,7 +26,7 @@ void StartScene::Initialize()
 	
 	
 #if _DEBUG
-	Instantiate<Imgui_Obj>(this);
+	//Instantiate<Imgui_Obj>(this);
 #endif
 }
 
