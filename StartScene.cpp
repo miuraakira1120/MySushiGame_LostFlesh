@@ -3,6 +3,8 @@
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
 #include "ButtonManager.h"
+#include "Engine/IniOperator.h"
+#include "Imgui_Obj.h"
 
 //コンストラクタ
 StartScene::StartScene(GameObject* parent)
@@ -13,12 +15,19 @@ StartScene::StartScene(GameObject* parent)
 //初期化
 void StartScene::Initialize()
 {
-	//画像データのロード
-	hPict_ = Image::Load("start.jpg");
-	assert(hPict_ >= 0);
+	////画像データのロード
+	//hPict_ = Image::Load("start.jpg");
+	//assert(hPict_ >= 0);
 
 	XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
-	GameObject* testButton = ButtonManager::CreateTestButton(this,pos);
+	GameObject* StartButton = ButtonManager::CreateSceneChangeButton(this, pos, SCENE_ID_PLAY, "GameStartButton.png");
+	iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
+
+	
+	
+#if _DEBUG
+	Instantiate<Imgui_Obj>(this);
+#endif
 }
 
 //更新
@@ -28,6 +37,9 @@ void StartScene::Update()
 	int isPlaySe_ = GetPrivateProfileInt("Option", "Key", 1, ".\\/Config/test.ini");
 	//filesystem
 	int a = 7;
+
+
+	
 }
 
 //描画

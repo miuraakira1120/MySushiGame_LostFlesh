@@ -55,6 +55,13 @@ protected:
     /// </summary>
     virtual void Event();
 
+   
+
+    /// <summary>
+    ///  Update関数の前に呼ばれる関数
+    /// </summary>
+    virtual void PreUpdate() ;
+
 public:
 
     /// <summary>
@@ -93,5 +100,14 @@ public:
     /// マウスによるボタン操作の権限付与
     /// </summary>
     void Right();
+
+    
+
+    /// <summary>
+    /// value_のゲッター
+    /// </summary>
+    /// <returns>//変数value_</returns>
+    bool GetValue();
+
 };
 

@@ -21,6 +21,10 @@ void Button::Event()
 {
 }
 
+void Button::PreUpdate()
+{
+}
+
 //コンストラクタ
 Button::Button(GameObject* parent, const std::string& name)
     :GameObject(parent, name), hPict_(-1), value_(0.0f), select_(false), operationRight_(true)
@@ -40,6 +44,8 @@ Button::Button(GameObject* parent, const std::string& name)
 //更新
 void Button::Update()
 {
+    PreUpdate();
+
     //マウス操作
     if (operationRight_)
     {
@@ -100,7 +106,6 @@ void Button::SetImage(const std::string& name)
 {
     //画像データのロード
     hPict_ = Image::Load(name);
-
     //ロードされたか確認
     assert(hPict_ >= 0);
 }
@@ -117,4 +122,9 @@ void Button::Right()
 {
     operationRight_ = true;
     Select();
+}
+
+bool Button::GetValue()
+{
+    return value_;
 }

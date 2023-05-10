@@ -77,6 +77,9 @@
     <Filter Include="Imgui\ImClass">
       <UniqueIdentifier>{34d6fae0-61e4-42bc-a87c-45c574ab28c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00Engine\Ini">
+      <UniqueIdentifier>{fd9aa88c-6632-4779-aad3-c057afbf118b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -237,6 +240,12 @@
     </ClCompile>
     <ClCompile Include="PoryLine.cpp">
       <Filter>00Engine\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeSceneButton.cpp">
+      <Filter>01TitleScene\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\IniOperator.cpp">
+      <Filter>00Engine\Ini</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -404,6 +413,12 @@
     </ClInclude>
     <ClInclude Include="Particle.h">
       <Filter>00Engine\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeSceneButton.h">
+      <Filter>01TitleScene\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\IniOperator.h">
+      <Filter>00Engine\Ini</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

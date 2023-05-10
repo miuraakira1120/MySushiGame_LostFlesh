@@ -89,6 +89,11 @@ public:
 		return XMFLOAT3(a.x * b, a.y * c, a.z * d);
 	}
 
+	static XMFLOAT3 Float3Mul(XMFLOAT3 a, float b)
+	{
+		return XMFLOAT3(a.x * b, a.y * b, a.z * b);
+	}
+
 	/// <summary>
 	/// XMFloat3ÇÃïÑçÜÇÃîΩì]
 	/// </summary>

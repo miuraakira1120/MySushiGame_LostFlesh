@@ -1,5 +1,6 @@
 #include "ButtonManager.h"
 #include "TestButton.h"
+#include "ChangeSceneButton.h"
 
 namespace ButtonManager
 {
@@ -24,6 +25,14 @@ namespace ButtonManager
     GameObject* CreateTestButton(GameObject* pParent, XMFLOAT3 position)
     {
         auto* pNewObject = new TestButton(pParent);
+        InstantiateButton(pParent, pNewObject, position, XMFLOAT3(0.0f, 0.0f, 0.0f));
+        return pNewObject;
+    }
+
+    //âÊñ ëJà⁄É{É^ÉìÇÃçÏê¨
+    GameObject* CreateSceneChangeButton(GameObject* pParent, XMFLOAT3 position, SCENE_ID name, std::string imageName)
+    {
+        auto* pNewObject = new ChangeSceneButton(pParent, name, imageName);
         InstantiateButton(pParent, pNewObject, position, XMFLOAT3(0.0f, 0.0f, 0.0f));
         return pNewObject;
     }
