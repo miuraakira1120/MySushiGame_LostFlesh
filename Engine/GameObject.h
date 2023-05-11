@@ -140,6 +140,7 @@ public:
 	XMFLOAT3 GetWorldScale() { return Transform::Float3Add(GetParent()->transform_.scale_, transform_.scale_); }
 	std::string GetTag() { return tag_; }
 	XMVECTOR GetMoved() {return vMoved ;}
+	Transform GetTransform() { return transform_; }
 
 	void SetPosition(XMFLOAT3 position) { transform_.position_ = position; }
 	void SetPosition(float x, float y, float z) { SetPosition(XMFLOAT3( x, y, z )); }

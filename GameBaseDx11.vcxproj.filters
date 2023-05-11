@@ -80,6 +80,9 @@
     <Filter Include="00Engine\Ini">
       <UniqueIdentifier>{fd9aa88c-6632-4779-aad3-c057afbf118b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01TitleScene\Object\ObjectManager">
+      <UniqueIdentifier>{70968b0c-0b3f-42f2-bccc-27388fbc35cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -247,6 +250,7 @@
     <ClCompile Include="Engine\IniOperator.cpp">
       <Filter>00Engine\Ini</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -420,6 +424,7 @@
     <ClInclude Include="Engine\IniOperator.h">
       <Filter>00Engine\Ini</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

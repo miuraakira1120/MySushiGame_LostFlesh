@@ -3,33 +3,20 @@
 #include "Maguro.h"
 #include "Syari.h"
 #include "Engine/Text.h"
+#include "ChangeSceneButton.h"
+#include "Engine/SceneManager.h"
 
 //imguiを管理するクラス
-class Imgui_Obj : public GameObject
+namespace Imgui_Obj
 {
-    /*Maguro* pMaguro;
-    Syari* pSyari;*/
-    Text* pText;
-    int gameTimerID;
-
-public:
-    //コンストラクタ
-    Imgui_Obj(GameObject* parent);
-
-    //デストラクタ
-    ~Imgui_Obj();
-
     //初期化
-    void Initialize() override;
+    void Initialize(SceneManager* pSceneManager_);
 
     //更新
-    void Update() override;
-
-    //描画
-    void Draw() override;
+    void Update();
 
     //開放
-    void Release() override;
+    void Release();
 
     /// <summary>
     /// オブジェクトを探して入れる関数

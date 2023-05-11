@@ -23,7 +23,7 @@ void SceneManager::Initialize()
 	//最初のシーンを準備
 	currentSceneID_ = SCENE_ID_START;
 	nextSceneID_ = currentSceneID_;
-	Instantiate<StartScene>(this);
+	pNowScene[SCENE_ID_START] = Instantiate<StartScene>(this);
 }
 
 //更新
@@ -43,10 +43,10 @@ void SceneManager::Update()
 		//次のシーンを作成
 		switch (nextSceneID_)
 		{
-		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
-		case SCENE_ID_START: Instantiate<StartScene>(this); break;
-		case SCENE_ID_GOAL: Instantiate<GoalScene>(this); break;
-		case SCENE_ID_GAMEOVER: Instantiate<GameOverScene>(this); break;
+		case SCENE_ID_PLAY: pNowScene[SCENE_ID_PLAY] = Instantiate<PlayScene>(this); break;
+		case SCENE_ID_START: pNowScene[SCENE_ID_START] = Instantiate<StartScene>(this); break;
+		case SCENE_ID_GOAL: pNowScene[SCENE_ID_GOAL] = Instantiate<GoalScene>(this); break;
+		case SCENE_ID_GAMEOVER: pNowScene[SCENE_ID_GAMEOVER] = Instantiate<GameOverScene>(this); break;
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;
@@ -69,7 +69,14 @@ void SceneManager::ChangeScene(SCENE_ID next)
 	nextSceneID_ = next;
 }
 
-int SceneManager::GetScene()
+SCENE_ID SceneManager::GetNowSceneID()
 {
 	return currentSceneID_;
 }
+
+GameObject* SceneManager::GetNowScenePointer()
+{
+	return pNowScene[currentSceneID_];
+}
+
+

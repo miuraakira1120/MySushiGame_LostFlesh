@@ -24,7 +24,7 @@ void ChangeSceneButton::SetChangeSceneName(SCENE_ID name)
 
 void ChangeSceneButton::PreUpdate()
 {
-	
+	//‘I‚Î‚ê‚Ä‚¢‚½‚ç‰æ‘œ‚ðŠg‘å‚·‚é
 	if (GetValue())
 	{
 		transform_.scale_ = IMAGE_SIZE_MAG;

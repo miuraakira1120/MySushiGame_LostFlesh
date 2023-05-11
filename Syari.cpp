@@ -449,7 +449,7 @@ void Syari::KeyOperation()
         Move();
     }
     //ジャンプする
-    if (Input::IsKey(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
+    if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
     {
         Jump();
     }

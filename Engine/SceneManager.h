@@ -9,6 +9,7 @@ enum SCENE_ID
 	SCENE_ID_START,
 	SCENE_ID_GOAL,
 	SCENE_ID_GAMEOVER,
+	SCENE_ID_MAX
 };
 
 //-----------------------------------------------------------
@@ -31,10 +32,19 @@ public:
 	//引数：next	次のシーンのID
 	void ChangeScene(SCENE_ID next);
 
-	int GetScene();
+	//今のシーンのIDを返すゲッター
+	SCENE_ID GetNowSceneID();
+
+	//今のシーンのポインタを返すゲッター
+	GameObject* GetNowScenePointer();
+
+	
 
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
 	SCENE_ID nextSceneID_;		//次のシーン
+
+	//シーンのポインタの配列
+	GameObject* pNowScene[SCENE_ID_MAX];
 
 };

@@ -5,6 +5,7 @@
 #include "ButtonManager.h"
 #include "Engine/IniOperator.h"
 #include "Imgui_Obj.h"
+#include "Pause.h"
 
 //コンストラクタ
 StartScene::StartScene(GameObject* parent)
@@ -20,25 +21,27 @@ void StartScene::Initialize()
 	//assert(hPict_ >= 0);
 
 	XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
-	GameObject* StartButton = ButtonManager::CreateSceneChangeButton(this, pos, SCENE_ID_PLAY, "GameStartButton.png");
-	iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
+	pStartButton = ButtonManager::CreateSceneChangeButton(this, pos, SCENE_ID_PLAY, "GameStartButton.png");
 
-	
-	
+	int iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
+	//pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX",0), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY",0), 1);
 #if _DEBUG
 	//Instantiate<Imgui_Obj>(this);
 #endif
+
 }
 
 //更新
 void StartScene::Update()
 {
-	SetCurrentDirectory("Assrets");
-	int isPlaySe_ = GetPrivateProfileInt("Option", "Key", 1, ".\\/Config/test.ini");
-	//filesystem
-	int a = 7;
+	//SetCurrentDirectory("Assrets");
+	//int isPlaySe_ = GetPrivateProfileInt("Option", "Key", 1, ".\\/Config/test.ini");
+	////filesystem
+	//int a = 7;
 
-
+#if _DEBUG
+	//pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX"), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY"), 0);
+#endif
 	
 }
 

@@ -18,6 +18,7 @@
 #include "../imgui/imgui_impl_dx11.h"
 #include "../imgui/imgui_impl_win32.h"
 #include "../Pause.h"
+#include "../Imgui_Obj.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -93,7 +94,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Time::Initialize(FPS);
 
 	//Pauseのイニシャライズ
-	Pause::Initialize();
+	Pause::Initialize(pSceneManager);
+
+	//imguiのイニシャライズ
+	//Imgui_Obj::Initialize(pSceneManager);
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -160,6 +164,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					pRootObject->UpdateSub();
 				}
 
+				//imguiのアップデート
+				//Imgui_Obj::Update();
+
 				//カメラを更新
 				Camera::Update();
 
@@ -197,6 +204,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					pRootObject->DrawSub();
 				}
 
+
+
 				//右画面描画
 				{
 					Direct3D::SetViewPort(1);
@@ -221,13 +230,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//////全オブジェクトを描画
 					//////ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					//pRootObject->DrawSub();
-				} 
+				}
 
 #if _DEBUG
 				ImGui::Render();
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 #endif
-				
+				//ポーズ画面の描画
+				Pause::Draw();
+
 				//描画終了
 				Direct3D::EndDraw();
 
@@ -239,6 +250,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	//いろいろ解放
+
 	Audio::Release();
 	Model::AllRelease();
 	Image::AllRelease();

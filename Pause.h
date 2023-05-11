@@ -1,8 +1,16 @@
 #pragma once
+
+class SceneManager;
+
 namespace Pause
 {
-	//初期化
+
+	// 初期化
 	void Initialize();
+
+	//初期化
+	void Initialize(SceneManager* pSceneManager);
+	
 
 	//isPauseのゲッター
 	bool GetPause();
@@ -15,5 +23,8 @@ namespace Pause
 
 	//更新
 	void Update();
+
+	//描画
+	void Draw();
 };
 

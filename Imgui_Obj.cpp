@@ -1,24 +1,32 @@
 #include "Imgui_Obj.h"
 #include "imgui/imgui.h"
 #include "Time.h"
+#include "Engine/IniOperator.h"
 
-
-//コンストラクタ
-Imgui_Obj::Imgui_Obj(GameObject* parent)
-    :GameObject(parent, "Imgui_Obj"), pText(nullptr)/*, pMaguro(nullptr), pSyari(nullptr)*/
+namespace
 {
-}
+    Text* pText;
+    int gameTimerID;
+    ChangeSceneButton* pChangeSceneButton;
+    SceneManager* pSceneManager;
 
-//デストラクタ
-Imgui_Obj::~Imgui_Obj()
-{
+    float ChangeSceneButtonX;
+    float ChangeSceneButtonY;
+
+    int iniListButton;//タイトルシーンのボタンの番号
+
+    //使用するiniファイルの名前
+    const std::string iniFileName = "UI.ini";
+
 }
 
 //初期化
-void Imgui_Obj::Initialize()
+void Imgui_Obj::Initialize(SceneManager* pSceneManager_)
 {
     pText = new Text;
     pText->Initialize();
+    pSceneManager = pSceneManager_;
+    InstantiateImgui();
 }
 
 //更新
@@ -29,13 +37,6 @@ void Imgui_Obj::Update()
 
     //Imguiを生成する
     InstantiateImgui();
-}
-
-//描画
-void Imgui_Obj::Draw()
-{
-    //pText->Draw(500, 75, "Hello");
-    
 }
 
 //開放
@@ -49,6 +50,8 @@ void Imgui_Obj::FindAllObject()
 {
    /* pMaguro = (Maguro*)FindObject("Maguro");
     pSyari  = (Syari*)FindObject("Syari");*/
+    pChangeSceneButton = (ChangeSceneButton*)pSceneManager->FindObject("ChangeSceneButton");
+
 }
 
 //Imguiを生成する
@@ -58,19 +61,34 @@ void Imgui_Obj::InstantiateImgui()
 
     ImGui::Text("Hello, world %d", 123);
 
-    if (ImGui::Button("OK")) {
-        printf("Button\n");
-    }
+    //if (ImGui::Button("オブジェクトを追加")) 
+    //{
+    //    printf("Button\n");
+    //}
 
-    static char buf[256] = "aaa";
+    static char buf[256] = "";
     if (ImGui::InputText("string", buf, 256)) {
         printf("InputText\n");
     }
 
     static float f = 0.0f;
-    if (ImGui::SliderFloat("float", &f, 0.0f, 1.0f)) {
-        printf("SliderFloat\n");
+    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+
+    ImGui::End();
+
+
+    ////////ボタンの位置////////////////
+    ImGui::Begin("Botton Pos");
+    ImGui::SliderFloat("ChangeSceneButtonX", &ChangeSceneButtonX, -1.0f, 1.0f);
+    ImGui::SliderFloat("ChangeSceneButtonY", &ChangeSceneButtonY, -1.0f, 1.0f);
+
+    if (ImGui::Button("PositionSave")) 
+    {
+        int iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
+        IniOperator::SetValue(iniListButton, "ChangeSceneButtonX", ChangeSceneButtonX);
+        IniOperator::SetValue(iniListButton, "ChangeSceneButtonY", ChangeSceneButtonY);
     }
+
     ImGui::End();
 
     //if (pSyari != nullptr)
