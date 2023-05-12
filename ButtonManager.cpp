@@ -18,7 +18,7 @@ namespace ButtonManager
         pChild->SetPosition(position);
 
         //間隔を空ける
-        Transform::Float3Sub(position, interval);
+        Math::Float3Sub(position, interval);
     }
 
     //テストボタンの作成

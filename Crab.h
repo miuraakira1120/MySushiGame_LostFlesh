@@ -61,7 +61,7 @@ public:
     //e‚Ìe‚©‚çŒ©‚½ˆÊ’u‚ð“üŽè
     XMFLOAT3 GetParentPos()
     {
-        return Transform::Float3Add(GetParent()->GetPosition(), transform_.position_);
+        return Math::Float3Add(GetParent()->GetPosition(), transform_.position_);
     }
 
     //‰½‚©‚É“–‚½‚Á‚½

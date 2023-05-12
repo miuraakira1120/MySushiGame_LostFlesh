@@ -24,10 +24,7 @@ void StartScene::Initialize()
 	pStartButton = ButtonManager::CreateSceneChangeButton(this, pos, SCENE_ID_PLAY, "GameStartButton.png");
 
 	int iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
-	//pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX",0), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY",0), 1);
-#if _DEBUG
-	//Instantiate<Imgui_Obj>(this);
-#endif
+	pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX",0), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY",0), 0);
 
 }
 
@@ -40,7 +37,7 @@ void StartScene::Update()
 	//int a = 7;
 
 #if _DEBUG
-	//pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX"), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY"), 0);
+	pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX"), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY"), 0);
 #endif
 	
 }

@@ -148,6 +148,7 @@
     <ClCompile Include="Engine\IniOperator.cpp" />
     <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\Main.cpp" />
+    <ClCompile Include="Engine\Math.cpp" />
     <ClCompile Include="Engine\Model.cpp" />
     <ClCompile Include="Engine\ModelManager.cpp" />
     <ClCompile Include="Engine\RootObject.cpp" />
@@ -170,7 +171,6 @@
     <ClCompile Include="Imgui_Obj.cpp" />
     <ClCompile Include="Maguro.cpp" />
     <ClCompile Include="OBB.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="PlayScene.cpp" />
@@ -206,6 +206,7 @@
     <ClInclude Include="Engine\Image.h" />
     <ClInclude Include="Engine\IniOperator.h" />
     <ClInclude Include="Engine\Input.h" />
+    <ClInclude Include="Engine\Math.h" />
     <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\ModelManager.h" />
     <ClInclude Include="Engine\RootObject.h" />
@@ -230,7 +231,6 @@
     <ClInclude Include="Imgui_Obj.h" />
     <ClInclude Include="Maguro.h" />
     <ClInclude Include="OBB.h" />
-    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="PlayScene.h" />

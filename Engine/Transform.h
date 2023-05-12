@@ -52,59 +52,6 @@ public:
 	//戻値：その時点でのワールド行列
 	XMMATRIX GetWorldMatrix();
 
-	/// <summary>
-	/// XMFloat3の足し算
-	/// </summary>
-	/// <param name="引数1 : 足される数"></param>
-	/// <param name="引数2 : 足す数"></param>
-	/// <param name="戻値  : XMFLOAT3"></param>
-	/// <returns></returns>
-	static XMFLOAT3 Float3Add(XMFLOAT3 a, XMFLOAT3 b)
-	{
-		return XMFLOAT3(a.x + b.x, a.y + b.y, a.z + b.z);
-	}
-
-	/// <summary>
-	/// XMFloat3の引き算
-	/// </summary>
-	/// <param name="引数1 : 引かれる数"></param>
-	/// <param name="引数2 : 引く数"></param>
-	/// <param name="戻値  : XMFLOAT3"></param>
-	/// <returns></returns>
-	static XMFLOAT3 Float3Sub(XMFLOAT3 a, XMFLOAT3 b)
-	{
-		return XMFLOAT3(a.x - b.x, a.y - b.y, a.z - b.z);
-	}
-
-	/// <summary>
-	///  XMFloat3のxyzに同じ数かける
-	/// </summary>
-	/// <param name="a">XMFloat3のかけられる数</param>
-	/// <param name="b">XMFloat3のxにかける数</param>
-	/// <param name="c">XMFloat3のyにかける数</param>
-	/// <param name="d">XMFloat3のzにかける数</param>
-	/// <returns></returns>
-	static XMFLOAT3 Float3Mul(XMFLOAT3 a, float b, float c, float d)
-	{
-		return XMFLOAT3(a.x * b, a.y * c, a.z * d);
-	}
-
-	static XMFLOAT3 Float3Mul(XMFLOAT3 a, float b)
-	{
-		return XMFLOAT3(a.x * b, a.y * b, a.z * b);
-	}
-
-	/// <summary>
-	/// XMFloat3の符号の反転
-	/// </summary>
-	/// <param name="引数1 : 反転する数"></param>
-	/// <param name="戻値  : XMFLOAT3"></param>
-	/// <returns></returns>
-	static XMFLOAT3 Float3Reverse(XMFLOAT3 a)
-	{
-		return XMFLOAT3(-(a.x), -(a.y), -(a.z));
-	}
-
 	void NomalAxisRotate();	//軸を移動しないで回転する
 	void MoveAxisRotate();  //軸を移動して回転する
 

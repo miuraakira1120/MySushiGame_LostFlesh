@@ -96,8 +96,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//Pauseのイニシャライズ
 	Pause::Initialize(pSceneManager);
 
+#if _DEBUG
 	//imguiのイニシャライズ
 	//Imgui_Obj::Initialize(pSceneManager);
+#endif
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -163,10 +165,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->UpdateSub();
 				}
-
+#if _DEBUG
 				//imguiのアップデート
 				//Imgui_Obj::Update();
-
+#endif
 				//カメラを更新
 				Camera::Update();
 
@@ -249,11 +251,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	//いろいろ解放
-
+	
 	Audio::Release();
 	Model::AllRelease();
 	Image::AllRelease();
+#if _DEBUG
+	//Imgui_Obj::Release();
+#endif
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
 	Direct3D::Release();

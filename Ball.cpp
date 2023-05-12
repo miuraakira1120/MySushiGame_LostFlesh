@@ -60,7 +60,7 @@ void Ball::Update()
     //posBackData.dir = XMFLOAT3(0, 0, 1);       //ƒŒƒC‚Ì•ûŒü
     //Model::RayCast(hGroundModel, &posBackData); //ƒŒƒC‚ð”­ŽË
 
-    transform_.position_ = Transform::Float3Add(transform_.position_, fMove);
+    transform_.position_ = Math::Float3Add(transform_.position_, fMove);
     //‚à‚µ‰º‚É’n–Ê‚ª‚ ‚Á‚½‚ç
     if (posLowData.hit && posLowData.dist - BALL_SIZE > accel)
     {

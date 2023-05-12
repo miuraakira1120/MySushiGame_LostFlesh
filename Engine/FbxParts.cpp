@@ -609,8 +609,8 @@ void FbxParts::RayCast(RayCastData * data)
 				data->dist = dist;
 				data->pos = pos;
 
-				XMFLOAT3 vec1 = Transform::Float3Sub(ver[0], ver[1]);
-				XMFLOAT3 vec2 = Transform::Float3Sub(ver[2], ver[1]);
+				XMFLOAT3 vec1 = Math::Float3Sub(ver[0], ver[1]);
+				XMFLOAT3 vec2 = Math::Float3Sub(ver[2], ver[1]);
 
 				XMVECTOR vVec1 = XMLoadFloat3(&vec1);
 				XMVECTOR vVec2 = XMLoadFloat3(&vec2);

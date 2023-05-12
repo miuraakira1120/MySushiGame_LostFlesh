@@ -163,7 +163,7 @@ void Syari::Update()
 
     XMFLOAT3 fFlipped;
     XMStoreFloat3(&fFlipped, flipped);
-    transform_.position_ = Transform::Float3Add( transform_.position_, fFlipped);
+    transform_.position_ = Math::Float3Add( transform_.position_, fFlipped);
     flipped = XMVectorSet(0, 0, 0, 0);
     
     ///////////////レイを飛ばし放題//////////////
@@ -178,7 +178,7 @@ void Syari::Update()
     for (int i = 0; i < VERTEX_MAX; i++)
     {
         //過去のボーンの位置からどこに動いたか
-        fMoveBonePos[i] = Transform::Float3Sub(vertexBonePos[i], prevBonePos[i]);
+        fMoveBonePos[i] = Math::Float3Sub(vertexBonePos[i], prevBonePos[i]);
     }
 
     RayCastData rayMove[VERTEX_MAX];
@@ -298,10 +298,10 @@ void Syari::Update()
         {  1,  0,  0  }, //右
         {  0 , 0, -1  }, //手前
         {  0,  0,  1  }, //奥
-        { Transform::Float3Sub(vertexBonePos[DOWN_RIGHT_FRONT], transform_.position_)},
-        { Transform::Float3Sub(vertexBonePos[DOWN_RIGHT_BACK], transform_.position_)},
-        { Transform::Float3Sub(vertexBonePos[DOWN_LEFT_FRONT], transform_.position_)},
-        { Transform::Float3Sub(vertexBonePos[DOWN_LEFT_BACK], transform_.position_)}
+        { Math::Float3Sub(vertexBonePos[DOWN_RIGHT_FRONT], transform_.position_)},
+        { Math::Float3Sub(vertexBonePos[DOWN_RIGHT_BACK], transform_.position_)},
+        { Math::Float3Sub(vertexBonePos[DOWN_LEFT_FRONT], transform_.position_)},
+        { Math::Float3Sub(vertexBonePos[DOWN_LEFT_BACK], transform_.position_)}
     };
 
     //シャリのOBBを設定

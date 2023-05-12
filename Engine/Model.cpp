@@ -1,5 +1,6 @@
 #include "Global.h"
 #include "Model.h"
+#include "Math.h"
 
 //3Dモデル（FBXファイル）を管理する
 namespace Model
@@ -181,7 +182,7 @@ namespace Model
 	//レイキャスト（レイを飛ばして当たり判定）
 	void RayCast(int handle, RayCastData *data)
 	{
-			XMFLOAT3 target = Transform::Float3Add(data->start, data->dir);
+			XMFLOAT3 target = Math::Float3Add(data->start, data->dir);
 			XMMATRIX matInv = XMMatrixInverse(nullptr, _datas[handle]->transform.GetWorldMatrix());
 			XMVECTOR vecStart = XMVector3TransformCoord(XMLoadFloat3(&data->start), matInv);
 			XMVECTOR vecTarget = XMVector3TransformCoord(XMLoadFloat3(&target), matInv);

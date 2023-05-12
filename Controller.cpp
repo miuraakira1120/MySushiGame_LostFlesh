@@ -52,7 +52,7 @@ void Controller::Update()
     }
 
     XMFLOAT3 stickR = { Input::GetPadStickR().y, Input::GetPadStickR().x, 0 };
-    transform_.rotate_ = Transform::Float3Add(Transform::Float3Mul( stickR, PAD_SPEED, PAD_SPEED, PAD_SPEED), transform_.rotate_);
+    transform_.rotate_ = Math::Float3Add(Math::Float3Mul( stickR, PAD_SPEED, PAD_SPEED, PAD_SPEED), transform_.rotate_);
 
     Camera::SetTarget(transform_.position_);
 }

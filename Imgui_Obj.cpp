@@ -10,8 +10,8 @@ namespace
     ChangeSceneButton* pChangeSceneButton;
     SceneManager* pSceneManager;
 
-    float ChangeSceneButtonX;
-    float ChangeSceneButtonY;
+    float changeSceneButtonX;
+    float changeSceneButtonY;
 
     int iniListButton;//タイトルシーンのボタンの番号
 
@@ -26,7 +26,6 @@ void Imgui_Obj::Initialize(SceneManager* pSceneManager_)
     pText = new Text;
     pText->Initialize();
     pSceneManager = pSceneManager_;
-    InstantiateImgui();
 }
 
 //更新
@@ -79,172 +78,18 @@ void Imgui_Obj::InstantiateImgui()
 
     ////////ボタンの位置////////////////
     ImGui::Begin("Botton Pos");
-    ImGui::SliderFloat("ChangeSceneButtonX", &ChangeSceneButtonX, -1.0f, 1.0f);
-    ImGui::SliderFloat("ChangeSceneButtonY", &ChangeSceneButtonY, -1.0f, 1.0f);
+    ImGui::SliderFloat("ChangeSceneButtonX", &changeSceneButtonX, -1.0f, 1.0f);
+    ImGui::SliderFloat("ChangeSceneButtonY", &changeSceneButtonY, -1.0f, 1.0f);
+    pChangeSceneButton->SetPosition(changeSceneButtonX, changeSceneButtonY, 0);
 
-    if (ImGui::Button("PositionSave")) 
+    if (ImGui::Button("PositionSave"))
     {
         int iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
-        IniOperator::SetValue(iniListButton, "ChangeSceneButtonX", ChangeSceneButtonX);
-        IniOperator::SetValue(iniListButton, "ChangeSceneButtonY", ChangeSceneButtonY);
+        XMFLOAT3 changeSceneButtonPos = XMFLOAT3(changeSceneButtonX, changeSceneButtonY, 0);
+        changeSceneButtonPos = Math::TransformToPixel(changeSceneButtonPos);
+        IniOperator::SetValue(iniListButton, "ChangeSceneButtonX", changeSceneButtonX);
+        IniOperator::SetValue(iniListButton, "ChangeSceneButtonY", changeSceneButtonY );
     }
 
     ImGui::End();
-
-    //if (pSyari != nullptr)
-    //{
-    //    //シャリのステータスのImgui
-    //    ImGui::Begin("Syari State");
-    //    if (pSyari != nullptr)
-    //    {
-    //        ImGui::Text("SyariPositionX  ");
-    //        ImGui::SameLine();
-    //        ImGui::Text(std::to_string(pSyari->GetPosition().x).c_str());
-
-    //        ImGui::Text("SyariPositionY  ");
-    //        ImGui::SameLine();
-    //        ImGui::Text(std::to_string(pSyari->GetPosition().y).c_str());
-
-    //        ImGui::Text("SyariPositionZ  ");
-    //        ImGui::SameLine();
-    //        ImGui::Text(std::to_string(pSyari->GetPosition().z).c_str());
-
-    //    }
-    //    ImGui::End();
-
-    //    //マグロのステータスのImgui
-    //    ImGui::Begin("Maguro State");
-    //    if (pMaguro != nullptr)
-    //    {
-    //        ImGui::Text("MaguroPositionX  ");
-    //        ImGui::SameLine();
-    //        ImGui::Text(std::to_string(pMaguro->GetPosition().x).c_str());
-
-    //        ImGui::Text("MaguroPositionY  ");
-    //        ImGui::SameLine();
-    //        ImGui::Text(std::to_string(pMaguro->GetPosition().y).c_str());
-
-    //        ImGui::Text("MaguroPositionZ  ");
-    //        ImGui::SameLine();
-    //        ImGui::Text(std::to_string(pMaguro->GetPosition().z).c_str());
-    //    }
-    //    ImGui::End();
-
-    //    gameTimerID = Time::GetTimerID();
-    //    ImGui::Begin("Time");
-    //    ImGui::Text("Timer ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(Time::GetTimef(gameTimerID)).c_str());
-    //    ImGui::SameLine();
-    //    ImGui::Text("s");
-    //    ImGui::End();
-
-    //    ImGui::Begin("accel");
-    //    ImGui::Text("accel ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->accel).c_str());
-    //    ImGui::SameLine();
-    //    ImGui::Text("s");
-
-    //    ImGui::Text("UP_RIGHT_FRONTX ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_FRONT].x).c_str());
-    //    ImGui::Text("UP_RIGHT_FRONTY ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_FRONT].y).c_str());
-    //    ImGui::Text("UP_RIGHT_FRONTZ ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_FRONT].z).c_str());
-    //    ImGui::NewLine();
-
-    //    ImGui::Text("UP_RIGHT_BACKX ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_BACK].x).c_str());
-    //    ImGui::Text("UP_RIGHT_BACKY ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_BACK].y).c_str());
-    //    ImGui::Text("UP_RIGHT_BACKZ ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_RIGHT_BACK].z).c_str());
-    //    ImGui::NewLine();
-
-    //    ImGui::Text("UP_LEFT_FRONTX ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_FRONT].x).c_str());
-    //    ImGui::Text("UP_LEFT_FRONTY ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_FRONT].y).c_str());
-    //    ImGui::Text("UP_LEFT_FRONTZ ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_FRONT].z).c_str());
-    //    ImGui::NewLine();
-
-    //    ImGui::Text("UP_LEFT_BACKX ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_BACK].x).c_str());
-    //    ImGui::Text("UP_LEFT_BACKY ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_BACK].y).c_str());
-    //    ImGui::Text("UP_LEFT_BACKZ ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[UP_LEFT_BACK].z).c_str());
-    //    ImGui::NewLine();
-
-    //    ImGui::Text("DOWN_RIGHT_FRONTX ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_FRONT].x).c_str());
-    //    ImGui::Text("DOWN_RIGHT_FRONTY ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_FRONT].y).c_str());
-    //    ImGui::Text("DOWN_RIGHT_FRONTZ ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_FRONT].z).c_str());
-    //    ImGui::NewLine();
-
-    //    ImGui::Text("DOWN_RIGHT_BACKX ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_BACK].x).c_str());
-    //    ImGui::Text("DOWN_RIGHT_BACKY ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_BACK].y).c_str());
-    //    ImGui::Text("DOWN_RIGHT_BACKZ ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_RIGHT_BACK].z).c_str());
-    //    ImGui::NewLine();
-
-    //    ImGui::Text("DOWN_LEFT_FRONTX ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_FRONT].x).c_str());
-    //    ImGui::Text("DOWN_LEFT_FRONTY ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_FRONT].y).c_str());
-    //    ImGui::Text("DOWN_LEFT_FRONTZ ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_FRONT].z).c_str());
-    //    ImGui::NewLine();
-
-    //    ImGui::Text("DOWN_LEFT_BACKX ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_BACK].x).c_str());
-    //    ImGui::Text("DOWN_LEFT_BACKY ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_BACK].y).c_str());
-    //    ImGui::Text("DOWN_LEFT_BACKZ ");
-    //    ImGui::SameLine();
-    //    ImGui::Text(std::to_string(pSyari->vertexBonePos[DOWN_LEFT_BACK].z).c_str());
-    //    ImGui::NewLine();
-
-    //    ImGui::End();
-    //}
-    //
 }
-
-
-/* static int clickCount;*/
-    /*if (ImGui::Button("click"))
-    {
-        clickCount += 1;
-    }
-    ImGui::SameLine();
-    std::string c = "ClickCount " + std::to_string(clickCount);
-    */

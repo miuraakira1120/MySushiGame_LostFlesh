@@ -29,7 +29,7 @@ void Maguro::Initialize()
     transform_.position_.y = SYARI_SIZE_Y + MAGURO_SIZE_Y;
 
     //モデルデータのロード
-    hModel_ = Model::Load("Maguro.fbx");
+    hModel_ = Model::Load("tuna.fbx");
     assert(hModel_ >= 0);
 
     pParticle_ = Instantiate<Particle>(this);
