@@ -169,6 +169,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Imgui_Obj.cpp" />
+    <ClCompile Include="JsonOperator.cpp" />
     <ClCompile Include="Maguro.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -229,6 +230,7 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Imgui_Obj.h" />
+    <ClInclude Include="JsonOperator.h" />
     <ClInclude Include="Maguro.h" />
     <ClInclude Include="OBB.h" />
     <ClInclude Include="Particle.h" />

@@ -6,6 +6,7 @@
 #include "Engine/IniOperator.h"
 #include "Imgui_Obj.h"
 #include "Pause.h"
+#include "JsonOperator.h"
 
 //コンストラクタ
 StartScene::StartScene(GameObject* parent)
@@ -25,6 +26,10 @@ void StartScene::Initialize()
 
 	int iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
 	pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX",0), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY",0), 0);
+
+	Document data;
+	bool isSuccess = JsonOperator::LoadJSONFromFile("sana.json", data);
+	int a = 0;
 
 }
 

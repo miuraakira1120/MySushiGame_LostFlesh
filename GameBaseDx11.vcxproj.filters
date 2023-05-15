@@ -256,6 +256,7 @@
     <ClCompile Include="Engine\Math.cpp">
       <Filter>00Engine\Math</Filter>
     </ClCompile>
+    <ClCompile Include="JsonOperator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -432,6 +433,7 @@
     <ClInclude Include="Engine\Math.h">
       <Filter>00Engine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="JsonOperator.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
