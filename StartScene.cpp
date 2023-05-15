@@ -27,8 +27,7 @@ void StartScene::Initialize()
 	int iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
 	pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX",0), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY",0), 0);
 
-	Document data;
-	bool isSuccess = JsonOperator::LoadJSONFromFile("sana.json", data);
+	string str = JsonOperator::GetJSONString("test.json", "key");
 	int a = 0;
 
 }

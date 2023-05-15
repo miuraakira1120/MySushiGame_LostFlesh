@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "Json/rapidjson-master/include/rapidjson/document.h"
 #include "Json/rapidjson-master/include/rapidjson/filereadstream.h"
 #include "Json/rapidjson-master/include/rapidjson/filewritestream.h"
@@ -16,5 +17,13 @@ namespace JsonOperator
 	/// <param name="document">読み込むドキュメント</param>
 	/// <returns>成功したかどうか</returns>
 	bool LoadJSONFromFile(const char* filename, Document& document);
+	
+	/// <summary>
+	/// JSONファイルの文字列を読み取る
+	/// </summary>
+	/// <param name="fileName">読み取るファイルの名前</param>
+	/// <param name="key">>キーの名前</param>
+	/// <returns>対応している文字列</returns>
+	std::string GetJSONString(std::string fileName, std::string key);
 };
 

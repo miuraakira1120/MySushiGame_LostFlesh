@@ -22,3 +22,16 @@ bool JsonOperator::LoadJSONFromFile(const char* filename, Document& document)
     // “Ç‚İ‚İ‚ª¬Œ÷‚µ‚½‚©‚Ç‚¤‚©‚ğ•Ô‚·
     return !document.HasParseError() && document.IsObject();
 }
+
+std::string JsonOperator::GetJSONString(std::string fileName, std::string key)
+{
+    Document data;
+    bool isSuccess = JsonOperator::LoadJSONFromFile(fileName.c_str(), data);
+
+    const char* name = "";
+    if (data.HasMember(key.c_str()) && data[key.c_str()].IsString()) {
+        name = data[key.c_str()].GetString();
+    }
+    return name;
+}
+
