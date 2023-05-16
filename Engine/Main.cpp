@@ -19,6 +19,7 @@
 #include "../imgui/imgui_impl_win32.h"
 #include "../Pause.h"
 #include "../Imgui_Obj.h"
+#include "../JsonOperator.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -79,6 +80,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
+
+	//JsonOperator初期化
+	JsonOperator::Initialize();
 
 
 	//ルートオブジェクト準備

@@ -14,6 +14,11 @@ using namespace rapidjson;
 namespace JsonOperator
 {
 	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
+
+	/// <summary>
 	/// JSONファイルを読み込む関数
 	/// </summary>
 	/// <param name="filename">読み込むファイルの名前</param>
