@@ -8,6 +8,9 @@
 
 using namespace rapidjson;
 
+//JSONの記述例
+//https://products.sint.co.jp/topsic/blog/json#toc-2
+
 namespace JsonOperator
 {
 	/// <summary>
@@ -22,8 +25,61 @@ namespace JsonOperator
 	/// JSONファイルの文字列を読み取る
 	/// </summary>
 	/// <param name="fileName">読み取るファイルの名前</param>
-	/// <param name="key">>キーの名前</param>
-	/// <returns>対応している文字列</returns>
-	std::string GetJSONString(std::string fileName, std::string key);
+	/// <param name="key">キーの名前</param>
+	/// <param name="out">読み込んだ文字列</param>
+	/// <returns>成功したかどうか</returns>
+	bool GetJSONString(std::string filename, std::string key, std::string &out);
+
+	/// <summary>
+	/// JSONファイルの整数値を読み取る
+	/// </summary>
+	/// <param name="fileName">読み取るファイルの名前</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="out">読み込んだ整数値</param>
+	/// <returns>成功したかどうか</returns>
+	bool GetJSONInt(std::string filename, std::string key, int &out);
+
+	/// <summary>
+	/// JSONファイルの小数値を読み取る
+	/// </summary>
+	/// <param name="fileName">読み取るファイルの名前</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="out">読み込んだ小数値</param>
+	/// <returns>成功したかどうか</returns>
+	bool GetJSONFloat(std::string filename, std::string key, float& out);
+
+	//////////////////////////////////////セッションあり（オーバーロード）////////////////////////////////////////////
+
+	/// <summary>
+	/// JSONファイルの文字列を読み取る
+	/// </summary>
+	/// <param name="fileName">読み取るファイルの名前</param>
+	/// <param name="section">セッション名</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="out">読み込んだ文字列</param>
+	/// <returns>成功したかどうか</returns>
+	bool GetJSONString(std::string filename, std::string section, std::string key, std::string& out);
+
+	/// <summary>
+	/// JSONファイルの整数値を読み取る
+	/// </summary>
+	/// <param name="fileName">読み取るファイルの名前</param>
+	/// <param name="section">セッション名</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="out">読み込んだ整数値</param>
+	/// <returns>成功したかどうか</returns>
+	bool GetJSONInt(std::string filename, std::string section, std::string key, int& out);
+
+	/// <summary>
+	/// JSONファイルの小数値を読み取る
+	/// </summary>
+	/// <param name="filename">読み取るファイルの名前</param>
+	/// <param name="section">セッション名</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="out">読み込んだ小数値</param>
+	/// <returns>成功したかどうか</returns>
+	bool GetJSONFloat(std::string filename, std::string section, std::string key, float& out);
+
+
 };
 

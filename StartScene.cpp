@@ -27,9 +27,23 @@ void StartScene::Initialize()
 	int iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
 	pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX",0), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY",0), 0);
 
-	string str = JsonOperator::GetJSONString("test.json", "key");
-	int a = 0;
+	/*string str = "yo";
+	if (JsonOperator::GetJSONString("test.json", "key", str))
+	{
+		int i = 0;
+	}
+	int a = 0;*/
 
+	float i = 0;
+	if (JsonOperator::GetJSONFloat("test.json","Button", "posX", i))
+	{
+		int j = 0;
+	}
+	int ij= 0;
+	if (JsonOperator::GetJSONFloat("test.json", "Button", "posY", i))
+	{
+		int j = 0;
+	}
 }
 
 //çXêV
