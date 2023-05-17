@@ -13,6 +13,12 @@ using namespace rapidjson;
 
 namespace JsonOperator
 {
+	enum class JSONData
+	{
+		TITLE_DATA = 0,
+		DATA_MAX
+	};
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -24,7 +30,7 @@ namespace JsonOperator
 	/// <param name="filename">読み込むファイルの名前</param>
 	/// <param name="document">読み込むドキュメント</param>
 	/// <returns>成功したかどうか</returns>
-	bool LoadJSONFromFile(const char* filename, Document& document);
+	bool LoadJSONFromFile(std::string filename, Document& document);
 	
 	/// <summary>
 	/// JSONファイルの文字列を読み取る
@@ -85,6 +91,70 @@ namespace JsonOperator
 	/// <returns>成功したかどうか</returns>
 	bool GetJSONFloat(std::string filename, std::string section, std::string key, float& out);
 
+	////////////////////////////書き込み///////////////////////////////////////////////////
 
+	/// <summary>
+	/// JSONファイルに書き込む
+	/// </summary>
+	/// <param name="filename">>書き込むファイルの名前</param>
+	/// <param name="section">セッション名</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="value">入れる値</param>
+	/// <returns>成功したかどうか</returns>
+	bool WriteJSONToFile(const std::string& filename, const std::string &section, const std::string &key, const std::string &value);
+
+	/// <summary>
+	/// JSONファイルに書き込む
+	/// </summary>
+	/// <param name="filename">>書き込むファイルの名前</param>
+	/// <param name="section">セッション名</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="value">入れる値</param>
+	/// <returns>成功したかどうか</returns>
+	bool WriteJSONToFile(const std::string& filename, const std::string &section, const std::string &key, const int &value);
+
+	/// <summary>
+	/// JSONファイルに書き込む
+	/// </summary>
+	/// <param name="filename">>書き込むファイルの名前</param>
+	/// <param name="section">セッション名</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="value">入れる値</param>
+	/// <returns>成功したかどうか</returns>
+	bool WriteJSONToFile(const std::string& filename, const std::string& section, const std::string& key, const float& value);
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+
+//	template <class T = int>
+//	bool GetData(const std::string& filename, const std::string& section, const std::string& key, T& out)
+//	{
+//		Document data;
+//		//ファイルを開けなかったらfalseを返す
+//		if (!LoadJSONFromFile(filename.c_str(), data))
+//		{
+//			return false;
+//		}
+//
+//		//dataに読み取ったデータを入れる
+//		int name = 0.0f;
+//
+//		//引数のセッションがあるかどうか確認
+//		if (data.IsObject())
+//		{
+//			const Value& sectionData = data[section.c_str()];
+//
+//			//引数のキーがあるかどうか確認
+//			if (sectionData.HasMember(key.c_str()) && (typeid(sectionData[key.c_str()]) == typeid(T))) {
+//
+//				//読み取ったデータを入れる
+//				name = sectionData[key.c_str()].GetInt();
+//				out = name;
+//				return true;
+//			}
+//		}
+//
+//		//失敗したらfalseを返す
+//		return false;
+//	}
 };
 

@@ -34,7 +34,7 @@ void StartScene::Initialize()
 	}
 	int a = 0;*/
 
-	float i = 0;
+	/*float i = 0;
 	if (JsonOperator::GetJSONFloat("test.json","Button", "posX", i))
 	{
 		int j = 0;
@@ -43,6 +43,19 @@ void StartScene::Initialize()
 	if (JsonOperator::GetJSONFloat("test.json", "Button", "posY", i))
 	{
 		int j = 0;
+	}*/
+
+	
+
+	// JSON‚ğƒtƒ@ƒCƒ‹‚É‘‚«‚Ş
+	std::string filename = "../Assets\\GameData\\output.json";
+	if (JsonOperator::WriteJSONToFile(filename, "a", "a", (float)30.0))
+	{
+		int success = 1;
+	}
+	else
+	{
+		int success = 0;
 	}
 }
 
