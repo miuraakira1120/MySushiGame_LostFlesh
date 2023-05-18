@@ -39,6 +39,14 @@ namespace JsonOperator
 	/// <param name="str">読み込んだ文字列</param>
 	/// <returns>成功したかどうか</returns>
 	bool LoadJSONString(std::string filename, std::string& str);
+
+	/// <summary>
+	/// セッションを追加する関数
+	/// </summary>
+	/// <param name="filename">読み込むファイルの名前</param>
+	/// <param name="section">セクション名</param>
+	/// <returns>成功したかどうか</returns>
+	bool AddSection(const std::string& filename, const std::string& section);
 	
 	/// <summary>
 	/// JSONファイルの文字列を読み取る
@@ -142,6 +150,8 @@ namespace JsonOperator
 	/// <param name="value">書き込む値</param>
 	/// <returns>成功したかどうか</returns>
 	bool AppendToJSONFileFloat(const std::string& filename, const std::string& section, const std::string& key, float value);
+
+
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////

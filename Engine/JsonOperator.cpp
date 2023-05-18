@@ -17,12 +17,12 @@ using std::vector;
 namespace
 {
     std::map<string, Document> dataList;
-   // ("../Assets\\GameData\\TitleData.json");
+    // ("../Assets\\GameData\\TitleData.json");
 
 
-    // JSONファイルの名前
+     // JSONファイルの名前
     const std::string TITLE_JSON = "../Assets\\GameData\\TitleScene.json";
-   
+
 }
 
 namespace JsonOperator
@@ -73,6 +73,53 @@ namespace JsonOperator
         std::string jsonStr((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
         str = jsonStr;
         ifs.close();
+    }
+
+    //セッションを追加する関数
+    bool AddSection(const std::string& filename, const std::string& section)
+    {
+        //ファイルの内容を文字列として読み込む
+        std::string str = "";
+        //失敗したらfalseを返す
+        if (!LoadJSONString(filename, str))
+        {
+            return false;
+        }
+
+        // JSONデータをパースする
+        // パース　データを解析し必要なデータを取り出すこと
+        Document document;
+        //失敗したらfalseを返す
+        if (document.Parse(str.c_str()).HasParseError()) {
+            return false;
+        }
+
+        // 新しい値を追加または上書きする
+        if (!document.IsObject()) {
+            return false;
+        }
+
+        // セクションを追加する
+        Document::AllocatorType& allocator = document.GetAllocator();
+        Value newValueObj;
+        document.AddMember(Value(section.c_str(), allocator).Move(), newValueObj, allocator);
+
+        // 更新されたJSONデータを文字列に変換する
+        StringBuffer buffer;
+        Writer<StringBuffer> writer(buffer);
+        document.Accept(writer);
+        std::string updatedJsonStr = buffer.GetString();
+
+        // JSONファイルを上書きする
+        std::ofstream ofs(filename);
+        if (!ofs) {
+            return false;
+        }
+
+        ofs << updatedJsonStr;
+        ofs.close();
+
+        return true;
     }
 
     //JSONファイルの文字列を読み取る
@@ -266,14 +313,9 @@ namespace JsonOperator
         return true;
     }
 
+    //JSONファイルに書き込む(上書き)
     bool WriteJSONToFile(const std::string& filename, const std::string& section, const std::string& key, const int& value)
     {
-        //指定したファイルが見つかった場合
-        if (dataList.find(filename) != end(dataList))
-        {
-            dataList[filename];
-        }
-
         // JSONオブジェクトを作成
         Document sectionDocument;
         sectionDocument.SetObject();
@@ -336,8 +378,8 @@ namespace JsonOperator
     }
 
     // JSONファイルに書き込む(追記、書き換え）
-    bool AppendToJSONFileFloat(const std::string& filename, const std::string& section,const std::string& key, float value)
-    { 
+    bool AppendToJSONFileFloat(const std::string& filename, const std::string& section, const std::string& key, float value)
+    {
         //ファイルの内容を文字列として読み込む
         std::string str = "";
         //失敗したらfalseを返す
@@ -356,6 +398,12 @@ namespace JsonOperator
 
         // 新しい値を追加または上書きする
         if (!document.IsObject()) {
+            return false;
+        }
+
+        //セクションを追加
+        if (!AddSection(filename, section))
+        {
             return false;
         }
 
@@ -419,3 +467,55 @@ namespace JsonOperator
       // // 読み込みが成功したかどうかを返す
       // return !document.HasParseError() && document.IsObject();
        // ファイルを開く
+
+//// JSONファイルに書き込む(追記、書き換え）
+//bool AppendToJSONFileFloat(const std::string& filename, const std::string& section, const std::string& key, float value)
+//{
+//    //ファイルの内容を文字列として読み込む
+//    std::string str = "";
+//    //失敗したらfalseを返す
+//    if (!LoadJSONString(filename, str))
+//    {
+//        return false;
+//    }
+//
+//    // JSONデータをパースする
+//    // パース　データを解析し必要なデータを取り出すこと
+//    Document document;
+//    //失敗したらfalseを返す
+//    if (document.Parse(str.c_str()).HasParseError()) {
+//        return false;
+//    }
+//
+//    // 新しい値を追加または上書きする
+//    if (!document.IsObject()) {
+//        return false;
+//    }
+//
+//    // オブジェクト内に既に同じキーが存在する場合は上書き、そうでない場合は追加する
+//    Document::AllocatorType& allocator = document.GetAllocator();
+//    if (document.HasMember(key.c_str())) {
+//        document[key.c_str()] = value;
+//    }
+//    else {
+//        Value newValueObj(value);
+//        document.AddMember(Value(key.c_str(), allocator).Move(), newValueObj, allocator);
+//    }
+//
+//    // 更新されたJSONデータを文字列に変換する
+//    StringBuffer buffer;
+//    Writer<StringBuffer> writer(buffer);
+//    document.Accept(writer);
+//    std::string updatedJsonStr = buffer.GetString();
+//
+//    // JSONファイルを上書きする
+//    std::ofstream ofs(filename);
+//    if (!ofs) {
+//        return false;
+//    }
+//
+//    ofs << updatedJsonStr;
+//    ofs.close();
+//
+//    return true;
+//}

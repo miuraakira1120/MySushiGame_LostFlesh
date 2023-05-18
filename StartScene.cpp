@@ -29,8 +29,8 @@ void StartScene::Initialize()
 
 	JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "Button","value", 22.4);
 	
-	JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonX", pos.x);
-	JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonY", pos.y);
+	//JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonX", pos.x);
+	//JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonY", pos.y);
 	pStartButton->SetPosition(pos);
 
 
@@ -68,8 +68,8 @@ void StartScene::Update()
 #if _DEBUG
 	/*pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX"), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY"), 0);*/
 	XMFLOAT3 pos = { 0,0,0 };
-	JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonX", pos.x);
-	JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonY", pos.y);
+	//JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonX", pos.x);
+	//JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonY", pos.y);
 	pStartButton->SetPosition(pos);
 #endif
 	
