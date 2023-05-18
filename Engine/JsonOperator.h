@@ -1,10 +1,10 @@
 #pragma once
 
 #include <string>
-#include "Json/rapidjson-master/include/rapidjson/document.h"
-#include "Json/rapidjson-master/include/rapidjson/filereadstream.h"
-#include "Json/rapidjson-master/include/rapidjson/filewritestream.h"
-#include "Json/rapidjson-master/include/rapidjson/writer.h"
+#include "../Json/rapidjson-master/include/rapidjson/document.h"
+#include "../Json/rapidjson-master/include/rapidjson/filereadstream.h"
+#include "../Json/rapidjson-master/include/rapidjson/filewritestream.h"
+#include "../Json/rapidjson-master/include/rapidjson/writer.h"
 
 using namespace rapidjson;
 
@@ -31,6 +31,14 @@ namespace JsonOperator
 	/// <param name="document">読み込むドキュメント</param>
 	/// <returns>成功したかどうか</returns>
 	bool LoadJSONFromFile(std::string filename, Document& document);
+
+	/// <summary>
+	/// ファイルの内容を文字列として読み込む
+	/// </summary>
+	/// <param name="filename">読み込むファイルの名前</param>
+	/// <param name="str">読み込んだ文字列</param>
+	/// <returns>成功したかどうか</returns>
+	bool LoadJSONString(std::string filename, std::string& str);
 	
 	/// <summary>
 	/// JSONファイルの文字列を読み取る
@@ -59,13 +67,13 @@ namespace JsonOperator
 	/// <returns>成功したかどうか</returns>
 	bool GetJSONFloat(std::string filename, std::string key, float& out);
 
-	//////////////////////////////////////セッションあり（オーバーロード）////////////////////////////////////////////
+	//////////////////////////////////////セクションあり（オーバーロード）////////////////////////////////////////////
 
 	/// <summary>
 	/// JSONファイルの文字列を読み取る
 	/// </summary>
 	/// <param name="fileName">読み取るファイルの名前</param>
-	/// <param name="section">セッション名</param>
+	/// <param name="section">セクション名</param>
 	/// <param name="key">キーの名前</param>
 	/// <param name="out">読み込んだ文字列</param>
 	/// <returns>成功したかどうか</returns>
@@ -75,7 +83,7 @@ namespace JsonOperator
 	/// JSONファイルの整数値を読み取る
 	/// </summary>
 	/// <param name="fileName">読み取るファイルの名前</param>
-	/// <param name="section">セッション名</param>
+	/// <param name="section">セクション名</param>
 	/// <param name="key">キーの名前</param>
 	/// <param name="out">読み込んだ整数値</param>
 	/// <returns>成功したかどうか</returns>
@@ -85,19 +93,19 @@ namespace JsonOperator
 	/// JSONファイルの小数値を読み取る
 	/// </summary>
 	/// <param name="filename">読み取るファイルの名前</param>
-	/// <param name="section">セッション名</param>
+	/// <param name="section">セクション名</param>
 	/// <param name="key">キーの名前</param>
 	/// <param name="out">読み込んだ小数値</param>
 	/// <returns>成功したかどうか</returns>
 	bool GetJSONFloat(std::string filename, std::string section, std::string key, float& out);
 
-	////////////////////////////書き込み///////////////////////////////////////////////////
+	////////////////////////////書き込み(上書き）///////////////////////////////////////////////////
 
 	/// <summary>
 	/// JSONファイルに書き込む
 	/// </summary>
 	/// <param name="filename">>書き込むファイルの名前</param>
-	/// <param name="section">セッション名</param>
+	/// <param name="section">セクション名</param>
 	/// <param name="key">キーの名前</param>
 	/// <param name="value">入れる値</param>
 	/// <returns>成功したかどうか</returns>
@@ -107,21 +115,34 @@ namespace JsonOperator
 	/// JSONファイルに書き込む
 	/// </summary>
 	/// <param name="filename">>書き込むファイルの名前</param>
-	/// <param name="section">セッション名</param>
+	/// <param name="section">セクション名</param>
 	/// <param name="key">キーの名前</param>
 	/// <param name="value">入れる値</param>
 	/// <returns>成功したかどうか</returns>
 	bool WriteJSONToFile(const std::string& filename, const std::string &section, const std::string &key, const int &value);
 
 	/// <summary>
-	/// JSONファイルに書き込む
+	/// JSONファイルに書き込む(上書き）
 	/// </summary>
 	/// <param name="filename">>書き込むファイルの名前</param>
-	/// <param name="section">セッション名</param>
+	/// <param name="section">セクション名</param>
 	/// <param name="key">キーの名前</param>
 	/// <param name="value">入れる値</param>
 	/// <returns>成功したかどうか</returns>
 	bool WriteJSONToFile(const std::string& filename, const std::string& section, const std::string& key, const float& value);
+
+	////////////////////////////書き込み(追記、書き換え）///////////////////////////////////////////////////
+
+	/// <summary>
+	/// JSONファイルに書き込む(追記、書き換え）
+	/// </summary>
+	/// <param name="filename">書き込むファイルの名前</param>
+	/// <param name="section">セクション名</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="value">書き込む値</param>
+	/// <returns>成功したかどうか</returns>
+	bool AppendToJSONFileFloat(const std::string& filename, const std::string& section, const std::string& key, float value);
+
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 
@@ -138,7 +159,7 @@ namespace JsonOperator
 //		//dataに読み取ったデータを入れる
 //		int name = 0.0f;
 //
-//		//引数のセッションがあるかどうか確認
+//		//引数のセクションがあるかどうか確認
 //		if (data.IsObject())
 //		{
 //			const Value& sectionData = data[section.c_str()];

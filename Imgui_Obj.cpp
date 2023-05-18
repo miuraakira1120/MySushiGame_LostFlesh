@@ -1,7 +1,7 @@
 #include "Imgui_Obj.h"
 #include "imgui/imgui.h"
 #include "Time.h"
-#include "Engine/IniOperator.h"
+#include "Engine/JsonOperator.h"
 
 namespace
 {
@@ -17,6 +17,9 @@ namespace
 
     //使用するiniファイルの名前
     const std::string iniFileName = "UI.ini";
+
+    // JSONファイルの名前
+    const std::string TITLE_JSON = "../Assets\\GameData\\TitleScene.json";
 
 }
 
@@ -76,19 +79,21 @@ void Imgui_Obj::InstantiateImgui()
     ImGui::End();
 
 
-    ////////ボタンの位置////////////////
+    ////////ボタンの位置/////////////////////////////
+    
     ImGui::Begin("Botton Pos");
+    //スタートボタン
     ImGui::SliderFloat("ChangeSceneButtonX", &changeSceneButtonX, -1.0f, 1.0f);
     ImGui::SliderFloat("ChangeSceneButtonY", &changeSceneButtonY, -1.0f, 1.0f);
-    pChangeSceneButton->SetPosition(changeSceneButtonX, changeSceneButtonY, 0);
+    if (!changeSceneButtonX == 0 || !changeSceneButtonY == 0)
+    {
+        pChangeSceneButton->SetPosition(changeSceneButtonX, changeSceneButtonY, 0);
+    }
 
     if (ImGui::Button("PositionSave"))
     {
-        int iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
-        XMFLOAT3 changeSceneButtonPos = XMFLOAT3(changeSceneButtonX, changeSceneButtonY, 0);
-        changeSceneButtonPos = Math::TransformToPixel(changeSceneButtonPos);
-        IniOperator::SetValue(iniListButton, "ChangeSceneButtonX", changeSceneButtonX);
-        IniOperator::SetValue(iniListButton, "ChangeSceneButtonY", changeSceneButtonY );
+        JsonOperator::WriteJSONToFile(TITLE_JSON, "Button", "ChangeSceneButtonX", changeSceneButtonX);
+        JsonOperator::WriteJSONToFile(TITLE_JSON, "Button", "ChangeSceneButtonY", changeSceneButtonY);
     }
 
     ImGui::End();

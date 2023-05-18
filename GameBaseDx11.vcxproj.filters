@@ -86,6 +86,9 @@
     <Filter Include="00Engine\Math">
       <UniqueIdentifier>{df261b89-18ec-47f9-949e-37eb15b19236}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00Engine\JSON">
+      <UniqueIdentifier>{e80d4d6e-d393-4597-be5c-5356d6aeac79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -256,7 +259,9 @@
     <ClCompile Include="Engine\Math.cpp">
       <Filter>00Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="JsonOperator.cpp" />
+    <ClCompile Include="Engine\JsonOperator.cpp">
+      <Filter>00Engine\JSON</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -433,7 +438,9 @@
     <ClInclude Include="Engine\Math.h">
       <Filter>00Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="JsonOperator.h" />
+    <ClInclude Include="Engine\JsonOperator.h">
+      <Filter>00Engine\JSON</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

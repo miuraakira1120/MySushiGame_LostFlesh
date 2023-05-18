@@ -19,7 +19,7 @@
 #include "../imgui/imgui_impl_win32.h"
 #include "../Pause.h"
 #include "../Imgui_Obj.h"
-#include "../JsonOperator.h"
+#include "../Engine/JsonOperator.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -102,7 +102,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 #if _DEBUG
 	//imguiのイニシャライズ
-	//Imgui_Obj::Initialize(pSceneManager);
+	Imgui_Obj::Initialize(pSceneManager);
 #endif
 
 	//メッセージループ（何か起きるのを待つ）
@@ -171,7 +171,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 #if _DEBUG
 				//imguiのアップデート
-				//Imgui_Obj::Update();
+				Imgui_Obj::Update();
 #endif
 				//カメラを更新
 				Camera::Update();
@@ -260,7 +260,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Model::AllRelease();
 	Image::AllRelease();
 #if _DEBUG
-	//Imgui_Obj::Release();
+	Imgui_Obj::Release();
 #endif
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
