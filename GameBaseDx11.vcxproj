@@ -182,7 +182,6 @@
     <ClCompile Include="ChangeSceneButton.cpp" />
     <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="Syari.cpp" />
-    <ClCompile Include="TestButton.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -243,7 +242,6 @@
     <ClInclude Include="ChangeSceneButton.h" />
     <ClInclude Include="StartScene.h" />
     <ClInclude Include="Syari.h" />
-    <ClInclude Include="TestButton.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>

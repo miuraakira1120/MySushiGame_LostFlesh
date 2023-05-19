@@ -89,6 +89,9 @@
     <Filter Include="00Engine\JSON">
       <UniqueIdentifier>{e80d4d6e-d393-4597-be5c-5356d6aeac79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00Engine\Button\ButtonBase">
+      <UniqueIdentifier>{36b28fd9-2cda-4156-9659-0f7367bdef56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -169,12 +172,6 @@
     <ClCompile Include="GameOverScene.cpp">
       <Filter>04GameOverScene</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>00Engine\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="ButtonManager.cpp">
-      <Filter>00Engine\Button</Filter>
-    </ClCompile>
     <ClCompile Include="StartScene.cpp">
       <Filter>01TitleScene</Filter>
     </ClCompile>
@@ -183,9 +180,6 @@
     </ClCompile>
     <ClCompile Include="GoalScene.cpp">
       <Filter>03GoalScene</Filter>
-    </ClCompile>
-    <ClCompile Include="TestButton.cpp">
-      <Filter>01TitleScene\Button</Filter>
     </ClCompile>
     <ClCompile Include="Ball.cpp">
       <Filter>01TitleScene\Object</Filter>
@@ -250,9 +244,6 @@
     <ClCompile Include="PoryLine.cpp">
       <Filter>00Engine\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="ChangeSceneButton.cpp">
-      <Filter>01TitleScene\Button</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\IniOperator.cpp">
       <Filter>00Engine\Ini</Filter>
     </ClCompile>
@@ -261,6 +252,15 @@
     </ClCompile>
     <ClCompile Include="Engine\JsonOperator.cpp">
       <Filter>00Engine\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>00Engine\Button\ButtonBase</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonManager.cpp">
+      <Filter>00Engine\Button\ButtonBase</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeSceneButton.cpp">
+      <Filter>00Engine\Button</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -348,12 +348,6 @@
     <ClInclude Include="GameOverScene.h">
       <Filter>04GameOverScene</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonManager.h">
-      <Filter>00Engine\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>00Engine\Button</Filter>
-    </ClInclude>
     <ClInclude Include="StartScene.h">
       <Filter>01TitleScene</Filter>
     </ClInclude>
@@ -362,9 +356,6 @@
     </ClInclude>
     <ClInclude Include="GoalScene.h">
       <Filter>03GoalScene</Filter>
-    </ClInclude>
-    <ClInclude Include="TestButton.h">
-      <Filter>01TitleScene\Button</Filter>
     </ClInclude>
     <ClInclude Include="Ball.h">
       <Filter>01TitleScene\Object</Filter>
@@ -429,9 +420,6 @@
     <ClInclude Include="Particle.h">
       <Filter>00Engine\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="ChangeSceneButton.h">
-      <Filter>01TitleScene\Button</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\IniOperator.h">
       <Filter>00Engine\Ini</Filter>
     </ClInclude>
@@ -440,6 +428,15 @@
     </ClInclude>
     <ClInclude Include="Engine\JsonOperator.h">
       <Filter>00Engine\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>00Engine\Button\ButtonBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonManager.h">
+      <Filter>00Engine\Button\ButtonBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeSceneButton.h">
+      <Filter>00Engine\Button</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

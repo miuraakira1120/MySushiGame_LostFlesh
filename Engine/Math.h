@@ -56,6 +56,7 @@ namespace Math
 	/// <param name="pixel"></param>
 	/// <returns></returns>
 	XMFLOAT3 PixelToTransform(const XMFLOAT3& pixel);
+
 };
 
 

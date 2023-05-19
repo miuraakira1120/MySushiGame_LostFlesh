@@ -65,7 +65,7 @@ void Button::Update()
     if (select_)
     {
         //‰Ÿ‚³‚ê‚½‚©
-        if (Input::IsMouseButtonDown(0) || Input::IsMouseButton(1))
+        if (Input::IsMouseButtonDown(0))
         {
             Event();
         }

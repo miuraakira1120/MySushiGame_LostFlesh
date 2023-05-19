@@ -3,6 +3,17 @@
 #include "Time.h"
 #include "Engine/JsonOperator.h"
 
+#include "Engine/GameObject.h"
+#include "Maguro.h"
+#include "Syari.h"
+#include "Engine/Text.h"
+#include "ChangeSceneButton.h"
+#include "Engine/SceneManager.h"
+#include "Engine/Math.h"
+#include "Engine/Input.h"
+
+#include "Pause.h"
+
 namespace
 {
     Text* pText;
@@ -78,23 +89,63 @@ void Imgui_Obj::InstantiateImgui()
 
     ImGui::End();
 
-
-    ////////ボタンの位置/////////////////////////////
-    
-    ImGui::Begin("Botton Pos");
-    //スタートボタン
-    ImGui::SliderFloat("ChangeSceneButtonX", &changeSceneButtonX, -1.0f, 1.0f);
-    ImGui::SliderFloat("ChangeSceneButtonY", &changeSceneButtonY, -1.0f, 1.0f);
-    if (!changeSceneButtonX == 0 || !changeSceneButtonY == 0)
+    //タイトルシーンだったら
+    if (pSceneManager->GetNowSceneID() == SCENE_ID::SCENE_ID_START)
     {
-        pChangeSceneButton->SetPosition(changeSceneButtonX, changeSceneButtonY, 0);
-    }
 
-    if (ImGui::Button("PositionSave"))
-    {
-        JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "ChangeSceneButton", "posX", changeSceneButtonX);
-        JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "ChangeSceneButton", "posY", changeSceneButtonY);
-    }
+        ///////////////////////ボタンの位置////////////////////////////////////////
 
-    ImGui::End();
+        ImGui::Begin("Botton Pos");
+        //////////////////////スタートボタン/////////////////////////////////////////////////////
+
+        /*int MouseMode = false;
+        ImGui::RadioButton("MouseModeON", &MouseMode, TRUE);
+        ImGui::SameLine();
+        ImGui::RadioButton("MouseMode", &MouseMode, FALSE);*/
+
+
+        if (ImGui::Button("MouseModeON"))
+        {
+            pChangeSceneButton->MouseModeON();
+        }
+        if (ImGui::Button("MouseModeOFF"))
+        {
+            pChangeSceneButton->MouseModeOFF();
+        }
+
+        ImGui::SliderFloat("ChangeSceneButtonX", &changeSceneButtonX, -1.0f, 1.0f);
+        ImGui::SliderFloat("ChangeSceneButtonY", &changeSceneButtonY, -1.0f, 1.0f);
+
+        //マウスモードならシリンダーで位置が変わらない変わらない
+        if (!pChangeSceneButton->GetMouseMode())
+        {
+            //シリンダーいじるまでは変わらない
+            if (!changeSceneButtonX == 0 || !changeSceneButtonY == 0)
+            {
+                //ボタンの位置を変える
+                pChangeSceneButton->SetPosition(changeSceneButtonX, changeSceneButtonY, 0);
+            }
+        }
+        else
+        {
+            //マウスモードかつボタンが選ばれてなおかつ左クリックが押されていたら
+            if (pChangeSceneButton->GetValue() && Input::IsMouseButton(1))
+            {
+                pChangeSceneButton->SetPosition(Math::PixelToTransform(Input::GetMousePosition()));
+            }
+        }
+
+        //ボタンの位置のセーブ
+        if (ImGui::Button("PositionSave"))
+        {
+            JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "ChangeSceneButton", "posX", pChangeSceneButton->GetPosition().x);
+            JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "ChangeSceneButton", "posY", pChangeSceneButton->GetPosition().y);
+        }
+
+        ImGui::End();
+        ///////////////////////////////////////////////////////////////////////////
+    }
 }
+
+//TREENODE
+//TreePop

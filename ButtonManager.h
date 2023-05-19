@@ -13,9 +13,6 @@ namespace ButtonManager
     /// <param name="interval">生成間隔</param>
     void InstantiateButton(GameObject* pParent, GameObject* pChild, XMFLOAT3& position, const XMFLOAT3& interval);
 
-    //テストボタンの作成
-    GameObject* CreateTestButton(GameObject* pParent, XMFLOAT3 position);
-
     /// <summary>
     /// 画面遷移ボタンの作成
     /// </summary>

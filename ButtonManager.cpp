@@ -1,5 +1,4 @@
 #include "ButtonManager.h"
-#include "TestButton.h"
 #include "ChangeSceneButton.h"
 
 namespace ButtonManager
@@ -21,13 +20,6 @@ namespace ButtonManager
         Math::Float3Sub(position, interval);
     }
 
-    //テストボタンの作成
-    GameObject* CreateTestButton(GameObject* pParent, XMFLOAT3 position)
-    {
-        auto* pNewObject = new TestButton(pParent);
-        InstantiateButton(pParent, pNewObject, position, XMFLOAT3(0.0f, 0.0f, 0.0f));
-        return pNewObject;
-    }
 
     //画面遷移ボタンの作成
     GameObject* CreateSceneChangeButton(GameObject* pParent, XMFLOAT3 position, SCENE_ID name, std::string imageName)

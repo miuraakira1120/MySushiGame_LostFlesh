@@ -37,6 +37,11 @@ private:
 protected:
 
     float move_;
+#if _DEBUG
+    bool isMouseMode = false;//デバッグで使うマウスで動かせる状態かどうか
+#endif // _DEBUG
+
+    
 
 private:
     /// <summary>
@@ -108,6 +113,21 @@ public:
     /// </summary>
     /// <returns>//変数value_</returns>
     bool GetValue();
+
+#if _DEBUG
+
+    //マウスモードをオンにする
+    void MouseModeON() { isMouseMode = TRUE; };
+
+    //マウスモードをオフにする
+    void MouseModeOFF() { isMouseMode = FALSE; };
+
+    //マウスモードを取得する
+    bool GetMouseMode() { return isMouseMode; };
+
+    //マウスモードを逆にする
+    void MouseModeReverse() { isMouseMode = !isMouseMode; };
+#endif
 
 };
 
