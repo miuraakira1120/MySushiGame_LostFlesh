@@ -92,8 +92,8 @@ void Imgui_Obj::InstantiateImgui()
 
     if (ImGui::Button("PositionSave"))
     {
-        JsonOperator::WriteJSONToFile(TITLE_JSON, "Button", "ChangeSceneButtonX", changeSceneButtonX);
-        JsonOperator::WriteJSONToFile(TITLE_JSON, "Button", "ChangeSceneButtonY", changeSceneButtonY);
+        JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "ChangeSceneButton", "posX", changeSceneButtonX);
+        JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "ChangeSceneButton", "posY", changeSceneButtonY);
     }
 
     ImGui::End();

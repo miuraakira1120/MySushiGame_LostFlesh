@@ -149,6 +149,16 @@ namespace JsonOperator
 	/// <param name="key">キーの名前</param>
 	/// <param name="value">書き込む値</param>
 	/// <returns>成功したかどうか</returns>
+	bool AppendToJSONFileString(const std::string& filename, const std::string& section, const std::string& key, std::string value);
+
+	/// <summary>
+	/// JSONファイルに書き込む(追記、書き換え）
+	/// </summary>
+	/// <param name="filename">書き込むファイルの名前</param>
+	/// <param name="section">セクション名</param>
+	/// <param name="key">キーの名前</param>
+	/// <param name="value">書き込む値</param>
+	/// <returns>成功したかどうか</returns>
 	bool AppendToJSONFileFloat(const std::string& filename, const std::string& section, const std::string& key, float value);
 
 

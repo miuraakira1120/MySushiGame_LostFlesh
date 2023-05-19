@@ -27,7 +27,7 @@ void StartScene::Initialize()
 	/*int iniListButton = IniOperator::AddList(iniFileName, "TitleButton");
 	pStartButton->SetPosition(IniOperator::GetValue(iniListButton, "ChangeSceneButtonX",0), IniOperator::GetValue(iniListButton, "ChangeSceneButtonY",0), 0);*/
 
-	JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "Button","value", 22.4);
+	//JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "Button","value", 22.4);
 	
 	//JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonX", pos.x);
 	//JsonOperator::GetJSONFloat(TITLE_JSON, "Button", "ChangeSceneButtonY", pos.y);
