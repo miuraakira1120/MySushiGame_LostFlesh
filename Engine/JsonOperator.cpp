@@ -101,8 +101,9 @@ namespace JsonOperator
 
         // セクションを追加する
         Document::AllocatorType& allocator = document.GetAllocator();
-        Value newValueObj;
-        document.AddMember(Value(section.c_str(), allocator).Move(), newValueObj, allocator);
+        Value newValueObj(kObjectType);
+        rapidjson::GenericStringRef<char> ref{ section.c_str() };
+        document.AddMember(ref, newValueObj, allocator);
 
         // 更新されたJSONデータを文字列に変換する
         StringBuffer buffer;
@@ -409,12 +410,12 @@ namespace JsonOperator
 
         // オブジェクト内に既に同じキーが存在する場合は上書き、そうでない場合は追加する
         Document::AllocatorType& allocator = document.GetAllocator();
-        if (document.HasMember(key.c_str())) {
-            document[key.c_str()] = value;
+        if (document[section.c_str()].HasMember(key.c_str())) {
+            document[section.c_str()][key.c_str()] = value;
         }
         else {
             Value newValueObj(value);
-            document.AddMember(Value(key.c_str(), allocator).Move(), newValueObj, allocator);
+            document[section.c_str()].AddMember(Value(key.c_str(), allocator).Move(), newValueObj, allocator);
         }
 
         // 更新されたJSONデータを文字列に変換する
