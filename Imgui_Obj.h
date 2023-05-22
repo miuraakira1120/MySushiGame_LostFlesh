@@ -23,4 +23,9 @@ namespace Imgui_Obj
     /// Imgui‚Ì¶¬
     /// </summary>
     void InstantiateImgui();
+
+    /// <summary>
+    /// •`‰æ
+    /// </summary>
+    void Draw();
 };

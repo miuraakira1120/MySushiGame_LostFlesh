@@ -1,64 +1,40 @@
 #include "Pause.h"
-#include "Engine/Input.h"
 #include "Engine/Image.h"
-#include "Engine/SceneManager.h"
 
-namespace 
+//コンストラクタ
+Pause::Pause()
 {
-	int hPict_;    //画像番号
-	bool isPause;  //ポーズされているか
-	SceneManager* pSceneManager; //SceneManagerのポインタ
 }
 
+//デストラクタ
+Pause::~Pause()
+{
+}
+
+//初期化
 void Pause::Initialize()
 {
-	isPause = false;
-	int hPict_ = -1;    //画像番号
 }
 
-void Pause::Initialize(SceneManager* pSceneManager_)
-{
-	isPause = false;
-	pSceneManager = pSceneManager_;
-	int hPict_ = -1;    //画像番号
-
-	//画像データのロード
-	hPict_ = Image::Load("BlackBack.jpg");
-	assert(hPict_ >= 0);
-}
-
-bool Pause::GetPause()
-{
-	return isPause;
-}
-
-void Pause::SetPause(bool pause)
-{
-	isPause = pause;
-}
-
-void Pause::ReversalPause()
-{
-	//isPauseを反転させる
-	isPause = !isPause;
-}
-
+//更新
 void Pause::Update()
 {
-	//1キーを押したら
-	if (Input::IsKeyDown(DIK_1))
-	{
-		ReversalPause();
-	}
+    //作成したUIの更新を呼ぶ
+    pCreateUI_->AllCreateStageUpdate();
 }
 
+//描画
 void Pause::Draw()
 {
-	if (isPause)
-	{
-		//Transform transform_ = pSceneManager->GetNowScenePointer()->GetTransform();
-		//Image::SetTransform(hPict_, transform_);
-		Image::Draw(hPict_);
-	}
+	//もし描画していないのなら
+	if (!isDrawUI_) return;
+
+	//作成したUIの描画を呼ぶ
+	pCreateUI_->AllCreateStageDraw();
+}
+
+//開放
+void Pause::Release()
+{
 }
 

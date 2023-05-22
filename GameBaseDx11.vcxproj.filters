@@ -262,6 +262,7 @@
     <ClCompile Include="ChangeSceneButton.cpp">
       <Filter>00Engine\Button</Filter>
     </ClCompile>
+    <ClCompile Include="GameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -438,6 +439,7 @@
     <ClInclude Include="ChangeSceneButton.h">
       <Filter>00Engine\Button</Filter>
     </ClInclude>
+    <ClInclude Include="GameManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -17,9 +17,9 @@
 #include "../Controller.h"
 #include "../imgui/imgui_impl_dx11.h"
 #include "../imgui/imgui_impl_win32.h"
-#include "../Pause.h"
 #include "../Imgui_Obj.h"
 #include "../Engine/JsonOperator.h"
+#include "../GameManager.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -81,9 +81,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
 
-	//JsonOperator初期化
+	//JsonOperatorの準備
 	JsonOperator::Initialize();
 
+	//ゲームマネジャーの準備
+	GameManager::Initialize();
 
 	//ルートオブジェクト準備
 	//すべてのゲームオブジェクトの親となるオブジェクト
@@ -96,9 +98,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//Timeのイニシャライズ
 	Time::Initialize(FPS);
-
-	//Pauseのイニシャライズ
-	Pause::Initialize(pSceneManager);
 
 #if _DEBUG
 	//imguiのイニシャライズ
@@ -159,25 +158,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//入力（キーボード、マウス、コントローラー）情報を更新
 				Input::Update();
 
-				//Pauseを更新
-				Pause::Update();
-
-				//Pauseしていてなかったら
-				if (!Pause::GetPause())
+				//ゲーム内時間が止まっていなかったら
+				if (GameManager::GetIsTimeMoving())
 				{
+					//Timeの更新
+				Time::Update();
+
 					//全オブジェクトの更新処理
 					//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-					pRootObject->UpdateSub();
+					pRootObject->UpdateSub();						
 				}
+
+				//マネージャの更新処理を呼ぶ
+				GameManager::Update();
 #if _DEBUG
 				//imguiのアップデート
 				Imgui_Obj::Update();
 #endif
 				//カメラを更新
 				Camera::Update();
-
-				//Timeの更新
-				Time::Update();
 
 				//このフレームの描画開始
 				Direct3D::BeginDraw();
@@ -221,29 +220,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					Controller* pController;
 					pController = (Controller*)pRootObject->FindObject("Controller");
 
-					//if (pSyari != nullptr)
-					//{
-					//	Camera::SetTarget(pSyari->GetPosition());
-					//	Camera::SetPosition(XMFLOAT3(0, 10, 0));
-
-
-					//	/*Camera::SetPosition(XMFLOAT3(10, 0, 0));
-					//	Camera::SetPosition(pController->GetPosition());*/
-					//}
-
-					//Camera::Update();
-
-					//////全オブジェクトを描画
-					//////ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-					//pRootObject->DrawSub();
 				}
 
+				//ゲームマネジャーの準備
+				GameManager::Draw();
+
 #if _DEBUG
-				ImGui::Render();
-				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+				//Imguiの描画
+				Imgui_Obj::Draw();
 #endif
-				//ポーズ画面の描画
-				Pause::Draw();
 
 				//描画終了
 				Direct3D::EndDraw();
@@ -265,6 +250,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
 	Direct3D::Release();
+	GameManager::Release();
 #if _DEBUG
 	ImGui_ImplDX11_Shutdown();
 	ImGui::DestroyContext();

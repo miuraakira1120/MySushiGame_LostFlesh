@@ -1,30 +1,31 @@
 #pragma once
+#include "Engine/GameObject.h"
+#include <directxmath.h>
 
-class SceneManager;
+class Transform;
 
-namespace Pause
+//Pauseシーンを管理するクラス
+class Pause
 {
+private:
 
-	// 初期化
-	void Initialize();
+public:
+    //コンストラクタ
+    Pause();
 
-	//初期化
-	void Initialize(SceneManager* pSceneManager);
-	
+    //デストラクタ
+    ~Pause();
 
-	//isPauseのゲッター
-	bool GetPause();
+    //初期化
+    void Initialize();
 
-	//isPauseのセッター
-	void SetPause(bool pause);
+    //更新
+    void Update();
 
-	//isPauseを反転させる
-	void ReversalPause();
+    //描画
+    void Draw();
 
-	//更新
-	void Update();
+    //開放
+    void Release();
 
-	//描画
-	void Draw();
 };
-
