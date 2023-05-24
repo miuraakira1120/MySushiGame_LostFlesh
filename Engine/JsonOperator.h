@@ -162,8 +162,6 @@ namespace JsonOperator
 	bool AppendToJSONFileFloat(const std::string& filename, const std::string& section, const std::string& key, float value);
 
 
-
-
 	/////////////////////////////////////////////////////////////////////////////////////////
 
 //	template <class T = int>

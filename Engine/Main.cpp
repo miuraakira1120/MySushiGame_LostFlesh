@@ -96,6 +96,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SceneManager* pSceneManager;
 	pSceneManager = (SceneManager*)pRootObject->FindObject("SceneManager");
 
+	//ゲームマネージャーにシーンマネージャーのポインタを入れる
+	GameManager::SetScenemanagerPointor(pSceneManager);
+
 	//Timeのイニシャライズ
 	Time::Initialize(FPS);
 
@@ -211,16 +214,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 
-				//右画面描画
-				{
-					Direct3D::SetViewPort(1);
+				////右画面描画
+				//{
+				//	Direct3D::SetViewPort(1);
 
-					Syari* pSyari = (Syari*)pRootObject->FindObject("Syari");
-					//controllerクラスのポインタを入れる
-					Controller* pController;
-					pController = (Controller*)pRootObject->FindObject("Controller");
+				//	Syari* pSyari = (Syari*)pRootObject->FindObject("Syari");
+				//	//controllerクラスのポインタを入れる
+				//	Controller* pController;
+				//	pController = (Controller*)pRootObject->FindObject("Controller");
 
-				}
+				//}
 
 				//ゲームマネジャーの準備
 				GameManager::Draw();

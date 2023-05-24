@@ -1,6 +1,7 @@
 #pragma once
 
 class Pause;
+class SceneManager;
 
 namespace GameManager
 {
@@ -44,5 +45,21 @@ namespace GameManager
 	/// </summary>
 	/// <returns></returns>
 	bool GetIsPause();
+
+	/// <summary>
+	/// シーンマネージャーのポインタをセットする
+	/// </summary>
+	void SetScenemanagerPointor(SceneManager* pSceneManager);
+
+	/// <summary>
+	/// シーンマネージャーのポインタのゲッター
+	/// </summary>
+	/// <returns></returns>
+	SceneManager* GetpSceneManagerPointor();
+
+	/// <summary>
+	/// ポーズ状態を逆にする関数
+	/// </summary>
+	void PauseReverse();
 };
 

@@ -263,6 +263,7 @@
       <Filter>00Engine\Button</Filter>
     </ClCompile>
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="BackUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -440,6 +441,7 @@
       <Filter>00Engine\Button</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="BackUI.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

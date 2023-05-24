@@ -12,6 +12,9 @@ namespace
 
 	//ポーズしているか
 	bool isPause;
+
+	//SceneManagerのポインタ
+	SceneManager* pSceneManager;
 }
 
 namespace GameManager
@@ -35,11 +38,20 @@ namespace GameManager
 		//ポーズキーを押したら
 		if (Input::IsKeyDown(DIK_1))
 		{
-			//UIの作成
-			pPause->CreateUI();
+			//ポーズ状態を逆にする関数
+			PauseReverse();
 
-			//ゲーム内時間が動いていたら停止し、止まっていたら動かす
-			TimeMovingReverse();
+			//ポーズしてたら
+			if (isPause)
+			{
+				//UIの作成
+				pPause->CreateUI();			
+			}
+			else
+			{
+				//UIの削除
+				pPause->DeleteUI();
+			}
 		}
 		//ポーズの更新
 		pPause->Update();
@@ -48,8 +60,8 @@ namespace GameManager
 	//描画
 	void Draw()
 	{
-		//時間が止まっていたら
-		//if (!GetIsTimeMoving())
+		//ポーズしていたら
+		if (isPause)
 		{
 			//ポーズ画面を描画
 			pPause->Draw();
@@ -90,5 +102,23 @@ namespace GameManager
 	bool GetIsPause()
 	{
 		return false;
+	}
+	void SetScenemanagerPointor(SceneManager* pScene)
+	{
+		pSceneManager = pScene;
+	}
+	SceneManager* GetpSceneManagerPointor()
+	{
+		return pSceneManager;
+	}
+
+	//ポーズ状態を逆にする関数
+	void PauseReverse()
+	{
+		//isPauseを逆にする
+		isPause = !isPause;
+
+		//ゲーム内時間が動いていたら停止し、止まっていたら動かす
+		TimeMovingReverse();
 	}
 }

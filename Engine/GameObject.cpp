@@ -27,16 +27,6 @@ GameObject::GameObject(GameObject * parent, const std::string& name)
 
 }
 
-GameObject::GameObject(GameObject* parent, const std::string& name, std::string fileName)
-	: pParent_(parent), objectName_(name), pathName_(fileName)
-{
-	childList_.clear();
-	state_ = { 0, 1, 1, 0 };
-
-	if (parent)
-		transform_.pParent_ = &parent->transform_;
-}
-
 //デストラクタ
 GameObject::~GameObject()
 {

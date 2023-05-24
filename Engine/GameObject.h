@@ -44,7 +44,6 @@ public:
 	GameObject();
 	GameObject(GameObject* parent);
 	GameObject(GameObject* parent, const std::string& name);
-	GameObject(GameObject* parent, const std::string& name, std::string fileName);
 
 	//デストラクタ
 	virtual ~GameObject();
@@ -156,6 +155,7 @@ public:
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 	void SetTag(std::string tag) { tag_ = tag; }
 	void SetMoved(XMVECTOR moved) { vMoved = moved; }
+	void SetPathName_(std::string pathName) { pathName_ = pathName; }
 
 private:
 
@@ -197,14 +197,16 @@ T* Instantiate(GameObject* pParent)
 
 //オブジェクトを作成するテンプレート
 template <class T>
-T* Instantiate(GameObject* pParent, std::string fileName)
+T* Instantiate(GameObject* pParent, std::string fileName, XMFLOAT3 pos)
 {
 	T* pNewObject = new T(pParent);
 	if (pParent != nullptr)
 	{
 		pParent->PushBackChild(pNewObject);
 	}
+	pNewObject->SetPathName_(fileName);
 	pNewObject->Initialize();
+	pNewObject->SetPosition(pos);
 	return pNewObject;
 }
 
