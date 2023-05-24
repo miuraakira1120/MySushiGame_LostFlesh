@@ -23,4 +23,14 @@ namespace Imgui_Obj
     /// 描画
     /// </summary>
     void Draw();
+
+    /// <summary>
+    /// オブジェクトを生成するImguiを出す関数
+    /// </summary>
+    void ImguiIniObj();
+
+    /// <summary>
+    /// シーンチェンジするImguiを生成する関数
+    /// </summary>
+    void SceneChangeImgui();
 };

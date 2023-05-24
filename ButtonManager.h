@@ -5,7 +5,7 @@
 namespace ButtonManager
 {
     //ƒ{ƒ^ƒ“‚ÌŽí—Þ
-    enum class ButtonKinds
+    enum ButtonKinds
     {
         SCENE_CHANGE_BUTTON,
         BUTTON_KINDS_MAX

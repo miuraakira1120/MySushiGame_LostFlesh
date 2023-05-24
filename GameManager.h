@@ -10,6 +10,7 @@ namespace GameManager
 		NOW_SCENE,
 		PAUSE,
 		PLAYER,
+		PARENT_MAX
 	};
 
 	/// <summary>

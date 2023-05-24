@@ -18,6 +18,16 @@
 
 #include "GameManager.h"
 
+//何のクラスを作成するか
+enum class IniType
+{
+    NONE,
+    BUTTON,
+    ENEMY,
+    TYPE_MAX
+
+};
+
 namespace
 {
     Text* pText;
@@ -36,6 +46,20 @@ namespace
     // JSONファイルの名前
     const std::string TITLE_JSON = "../Assets\\GameData\\TitleScene.json";
 
+    //親を何にするか
+    int parentNum;
+
+    int buttonKinds;//ボタンの種類
+
+    IniType iniType = IniType::NONE;
+
+    char loadFileName[256] = "";//読み込むファイル名
+
+    XMFLOAT3 iniPosition = { 0,0,0 };//位置
+    XMFLOAT3 iniScale = { 1,1,1 };//拡大率
+    XMFLOAT3 iniRotate = { 0,0,0 };//向き
+
+    int nextScene;//次に行くシーン
 }
 
 namespace Imgui_Obj
@@ -70,16 +94,10 @@ namespace Imgui_Obj
         //ポーズ中だったら
         if (GameManager::GetIsPause())
         {
-            ImGui::Begin("Pause Setting");
-            if (ImGui::TreeNode("Instantiate"))
-            {
-                if (ImGui::Button("Button")) 
-                {
-                }
-                ImGui::TreePop();
-            }
-            ImGui::End();
+            ImguiIniObj();
         }
+
+        SceneChangeImgui();
 
         //タイトルシーンだったら
         if (pSceneManager->GetNowSceneID() == SCENE_ID::SCENE_ID_START)
@@ -153,7 +171,86 @@ namespace Imgui_Obj
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     }
 
+    //オブジェクトを生成するImguiを出す関数
+    void ImguiIniObj()
+    {
+        //Pause SettingのImguiを作成
+        ImGui::Begin("Pause Setting");
+        if (ImGui::TreeNode("Instantiate"))
+        {
+            if (ImGui::Button("Button"))
+            {
+                iniType = IniType::BUTTON;
+            }
+            if (ImGui::Button("Enemy"))
+            {
+                iniType = IniType::ENEMY;
+            }
+            ImGui::TreePop();
 
+            //ボタン作成モードなら
+            if (iniType == IniType::BUTTON)
+            {
+                ImGui::Begin("Button Instantiate");
+
+                //読み込むファイル名を入力
+                ImGui::Text("LoadFileName");
+                ImGui::InputText(".png", loadFileName, 256);               
+
+                //Transfomの情報を入力
+                ImGui::Text("Transform");
+                //位置
+                float iniPositionArray[3] = { iniPosition.x,iniPosition.y, iniPosition.z };
+                ImGui::InputFloat3("Position", iniPositionArray);
+
+                //向き
+                float iniRotateArray[3] = { iniRotate.x,iniRotate.y, iniRotate.z };
+                ImGui::InputFloat3("Rotate", iniRotateArray);
+
+                //拡大率
+                float iniiniScaleArray[3] = { iniScale.x,iniScale.y, iniScale.z };
+                ImGui::InputFloat3("Scale", iniiniScaleArray);
+
+                //どんなボタンを生成するか
+                ImGui::Text("ButtonType");
+                for (auto i = 0; i < ButtonManager::ButtonKinds::BUTTON_KINDS_MAX; i++)
+                {
+                    //ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON));
+                }
+
+                //親オブジェクトは何か(どこで生成するか)
+                ImGui::Text("Parent");
+                ImGui::RadioButton("NowScene", &parentNum, static_cast<int>(GameManager::ParentNum::NOW_SCENE)); ImGui::SameLine();
+                ImGui::RadioButton("Pause", &parentNum, static_cast<int>(GameManager::ParentNum::PAUSE));
+
+                //キャンセルボタン
+                if (ImGui::Button("Cancel"))
+                {
+                    iniType = IniType::NONE;
+                }
+                ImGui::End();
+
+            }
+
+        }
+        ImGui::End();
+    }
+}
+
+//シーンチェンジするImguiを生成する関数
+void SceneChangeImgui() 
+{
+    ImGui::Begin("Scene Change");
+    ImGui::RadioButton("Title", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_START)); ImGui::SameLine();
+    ImGui::RadioButton("Play", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_PLAY));
+    ImGui::RadioButton("Goal", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GOAL)); ImGui::SameLine();
+    ImGui::RadioButton("GameOver", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GAMEOVER));
+
+    if (ImGui::Button("Scene Change"))
+    {
+        pSceneManager->ChangeScene(static_cast<SCENE_ID>(nextScene));
+    }
+    ImGui::End();
 }
 
 
