@@ -101,7 +101,7 @@ namespace GameManager
 	//isPause‚ÌƒQƒbƒ^[
 	bool GetIsPause()
 	{
-		return false;
+		return isPause;
 	}
 	void SetScenemanagerPointor(SceneManager* pScene)
 	{

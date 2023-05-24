@@ -46,10 +46,6 @@ namespace Imgui_Obj
         pText = new Text;
         pText->Initialize();
         pSceneManager = pSceneManager_;
-        
-
-        //オブジェクトを探して入れる
-        FindAllObject();
     }
 
     //更新
@@ -68,22 +64,26 @@ namespace Imgui_Obj
         pText->Release();
     }
 
-    //オブジェクトを探してポインタに入れる
-    void FindAllObject()
-    {
-        /* pMaguro = (Maguro*)FindObject("Maguro");
-         pSyari  = (Syari*)FindObject("Syari");*/
-        
-
-    }
-
     //Imguiを生成する
     void InstantiateImgui()
     {
+        //ポーズ中だったら
+        if (GameManager::GetIsPause())
+        {
+            ImGui::Begin("Pause Setting");
+            if (ImGui::TreeNode("Instantiate"))
+            {
+                if (ImGui::Button("Button")) 
+                {
+                }
+                ImGui::TreePop();
+            }
+            ImGui::End();
+        }
+
         //タイトルシーンだったら
         if (pSceneManager->GetNowSceneID() == SCENE_ID::SCENE_ID_START)
         {
-
             ///////////////////////ボタンの位置////////////////////////////////////////
 
             ImGui::Begin("Botton Pos");

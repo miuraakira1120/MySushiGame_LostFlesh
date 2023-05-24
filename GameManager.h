@@ -5,6 +5,13 @@ class SceneManager;
 
 namespace GameManager
 {
+	enum class ParentNum
+	{
+		NOW_SCENE,
+		PAUSE,
+		PLAYER,
+	};
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
@@ -61,5 +68,12 @@ namespace GameManager
 	/// ポーズ状態を逆にする関数
 	/// </summary>
 	void PauseReverse();
+
+	/// <summary>
+	/// pPauseのゲッター
+	/// </summary>
+	/// <returns></returns>
+	Pause* GetPauseClass();
+
 };
 

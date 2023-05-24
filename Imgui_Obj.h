@@ -15,11 +15,6 @@ namespace Imgui_Obj
     void Release();
 
     /// <summary>
-    /// オブジェクトを探して入れる関数
-    /// </summary>
-    void FindAllObject();
-
-    /// <summary>
     /// Imguiの生成
     /// </summary>
     void InstantiateImgui();

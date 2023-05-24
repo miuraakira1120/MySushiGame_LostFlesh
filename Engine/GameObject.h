@@ -195,7 +195,7 @@ T* Instantiate(GameObject* pParent)
 	return pNewObject;
 }
 
-//オブジェクトを作成するテンプレート
+//モデル(や画像)の名前と位置を引数にオブジェクトを作成するテンプレート
 template <class T>
 T* Instantiate(GameObject* pParent, std::string fileName, XMFLOAT3 pos)
 {

@@ -4,6 +4,13 @@
 
 namespace ButtonManager
 {
+    //ボタンの種類
+    enum class ButtonKinds
+    {
+        SCENE_CHANGE_BUTTON,
+        BUTTON_KINDS_MAX
+    };
+
     /// <summary>
     /// ボタンオブジェクトの生成と初期設定
     /// </summary>
