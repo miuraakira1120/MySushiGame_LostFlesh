@@ -40,9 +40,9 @@ namespace GameManager
 	void TimeMovingReverse();
 
 	/// <summary>
-	/// Pause‚ÌêŠ‚Ìİ’è
+	/// isPause‚ÌƒQƒbƒ^[
 	/// </summary>
-	/// <param name="pos"></param>
-	void SetPausePos(XMFLOAT3 pos);
+	/// <returns></returns>
+	bool GetIsPause();
 };
 

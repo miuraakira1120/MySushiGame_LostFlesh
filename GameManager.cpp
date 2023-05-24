@@ -9,6 +9,9 @@ namespace
 
 	//時間が停止しているか
 	bool isTimeMoving;
+
+	//ポーズしているか
+	bool isPause;
 }
 
 namespace GameManager
@@ -22,6 +25,8 @@ namespace GameManager
 		//ポーズ生成
 		pPause = new Pause;
 		pPause->Initialize();
+
+		isPause = false;
 	}
 
 	//更新
@@ -30,12 +35,14 @@ namespace GameManager
 		//ポーズキーを押したら
 		if (Input::IsKeyDown(DIK_1))
 		{
-			//ポーズの更新
-			pPause->Update();
+			//UIの作成
+			pPause->CreateUI();
 
 			//ゲーム内時間が動いていたら停止し、止まっていたら動かす
 			TimeMovingReverse();
 		}
+		//ポーズの更新
+		pPause->Update();
 	}
 
 	//描画
@@ -78,8 +85,10 @@ namespace GameManager
 	{
 		isTimeMoving = !isTimeMoving;
 	}
-	void SetPausePos(XMFLOAT3 pos)
+
+	//isPauseのゲッター
+	bool GetIsPause()
 	{
-		pPause->SetPos(pos);
+		return false;
 	}
 }

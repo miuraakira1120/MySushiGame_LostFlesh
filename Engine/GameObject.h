@@ -33,13 +33,18 @@ protected:
 	std::string	   			 tag_;
 
 	//前フレームからの移動ベクトル
-	XMVECTOR vMoved;
+	XMVECTOR				 vMoved;
+
+	//モデルや画像ファイルの名前
+	std::string				 pathName_;
+
 
 public:
 	//コンストラクタ
 	GameObject();
 	GameObject(GameObject* parent);
 	GameObject(GameObject* parent, const std::string& name);
+	GameObject(GameObject* parent, const std::string& name, std::string fileName);
 
 	//デストラクタ
 	virtual ~GameObject();
@@ -189,4 +194,18 @@ T* Instantiate(GameObject* pParent)
 	pNewObject->Initialize();
 	return pNewObject;
 }
+
+//オブジェクトを作成するテンプレート
+template <class T>
+T* Instantiate(GameObject* pParent, std::string fileName)
+{
+	T* pNewObject = new T(pParent);
+	if (pParent != nullptr)
+	{
+		pParent->PushBackChild(pNewObject);
+	}
+	pNewObject->Initialize();
+	return pNewObject;
+}
+
 

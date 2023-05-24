@@ -134,17 +134,6 @@ namespace Imgui_Obj
             }
 
             ImGui::End();
-            ///////////////////////////////////////////////////////////////////////////
-
-            ImGui::Begin("BlackBack Pos");
-
-
-            ImGui::SliderFloat("ChangeSceneButtonX", &changeSceneButtonX, -1.0f, 1.0f);
-            ImGui::SliderFloat("ChangeSceneButtonY", &changeSceneButtonY, -1.0f, 1.0f);
-
-            GameManager::SetPausePos((XMFLOAT3)(changeSceneButtonX, changeSceneButtonY, 0));
-
-            ImGui::End();
         }
     }
 
