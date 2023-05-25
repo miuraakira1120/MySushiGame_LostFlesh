@@ -10,9 +10,7 @@ private:
 	const XMFLOAT3 IMAGE_SIZE_MAG = { 1.1f, 1.1f, 1.0f };
 
 	SCENE_ID changeSceneName;
-	std::string ImageName;
 
-	
 public:
 	/// <summary>
 	/// コンストラクタ

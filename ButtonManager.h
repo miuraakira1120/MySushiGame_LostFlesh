@@ -8,6 +8,7 @@ namespace ButtonManager
     enum ButtonKinds
     {
         SCENE_CHANGE_BUTTON,
+        PLAYER_CONTROL_BUTTON,
         BUTTON_KINDS_MAX
     };
 
@@ -29,5 +30,25 @@ namespace ButtonManager
     /// <param name="fileName">表示させる画像の名前</param>
     /// <returns>ボタンのポインタ</returns>
     GameObject* CreateSceneChangeButton(GameObject* pParent, XMFLOAT3 position, SCENE_ID name, std::string imageName);
+
+
+    /// <summary>
+    /// プレイヤーのボタン配置を変えるボタンの作成
+    /// </summary>
+    /// <param name="pParent">親オブジェクト</param>
+    /// <param name="position">ボタンの位置</param>
+    /// <param name="fileName">表示させる画像の名前</param>
+    /// <returns>ボタンのポインタ</returns>
+    GameObject* CreatePlayerControlButton(GameObject* pParent, XMFLOAT3 position, std::string imageName);
+
+    GameObject* CreatePlayerControlButton(GameObject* pParent, XMFLOAT3 position, std::string imageName);
 };
+
+//ボタン作成手順
+//１　ボタンクラスを作る
+//２　Create関数を作成
+//３　ButtonKindsに追加
+//後はCreate関数を呼べばいい
+
+//Imguiに追加も
 

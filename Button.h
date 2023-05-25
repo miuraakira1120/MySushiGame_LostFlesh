@@ -30,7 +30,7 @@ private:
     bool select_;							//選ばれているか
     bool operationRight_;				    //操作権利
 
-    ShaderManager::ShaderType shaderType_;	//シェーダーの種類
+    Direct3D::SHADER_TYPE shaderType_;	//シェーダーの種類
 
     Microsoft::WRL::ComPtr<ID3D11Buffer>pConstantBuffer_;	//コンスタントバッファ
 
@@ -90,11 +90,19 @@ public:
     /// 解放
     /// </summary>
     void Release() override;
+
     /// <summary>
     /// 画像の設定
     /// </summary>
     /// <param name="name">画像の名前</param>
     void SetImage(const std::string& name);
+
+    /// <summary>
+    ///  画像の設定_(シェーダータイプの変更有り)
+    /// </summary>
+    /// <param name="name">画像の名前</param>
+    /// <param name="type">シェーダータイプ</param>
+    void SetImage(const std::string& name, Direct3D::SHADER_TYPE type);
 
     /// <summary>
     /// マウスによるボタン操作の権限剝奪

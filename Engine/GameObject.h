@@ -143,6 +143,7 @@ public:
 	std::string GetTag() { return tag_; }
 	XMVECTOR GetMoved() {return vMoved ;}
 	Transform GetTransform() { return transform_; }
+	std::string GetName() { return objectName_; }
 
 	void SetPosition(XMFLOAT3 position) { transform_.position_ = position; }
 	void SetPosition(float x, float y, float z) { SetPosition(XMFLOAT3( x, y, z )); }

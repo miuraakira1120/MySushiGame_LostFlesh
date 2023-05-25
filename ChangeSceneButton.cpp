@@ -1,13 +1,14 @@
 #include "ChangeSceneButton.h"
 
 ChangeSceneButton::ChangeSceneButton(GameObject* parent, SCENE_ID name, std::string fileName)
-	:Button(parent, "ChangeSceneButton"), changeSceneName(name), ImageName(fileName)
+	:Button(parent, "ChangeSceneButton"), changeSceneName(name)
 {
+	pathName_ = fileName;
 }
 
 void ChangeSceneButton::Initialize()
 {
-	std::string ImageFullName = ".\\Button/" + ImageName;
+	std::string ImageFullName = ".\\Button/" + pathName_;
 	SetImage(ImageFullName);
 }
 

@@ -27,7 +27,7 @@ void Button::PreUpdate()
 
 //コンストラクタ
 Button::Button(GameObject* parent, const std::string& name)
-    :GameObject(parent, name), hPict_(-1), value_(0.0f), select_(false), operationRight_(true)
+    :GameObject(parent, name), hPict_(-1), value_(0.0f), select_(false), operationRight_(true), shaderType_(Direct3D::SHADER_TYPE::SHADER_2D)
 {
     D3D11_BUFFER_DESC cb;
     cb.ByteWidth = sizeof(ConstantBuffer);
@@ -93,7 +93,7 @@ void Button::Draw()
 
     //描画
     Image::SetTransform(hPict_, transform_);
-    Image::Draw(hPict_, Direct3D::SHADER_FLASH_2D);
+    Image::Draw(hPict_, shaderType_);
 }
 
 //解放
@@ -104,6 +104,15 @@ void Button::Release()
 //画像の設定
 void Button::SetImage(const std::string& name)
 {
+    //画像データのロード
+    hPict_ = Image::Load(name);
+    //ロードされたか確認
+    assert(hPict_ >= 0);
+}
+
+void Button::SetImage(const std::string& name, Direct3D::SHADER_TYPE type)
+{
+    shaderType_ = type;
     //画像データのロード
     hPict_ = Image::Load(name);
     //ロードされたか確認

@@ -264,6 +264,10 @@
     </ClCompile>
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="BackUI.cpp" />
+    <ClCompile Include="PlayerControlButton.cpp">
+      <Filter>00Engine\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="InstanceManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -442,6 +446,10 @@
     </ClInclude>
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="BackUI.h" />
+    <ClInclude Include="PlayerControlButton.h">
+      <Filter>00Engine\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="InstanceManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

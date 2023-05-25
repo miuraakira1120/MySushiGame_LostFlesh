@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -172,10 +172,12 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Imgui_Obj.cpp" />
+    <ClCompile Include="InstanceManager.cpp" />
     <ClCompile Include="Maguro.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="PlayerControlButton.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PoryLine.cpp" />
     <ClCompile Include="RedBox.cpp" />
@@ -234,10 +236,12 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Imgui_Obj.h" />
+    <ClInclude Include="InstanceManager.h" />
     <ClInclude Include="Maguro.h" />
     <ClInclude Include="OBB.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="PlayerControlButton.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PoryLine.h" />
     <ClInclude Include="RedBox.h" />

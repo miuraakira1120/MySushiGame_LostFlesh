@@ -60,6 +60,7 @@ namespace
     XMFLOAT3 iniRotate = { 0,0,0 };//向き
 
     int nextScene;//次に行くシーン
+    int SceneChangeNextScene; //SceneChangeの時に使う次に行くシーン
 }
 
 namespace Imgui_Obj
@@ -106,11 +107,6 @@ namespace Imgui_Obj
 
             ImGui::Begin("Botton Pos");
             //////////////////////スタートボタン/////////////////////////////////////////////////////
-
-            /*int MouseMode = false;
-            ImGui::RadioButton("MouseModeON", &MouseMode, TRUE);
-            ImGui::SameLine();
-            ImGui::RadioButton("MouseMode", &MouseMode, FALSE);*/
 
 
             if (ImGui::Button("MouseModeON"))
@@ -213,46 +209,65 @@ namespace Imgui_Obj
 
                 //どんなボタンを生成するか
                 ImGui::Text("ButtonType");
-                for (auto i = 0; i < ButtonManager::ButtonKinds::BUTTON_KINDS_MAX; i++)
+
+                //どんな種類のボタンを生成するか
+                ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON)); ImGui::SameLine();
+                ImGui::RadioButton("PlayerControl", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON)); 
+
+                //シーンチェンジボタンを作成する予定なら
+                if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON))
                 {
-                    //ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON));
+                    ImGui::Text("NextScene");
+                    ImGui::RadioButton("Title", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_START)); ImGui::SameLine();
+                    ImGui::RadioButton("Play", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_PLAY));
+                    ImGui::RadioButton("GameOver", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_GAMEOVER)); ImGui::SameLine();
+                    ImGui::RadioButton("Clear", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_GOAL));
                 }
 
                 //親オブジェクトは何か(どこで生成するか)
                 ImGui::Text("Parent");
                 ImGui::RadioButton("NowScene", &parentNum, static_cast<int>(GameManager::ParentNum::NOW_SCENE)); ImGui::SameLine();
-                ImGui::RadioButton("Pause", &parentNum, static_cast<int>(GameManager::ParentNum::PAUSE));
+                ImGui::RadioButton("Pause", &parentNum, static_cast<int>(GameManager::ParentNum::PAUSE));               
+
+                //生成ボタン
+                if (ImGui::Button("Instantiate"))
+                {
+                    //シーンチェンジボタンを作成するなら
+                    if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON))
+                    {
+
+                    }
+                }
 
                 //キャンセルボタン
                 if (ImGui::Button("Cancel"))
                 {
+
                     iniType = IniType::NONE;
                 }
                 ImGui::End();
 
             }
+        }
+        ImGui::End();
+    }
 
+    //シーンチェンジするImguiを生成する関数
+    void SceneChangeImgui()
+    {
+        ImGui::Begin("Scene Change");
+        ImGui::RadioButton("Title", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_START)); ImGui::SameLine();
+        ImGui::RadioButton("Play", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_PLAY));
+        ImGui::RadioButton("Goal", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GOAL)); ImGui::SameLine();
+        ImGui::RadioButton("GameOver", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GAMEOVER));
+
+        if (ImGui::Button("Scene Change"))
+        {
+            pSceneManager->ChangeScene(static_cast<SCENE_ID>(nextScene));
         }
         ImGui::End();
     }
 }
-
-//シーンチェンジするImguiを生成する関数
-void SceneChangeImgui() 
-{
-    ImGui::Begin("Scene Change");
-    ImGui::RadioButton("Title", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_START)); ImGui::SameLine();
-    ImGui::RadioButton("Play", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_PLAY));
-    ImGui::RadioButton("Goal", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GOAL)); ImGui::SameLine();
-    ImGui::RadioButton("GameOver", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GAMEOVER));
-
-    if (ImGui::Button("Scene Change"))
-    {
-        pSceneManager->ChangeScene(static_cast<SCENE_ID>(nextScene));
-    }
-    ImGui::End();
-}
-
 
 
 //TREENODE
