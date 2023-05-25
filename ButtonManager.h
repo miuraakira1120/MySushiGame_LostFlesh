@@ -41,7 +41,6 @@ namespace ButtonManager
     /// <returns>ボタンのポインタ</returns>
     GameObject* CreatePlayerControlButton(GameObject* pParent, XMFLOAT3 position, std::string imageName);
 
-    GameObject* CreatePlayerControlButton(GameObject* pParent, XMFLOAT3 position, std::string imageName);
 };
 
 //ボタン作成手順

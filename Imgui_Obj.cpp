@@ -8,6 +8,7 @@
 #include "Syari.h"
 #include "Engine/Text.h"
 #include "ChangeSceneButton.h"
+#include "PlayerControlButton.h"
 #include "Engine/SceneManager.h"
 #include "Engine/Math.h"
 #include "Engine/Input.h"
@@ -236,6 +237,29 @@ namespace Imgui_Obj
                     if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON))
                     {
 
+                    }
+
+                    //プレイヤーのボタン配置を変えるボタンを作成するなら
+                    if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
+                    {
+                        //親が今のシーンなら
+                        if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
+                        {
+
+                        }
+
+                        //親がポーズなら
+                        if (parentNum == static_cast<int>(GameManager::ParentNum::PAUSE))
+                        {
+
+                        }
+
+                        //親がプレイヤーなら
+                        if (parentNum == static_cast<int>(GameManager::ParentNum::PLAYER))
+                        {
+
+                        }
+                        Instantiate<PlayerControlButton, loadFileName, iniPosition, iniRotate, iniScale>();
                     }
                 }
 

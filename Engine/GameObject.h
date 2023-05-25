@@ -211,4 +211,21 @@ T* Instantiate(GameObject* pParent, std::string fileName, XMFLOAT3 pos)
 	return pNewObject;
 }
 
+//モデル(や画像)の名前と位置、向き、拡大率を引数にオブジェクトを作成するテンプレート
+template <class T>
+T* Instantiate(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+{
+	T* pNewObject = new T(pParent);
+	if (pParent != nullptr)
+	{
+		pParent->PushBackChild(pNewObject);
+	}
+	pNewObject->SetPathName_(fileName);
+	pNewObject->Initialize();
+	pNewObject->SetPosition(pos);
+	pNewObject->SetRotate(rot);
+	pNewObject->SetScale(sca);
+	return pNewObject;
+}
+
 
