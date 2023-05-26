@@ -23,4 +23,13 @@ void PlayerControlButton::Event()
 
 void PlayerControlButton::PreUpdate()
 {
+	//‘I‚Î‚ê‚Ä‚¢‚½‚ç‰æ‘œ‚ðŠg‘å‚·‚é
+	if (GetValue())
+	{
+		transform_.scale_ = IMAGE_SIZE_MAG;
+	}
+	else
+	{
+		transform_.scale_ = IMAGE_SIZE_DEF;
+	}
 }

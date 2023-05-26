@@ -156,7 +156,7 @@ public:
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 	void SetTag(std::string tag) { tag_ = tag; }
 	void SetMoved(XMVECTOR moved) { vMoved = moved; }
-	void SetPathName_(std::string pathName) { pathName_ = pathName; }
+	void SetPathName(std::string pathName) { pathName_ = pathName; }
 
 private:
 
@@ -205,7 +205,7 @@ T* Instantiate(GameObject* pParent, std::string fileName, XMFLOAT3 pos)
 	{
 		pParent->PushBackChild(pNewObject);
 	}
-	pNewObject->SetPathName_(fileName);
+	pNewObject->SetPathName(fileName);
 	pNewObject->Initialize();
 	pNewObject->SetPosition(pos);
 	return pNewObject;
@@ -220,7 +220,23 @@ T* Instantiate(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3
 	{
 		pParent->PushBackChild(pNewObject);
 	}
-	pNewObject->SetPathName_(fileName);
+	pNewObject->SetPathName(fileName);
+	pNewObject->Initialize();
+	pNewObject->SetPosition(pos);
+	pNewObject->SetRotate(rot);
+	pNewObject->SetScale(sca);
+	return pNewObject;
+}
+
+//モデル(や画像)の名前と位置、向き、拡大率を引数にボタンを作成するテンプレート
+template <class T>
+T* InstantiateButton(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+{
+	T* pNewObject = new T(pParent, fileName);
+	if (pParent != nullptr)
+	{
+		pParent->PushBackChild(pNewObject);
+	}
 	pNewObject->Initialize();
 	pNewObject->SetPosition(pos);
 	pNewObject->SetRotate(rot);

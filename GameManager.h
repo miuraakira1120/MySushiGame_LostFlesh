@@ -5,6 +5,8 @@ class SceneManager;
 
 namespace GameManager
 {
+
+
 	enum class ParentNum
 	{
 		NOW_SCENE,

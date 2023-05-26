@@ -44,9 +44,6 @@ namespace
     //使用するiniファイルの名前
     const std::string iniFileName = "UI.ini";
 
-    // JSONファイルの名前
-    const std::string TITLE_JSON = "../Assets\\GameData\\TitleScene.json";
-
     //親を何にするか
     int parentNum;
 
@@ -144,8 +141,8 @@ namespace Imgui_Obj
             //ボタンの位置のセーブ
             if (ImGui::Button("PositionSave"))
             {
-                JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "ChangeSceneButton", "posX", pChangeSceneButton->GetPosition().x);
-                JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "ChangeSceneButton", "posY", pChangeSceneButton->GetPosition().y);
+                JsonOperator::AppendToJSONFileFloat(JsonOperator::TITLE_JSON, "ChangeSceneButton", "posX", pChangeSceneButton->GetPosition().x);
+                JsonOperator::AppendToJSONFileFloat(JsonOperator::TITLE_JSON, "ChangeSceneButton", "posY", pChangeSceneButton->GetPosition().y);
             }
 
             ImGui::End();
@@ -196,17 +193,19 @@ namespace Imgui_Obj
 
                 //Transfomの情報を入力
                 ImGui::Text("Transform");
+
                 //位置
-                float iniPositionArray[3] = { iniPosition.x,iniPosition.y, iniPosition.z };
-                ImGui::InputFloat3("Position", iniPositionArray);
+                //参照で生成
+                float* iniPositionArray[3] = { &iniPosition.x, &iniPosition.y, &iniPosition.z };
+                ImGui::InputFloat3("Position", iniPositionArray[0]);
 
                 //向き
-                float iniRotateArray[3] = { iniRotate.x,iniRotate.y, iniRotate.z };
-                ImGui::InputFloat3("Rotate", iniRotateArray);
+                float* iniRotateArray[3] = { &iniRotate.x,&iniRotate.y, &iniRotate.z };
+                ImGui::InputFloat3("Rotate", iniRotateArray[0]);
 
                 //拡大率
-                float iniiniScaleArray[3] = { iniScale.x,iniScale.y, iniScale.z };
-                ImGui::InputFloat3("Scale", iniiniScaleArray);
+                float* iniiniScaleArray[3] = { &iniScale.x,&iniScale.y, &iniScale.z };
+                ImGui::InputFloat3("Scale", iniiniScaleArray[0]);
 
                 //どんなボタンを生成するか
                 ImGui::Text("ButtonType");
@@ -233,6 +232,7 @@ namespace Imgui_Obj
                 //生成ボタン
                 if (ImGui::Button("Instantiate"))
                 {
+
                     //シーンチェンジボタンを作成するなら
                     if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON))
                     {
@@ -242,10 +242,16 @@ namespace Imgui_Obj
                     //プレイヤーのボタン配置を変えるボタンを作成するなら
                     if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
                     {
+                        //拡張子にpngを追加
+                        string loadFileNameStr = loadFileName;
+                        loadFileNameStr += ".png";
+
                         //親が今のシーンなら
                         if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
                         {
-
+                           
+                            InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), loadFileNameStr, iniPosition, iniRotate, iniScale);
+            
                         }
 
                         //親がポーズなら
@@ -259,9 +265,24 @@ namespace Imgui_Obj
                         {
 
                         }
-                        Instantiate<PlayerControlButton, loadFileName, iniPosition, iniRotate, iniScale>();
+                       
+                    }
+                } ImGui::SameLine();
+
+                //セーブボタン
+                if (ImGui::Button("Save"))
+                {
+                    //タイトルシーンだったら
+                    switch (pSceneManager->GetNowSceneID())
+                    {
+                        //タイトルシーンだったら
+                    case SCENE_ID::SCENE_ID_START:
+                        JsonOperator::AppendToJSONFileString(JsonOperator::TITLE_JSON, );
+                    default:
+                        break;
                     }
                 }
+
 
                 //キャンセルボタン
                 if (ImGui::Button("Cancel"))
