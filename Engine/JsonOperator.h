@@ -7,6 +7,8 @@
 #include "../Json/rapidjson-master/include/rapidjson/writer.h"
 
 using namespace rapidjson;
+class GameObject;
+
 
 //JSONの記述例
 //https://products.sint.co.jp/topsic/blog/json#toc-2
@@ -18,7 +20,6 @@ namespace JsonOperator
 		TITLE_DATA = 0,
 		DATA_MAX
 	};
-
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// タイトルに関係ある定数
@@ -153,6 +154,13 @@ namespace JsonOperator
 	/// <returns>成功したかどうか</returns>
 	bool WriteJSONToFile(const std::string& filename, const std::string& section, const std::string& key, const float& value);
 
+	/// ///////////////////////書き込み(追記)///////////////////////////////////////////////////////////////
+
+
+	//bool PostscriptJSONToFile(const std::string& filename, const std::string& section, const std::string& key, const float& value)
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	////////////////////////////書き込み(追記、書き換え）///////////////////////////////////////////////////
 
 	/// <summary>
@@ -177,6 +185,10 @@ namespace JsonOperator
 
 
 	/////////////////////////////////////////////////////////////////////////////////////////
+
+	///////////////////////////////Instanceのための関数//////////////////////////////////////////////////////////
+
+	
 
 //	template <class T = int>
 //	bool GetData(const std::string& filename, const std::string& section, const std::string& key, T& out)

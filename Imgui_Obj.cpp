@@ -59,6 +59,8 @@ namespace
 
     int nextScene;//次に行くシーン
     int SceneChangeNextScene; //SceneChangeの時に使う次に行くシーン
+
+    std::string sectionName;//セクションの名前
 }
 
 namespace Imgui_Obj
@@ -207,10 +209,8 @@ namespace Imgui_Obj
                 float* iniiniScaleArray[3] = { &iniScale.x,&iniScale.y, &iniScale.z };
                 ImGui::InputFloat3("Scale", iniiniScaleArray[0]);
 
-                //どんなボタンを生成するか
-                ImGui::Text("ButtonType");
-
                 //どんな種類のボタンを生成するか
+                ImGui::Text("ButtonType");
                 ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON)); ImGui::SameLine();
                 ImGui::RadioButton("PlayerControl", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON)); 
 
