@@ -19,13 +19,26 @@ void StartScene::Initialize()
 {
 	XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
 
-	JsonOperator::GetJSONFloat(TITLE_JSON, "ChangeSceneButton", "posX", pos.x);
-	JsonOperator::GetJSONFloat(TITLE_JSON, "ChangeSceneButton", "posY", pos.y);
+	
+
+	JsonOperator::GetJSONFloat(JsonOperator::TITLE_JSON, "ChangeSceneButton", "posX", pos.x);
+	JsonOperator::GetJSONFloat(JsonOperator::TITLE_JSON, "ChangeSceneButton", "posY", pos.y);
 	pStartButton = ButtonManager::CreateSceneChangeButton(this, pos, SCENE_ID_PLAY, "GameStartButton.png");
 
-	JsonOperator::AppendToJSONFileString(TITLE_JSON, "sec", "key", "hello");
-	JsonOperator::AppendToJSONFileFloat(TITLE_JSON, "OptionButton", "posX", 100);
+	JsonOperator::AppendToJSONFileString(JsonOperator::TITLE_JSON, "sec", "key", "hello");
+	JsonOperator::AppendToJSONFileFloat(JsonOperator::TITLE_JSON, "OptionButton", "posX", 100);
 
+	XMFLOAT3 a = { 1,2,3 };
+	XMFLOAT3 aa = { 4,5,6 };
+	XMFLOAT3 aaa = { 7,8,9 };
+
+
+	InstanceManager::InstantiateInfoJSON testInfo = { "parent", "image", "name", a, aa, aaa };
+	JsonOperator::WhiteInstanceInfo(JsonOperator::TEST_JSON, "sec", testInfo);
+
+	InstanceManager::InstantiateInfoJSON getInfo;
+	JsonOperator::GetInstanceInfo(JsonOperator::TEST_JSON, "sec", getInfo);
+	int b = 0;
 
 }
 

@@ -38,6 +38,9 @@ protected:
 	//モデルや画像ファイルの名前
 	std::string				 pathName_;
 
+	//オブジェクトごとのユニークな名前
+	std::string				 uniqueName_;
+
 
 public:
 	//コンストラクタ
@@ -144,6 +147,8 @@ public:
 	XMVECTOR GetMoved() {return vMoved ;}
 	Transform GetTransform() { return transform_; }
 	std::string GetName() { return objectName_; }
+	std::string GetUniqueName() { return uniqueName_; }
+
 
 	void SetPosition(XMFLOAT3 position) { transform_.position_ = position; }
 	void SetPosition(float x, float y, float z) { SetPosition(XMFLOAT3( x, y, z )); }
@@ -157,6 +162,7 @@ public:
 	void SetTag(std::string tag) { tag_ = tag; }
 	void SetMoved(XMVECTOR moved) { vMoved = moved; }
 	void SetPathName(std::string pathName) { pathName_ = pathName; }
+	void SetUniqueName(std::string uniqueName) { uniqueName_ = uniqueName; }
 
 private:
 
@@ -230,7 +236,7 @@ T* Instantiate(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3
 
 //モデル(や画像)の名前と位置、向き、拡大率を引数にボタンを作成するテンプレート
 template <class T>
-T* InstantiateButton(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+T* InstantiateButton(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca, std::string uniqueName)
 {
 	T* pNewObject = new T(pParent, fileName);
 	if (pParent != nullptr)
@@ -241,6 +247,7 @@ T* InstantiateButton(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XM
 	pNewObject->SetPosition(pos);
 	pNewObject->SetRotate(rot);
 	pNewObject->SetScale(sca);
+	pNewObject->SetUniqueName(uniqueName);
 	return pNewObject;
 }
 

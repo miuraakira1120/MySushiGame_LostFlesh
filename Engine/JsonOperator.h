@@ -1,10 +1,13 @@
 #pragma once
 
 #include <string>
+#include<vector>
 #include "../Json/rapidjson-master/include/rapidjson/document.h"
 #include "../Json/rapidjson-master/include/rapidjson/filereadstream.h"
 #include "../Json/rapidjson-master/include/rapidjson/filewritestream.h"
 #include "../Json/rapidjson-master/include/rapidjson/writer.h"
+#include "../InstanceManager.h"
+
 
 using namespace rapidjson;
 class GameObject;
@@ -24,7 +27,9 @@ namespace JsonOperator
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// タイトルに関係ある定数
 	// 使用するJSONファイルの名前
+	const std::string TEST_JSON = "../Assets\\GameData\\Test.json";
 	const std::string TITLE_JSON = "../Assets\\GameData\\TitleScene.json";
+	
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,6 +37,33 @@ namespace JsonOperator
 	// 使用するJSONファイルの名前
 	const std::string PAUSE_JSON = "../Assets\\GameData\\PauseScene.json";
 	//////////////////////////////////////////////////////////////////////////////////////////////
+
+	///////////Instanceのための定数/////////////////////////////////////////////////
+	
+	// 文字列を入れるkey(InstantiateInfoJSONの要素に対応させる) 
+	const std::vector<std::string> InstantiateKeyString =
+	{
+		"parentName",	//親クラス
+     	"loadFile",		//読み込む画像
+		"objectName"	//どんなオブジェクトを生成するか
+	};	
+
+	// 文字列を入れるkey(InstantiateInfoJSONの要素に対応させる) 
+	const std::vector<std::string> InstantiateKeyFloat =
+	{
+		"positionX",	//位置
+		"positionY",	//位置
+		"positionZ",	//位置
+		"rotateX",		//向き
+		"rotateY",		//向き
+		"rotateZ",		//向き
+		"scaleX",		//拡大率
+		"scaleY",		//拡大率
+		"scaleZ",		//拡大率
+	};
+	
+
+	/////////////////////////////////////////////////////////////////////////
 
 
 	/// <summary>
@@ -54,6 +86,13 @@ namespace JsonOperator
 	/// <param name="str">読み込んだ文字列</param>
 	/// <returns>成功したかどうか</returns>
 	bool LoadJSONString(std::string filename, std::string& str);
+
+	/// <summary>
+	/// JSONファイルを作成する関数
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
+	/// /// <returns>成功したかどうか</returns>
+	bool CreateJSONFile(std::string filename);
 
 	/// <summary>
 	/// セッションを追加する関数
@@ -183,10 +222,28 @@ namespace JsonOperator
 	/// <returns>成功したかどうか</returns>
 	bool AppendToJSONFileFloat(const std::string& filename, const std::string& section, const std::string& key, float value);
 
-
 	/////////////////////////////////////////////////////////////////////////////////////////
 
 	///////////////////////////////Instanceのための関数//////////////////////////////////////////////////////////
+
+
+	/// <summary>
+	/// オブジェクトを生成するための情報をJSONから書き込む(書き換えあり)
+	/// </summary>
+	/// <param name="filename">セクション</param>
+	/// <param name="key">キー</param>
+	/// <param name="info">値を入れる構造体</param>
+	/// <returns>成功したかどうか</returns>
+	bool WhiteInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info);
+
+	/// <summary>
+	/// オブジェクトを生成するための情報をJSONから読み込む
+	/// </summary>
+	/// <param name="filename">セクション</param>
+	/// <param name="key">キー</param>
+	/// <param name="info">値を入れる構造体</param>
+	/// <returns>成功したかどうか</returns>
+	bool GetInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info);
 
 	
 

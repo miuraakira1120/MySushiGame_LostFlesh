@@ -60,7 +60,11 @@ namespace
     int nextScene;//次に行くシーン
     int SceneChangeNextScene; //SceneChangeの時に使う次に行くシーン
 
-    std::string sectionName;//セクションの名前
+    char sectionName[256];//セクションの名前
+
+    GameObject* selectObj;//選択中のオブジェクト
+
+
 }
 
 namespace Imgui_Obj
@@ -93,7 +97,7 @@ namespace Imgui_Obj
     void InstantiateImgui()
     {
         //ポーズ中だったら
-        if (GameManager::GetIsPause())
+        //if (GameManager::GetIsPause())
         {
             ImguiIniObj();
         }
@@ -189,6 +193,10 @@ namespace Imgui_Obj
             {
                 ImGui::Begin("Button Instantiate");
 
+                //セクション名
+                ImGui::Text("ObjectName");
+                ImGui::InputText("name", sectionName, 256);
+
                 //読み込むファイル名を入力
                 ImGui::Text("LoadFileName");
                 ImGui::InputText(".png", loadFileName, 256);               
@@ -248,10 +256,10 @@ namespace Imgui_Obj
 
                         //親が今のシーンなら
                         if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
-                        {
-                           
-                            InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), loadFileNameStr, iniPosition, iniRotate, iniScale);
-            
+                        {    
+                            //sectionName = 
+                            selectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), loadFileNameStr, iniPosition, iniRotate, iniScale,"");
+                            
                         }
 
                         //親がポーズなら
@@ -277,12 +285,20 @@ namespace Imgui_Obj
                     {
                         //タイトルシーンだったら
                     case SCENE_ID::SCENE_ID_START:
-                        JsonOperator::AppendToJSONFileString(JsonOperator::TITLE_JSON, );
+                        //JsonOperator::AppendToJSONFileString(JsonOperator::TITLE_JSON, );
                     default:
                         break;
                     }
-                }
+                }ImGui::SameLine();
 
+                //削除ボタン
+                if (ImGui::Button("Delete"))
+                {
+                    if (selectObj != nullptr)
+                    {
+                        selectObj->KillMe();
+                    }                  
+                }
 
                 //キャンセルボタン
                 if (ImGui::Button("Cancel"))

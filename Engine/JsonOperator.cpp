@@ -75,6 +75,29 @@ namespace JsonOperator
         ifs.close();
     }
 
+    //JSONファイルを作成する関数
+    bool CreateJSONFile(std::string filename)
+    {
+        // JSONオブジェクトを作成
+        Document document;
+        document.SetObject();
+
+        // JSONファイルに書き出す
+        std::ofstream ofs(filename);
+        if (ofs) 
+        {
+            StringBuffer buffer;
+            Writer<StringBuffer> writer(buffer);
+            document.Accept(writer);
+            ofs << buffer.GetString();
+        }
+        else 
+        {
+            return false;
+        }
+        return true;
+    }
+
     //セッションを追加する関数
     bool AddSection(const std::string& filename, const std::string& section)
     {
@@ -383,7 +406,19 @@ namespace JsonOperator
     {
         //ファイルの内容を文字列として読み込む
         std::string str = "";
-        //失敗したらfalseを返す
+
+        //fileNameのファイル名のファイルがなかったら
+        std::ifstream file(filename);
+        if (!file.good())
+        {
+            //ファイルを作る
+            if (!CreateJSONFile(filename))
+            {
+                return false;          
+            }  
+        }
+
+        //ファイル読み込み
         if (!LoadJSONString(filename, str))
         {
             return false;
@@ -465,7 +500,19 @@ namespace JsonOperator
     {
         //ファイルの内容を文字列として読み込む
         std::string str = "";
-        //失敗したらfalseを返す
+
+        //fileNameのファイル名のファイルがなかったら
+        std::ifstream file(filename);
+        if (!file.good())
+        {
+            //ファイルを作る
+            if (!CreateJSONFile(filename))
+            {
+                return false;
+            }
+        }
+
+        //ファイル読み込み
         if (!LoadJSONString(filename, str))
         {
             return false;
@@ -536,6 +583,115 @@ namespace JsonOperator
         ofs << updatedJsonStr;
         ofs.close();
 
+        return true;
+    }
+
+    // オブジェクトを生成するための情報をJSONから書き込む(書き換えあり)
+    bool WhiteInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info)
+    {
+        //文字列の情報
+        std::string infoStr[InstanceManager::INFO_STR] =
+        {
+            info.parentName,
+            info.loadFile,
+            info.objectName
+        };
+
+        //数値の情報
+        float infoFloat[InstanceManager::INFO_FLOAT] =
+        {
+            info.position.x,
+            info.position.y,
+            info.position.z,
+
+            info.rotate.x,
+            info.rotate.y,
+            info.rotate.z,
+
+            info.scale.x,
+            info.scale.y,
+            info.scale.z,
+        };
+
+       //文字列の書き込み
+       for (auto i = 0; i < InstanceManager::INFO_STR; i++)
+        {
+           if (!AppendToJSONFileString(filename, section, InstantiateKeyString[i], infoStr[i]))
+           {
+               return false;
+           }
+        }
+
+       //数値の書き込み
+       for (auto i = 0; i < InstanceManager::INFO_FLOAT; i++)
+       {
+           if (!AppendToJSONFileFloat(filename, section, InstantiateKeyFloat[i], infoFloat[i]))
+           {
+               return false;
+           }
+       }
+
+        return true;
+    }
+
+    //オブジェクトを生成するための情報をJSONから読み込む
+    bool GetInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info)
+    {
+        //文字列の情報
+        std::string infoStr[InstanceManager::INFO_STR] =
+        {
+            info.parentName,
+            info.loadFile,
+            info.objectName
+        };
+
+        //数値の情報
+        float infoFloat[InstanceManager::INFO_FLOAT] =
+        {
+            info.position.x,
+            info.position.y,
+            info.position.z,
+
+            info.rotate.x,
+            info.rotate.y,
+            info.rotate.z,
+
+            info.scale.x,
+            info.scale.y,
+            info.scale.z,
+        };
+
+
+        //文字列の読み込み
+        for (auto i = 0; i < InstanceManager::INFO_STR; i++)
+        {
+            if (!GetJSONString(filename, section, InstantiateKeyString[i], infoStr[i]))
+            {
+                return false;
+            }
+        }
+
+        //数値の読み込み
+        for (auto i = 0; i < InstanceManager::INFO_FLOAT; i++)
+        {
+            if (!GetJSONFloat(filename, section, InstantiateKeyFloat[i], infoFloat[i]))
+            {
+                return false;
+            }
+        }
+
+        //返す構造体を作成
+        InstanceManager::InstantiateInfoJSON result =
+        {
+            infoStr[0],
+            infoStr[1],
+            infoStr[2],
+            {infoFloat[0], infoFloat[1], infoFloat[2]},
+            {infoFloat[3], infoFloat[4], infoFloat[5]},
+            {infoFloat[6], infoFloat[7], infoFloat[8]}
+        };
+
+        info = result;
         return true;
     }
 }
