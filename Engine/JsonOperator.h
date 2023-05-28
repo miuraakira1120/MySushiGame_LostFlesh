@@ -2,6 +2,10 @@
 
 #include <string>
 #include<vector>
+#include <map>
+#include <iostream>
+#include <fstream>
+#include "SceneManager.h"
 #include "../Json/rapidjson-master/include/rapidjson/document.h"
 #include "../Json/rapidjson-master/include/rapidjson/filereadstream.h"
 #include "../Json/rapidjson-master/include/rapidjson/filewritestream.h"
@@ -18,25 +22,50 @@ class GameObject;
 
 namespace JsonOperator
 {
-	enum class JSONData
-	{
-		TITLE_DATA = 0,
-		DATA_MAX
-	};
-	
-	//////////////////////////////////////////////////////////////////////////////////////////////
-	// タイトルに関係ある定数
-	// 使用するJSONファイルの名前
-	const std::string TEST_JSON = "../Assets\\GameData\\Test.json";
-	const std::string TITLE_JSON = "../Assets\\GameData\\TitleScene.json";
-	
 
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	// シーンに関係ある定数
+	// 使用するJSONファイルの名前
+	//テスト
+	const std::string TEST_JSON = "../Assets\\GameData\\Test.json";
+	
+	//タイトル
+	const std::string TITLE_JSON = "../Assets\\GameData\\TitleScene.json";	
+	const std::string TITLE_BUTTON_JSON = "../Assets\\GameData\\TitleButton.json";
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// ポーズに関係ある定数
 	// 使用するJSONファイルの名前
 	const std::string PAUSE_JSON = "../Assets\\GameData\\PauseScene.json";
 	//////////////////////////////////////////////////////////////////////////////////////////////
+	//シーンを文字列にした時の定数
+	const std::vector<std::string> sceneStrList =
+	{
+		"playScene",
+		"startScene",    
+		"goalScene",
+		"gameOverScene"
+	};
+
+	//生成される可能性のあるボタンを文字列にした時の定数
+	const std::vector<std::string> buttonStrList =
+	{
+		"sceneChangeButton",
+		"playerControlButton"
+	};
+
+	//生成される可能性のあるオブジェクトを文字列にした時の定数
+	
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	////各シーンと使用するJSONファイルの名前を紐付ける
+	//std::map<SCENE_ID, std::string> sceneFilename
+	//{
+	//	{SCENE_ID::SCENE_ID_START, TEST_JSON},
+	//};
 
 	///////////Instanceのための定数/////////////////////////////////////////////////
 	
@@ -245,7 +274,49 @@ namespace JsonOperator
 	/// <returns>成功したかどうか</returns>
 	bool GetInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info);
 
+	/// <summary>
+	/// 重複した文字列の後ろに数字をつけるプログラム
+	/// </summary>
+	/// <param name="filename">書き込むファイルの名前</param>
+	/// <param name="unique"></param>
+	/// 
 	
+	/// <summary>
+	/// 重複した文字列の後ろに数字をつけるプログラム
+	/// </summary>
+	/// <param name="filename">書き込むファイルの名前</param>
+	/// <param name="str">ユニークにしたい文字列</param>
+	/// <returns>成功したかどうか</returns>
+	bool CreateUniqueNameJSON(std::string filename, std::string& str);
+
+	/// <summary>
+	/// シーンを文字に変換
+	/// </summary>
+	/// <param name="scene">文字列にするシーン</param>
+	/// <returns>変換した文字列</returns>
+	std::string SceneToString(SCENE_ID scene);
+
+	/// <summary>
+	/// ボタンを文字に変換
+	/// </summary>
+	/// <param name="scene">文字列にするボタン</param>
+	/// <returns>変換した文字列</returns>
+	std::string ButtonToString(ButtonManager::ButtonKinds button);
+	
+	/// <summary>
+	/// 文字をシーンに変換
+	/// </summary>
+	/// <param name="scene">シーンにする文字列</param>
+	/// <returns>変換したシーン</returns>
+	SCENE_ID StringToScene(std::string scene);
+
+	
+	/// <summary>
+	/// 文字をボタンに変換
+	/// </summary>
+	/// <param name="button">ボタンにする文字列</param>
+	/// <returns></returns>
+	ButtonManager::ButtonKinds StringToButton(std::string  button);
 
 //	template <class T = int>
 //	bool GetData(const std::string& filename, const std::string& section, const std::string& key, T& out)

@@ -19,10 +19,6 @@ namespace
     std::map<string, Document> dataList;
     // ("../Assets\\GameData\\TitleData.json");
 
-
-     // JSONファイルの名前
-    const std::string TITLE_JSON = "../Assets\\GameData\\TitleScene.json";
-
 }
 
 namespace JsonOperator
@@ -39,7 +35,7 @@ namespace JsonOperator
         FILE* fp;
         if (fopen_s(&fp, filename.c_str(), "r") != 0)
         {
-            MessageBox(NULL, "error", "BaseProjDx9エラー", MB_OK);
+            MessageBox(NULL, "Load Error", "BaseProjDx9エラー", MB_OK);
         }
 
         // ファイルから読み込む
@@ -693,6 +689,94 @@ namespace JsonOperator
 
         info = result;
         return true;
+    }
+
+    //重複した文字列の後ろに数字をつけるプログラム
+    bool CreateUniqueNameJSON(std::string filename, std::string& str)
+    {
+        // 既存のキーのカウントを保持するマップ
+        std::map<std::string, int> keyCountMap;
+
+        //fileNameのファイル名のファイルがなかったら
+        std::ifstream file(filename);
+        if (!file.good())
+        {
+            //ファイルを作る
+            if (!CreateJSONFile(filename))
+            {
+                return false;
+            }
+        }
+
+        Document data;
+        //ファイルを開けなかったらfalseを返す
+        if (!LoadJSONFromFile(filename.c_str(), data))
+        {
+            return false;
+        }
+
+        // JSONオブジェクト内の既存のキーをカウント
+        for (auto it = data.MemberBegin(); it != data.MemberEnd(); ++it) {
+            const std::string existingKey = it->name.GetString();
+            keyCountMap[existingKey]++;
+        }
+
+        // 重複したキーがある場合、数字を付加してユニークなキーを作成
+        std::string uniqueStr = str;
+        int suffix = 1;
+        while (keyCountMap.find(uniqueStr) != keyCountMap.end()) {
+            uniqueStr = str + std::to_string(suffix);
+            suffix++;
+        }
+        str = uniqueStr;
+        return true;
+    }
+
+    // シーンを文字に変換
+    std::string SceneToString(SCENE_ID scene)
+    {
+        if (sceneStrList.size() >= scene)
+        {
+            return sceneStrList[scene];
+        }
+        return "";
+    }
+
+    //ボタンを文字に変換
+    std::string ButtonToString(ButtonManager::ButtonKinds button)
+    {
+        if (buttonStrList.size() >= button)
+        {
+            return buttonStrList[button];
+        }
+        return "";
+    }
+
+    //文字をシーンに変換
+    SCENE_ID StringToScene(std::string scene)
+    {
+        for (int i = 0; i < sceneStrList.size(); i++)
+        {
+            if (sceneStrList[i] == scene) 
+            {
+                return static_cast<SCENE_ID>(i);
+            }
+        }
+
+        return SCENE_ID::SCENE_ID_MAX;
+    }
+
+    /// 文字をボタンに変換
+    ButtonManager::ButtonKinds StringToButton(std::string button)
+    {
+        for (int i = 0; i < buttonStrList.size(); i++)
+        {
+            if (buttonStrList[i] == button)
+            {
+                return static_cast<ButtonManager::ButtonKinds>(i);
+            }
+        }
+        return ButtonManager::ButtonKinds::BUTTON_KINDS_MAX;
     }
 }
 //// JSON配列の読み込みと処理

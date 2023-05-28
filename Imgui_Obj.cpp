@@ -47,7 +47,7 @@ namespace
     //親を何にするか
     int parentNum;
 
-    int buttonKinds;//ボタンの種類
+    int buttonKinds = static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);//ボタンの種類
 
     IniType iniType = IniType::NONE;
 
@@ -62,7 +62,10 @@ namespace
 
     char sectionName[256];//セクションの名前
 
-    GameObject* selectObj;//選択中のオブジェクト
+    GameObject* pSelectObj;//選択中のオブジェクト
+    std::string selectObjParent;//選択中のオブジェクトの親オブジェクト
+    std::string selectButtonKinds;//選択中のオブジェクトの種類
+    string selectLoadFileNameStr;//選択中のオブジェクトが読み込む画像やモデルのファイル名
 
 
 }
@@ -219,7 +222,7 @@ namespace Imgui_Obj
 
                 //どんな種類のボタンを生成するか
                 ImGui::Text("ButtonType");
-                ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON)); ImGui::SameLine();
+                //ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON)); ImGui::SameLine();
                 ImGui::RadioButton("PlayerControl", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON)); 
 
                 //シーンチェンジボタンを作成する予定なら
@@ -250,16 +253,17 @@ namespace Imgui_Obj
                     //プレイヤーのボタン配置を変えるボタンを作成するなら
                     if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
                     {
+                        selectButtonKinds = JsonOperator::ButtonToString(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);
+
                         //拡張子にpngを追加
-                        string loadFileNameStr = loadFileName;
-                        loadFileNameStr += ".png";
+                        selectLoadFileNameStr = loadFileName;
+                        selectLoadFileNameStr += ".png";
 
                         //親が今のシーンなら
                         if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
                         {    
-                            //sectionName = 
-                            selectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), loadFileNameStr, iniPosition, iniRotate, iniScale,"");
-                            
+                            selectObjParent = JsonOperator::SceneToString(pSceneManager->GetNowSceneID());
+                            pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
                         }
 
                         //親がポーズなら
@@ -285,7 +289,7 @@ namespace Imgui_Obj
                     {
                         //タイトルシーンだったら
                     case SCENE_ID::SCENE_ID_START:
-                        //JsonOperator::AppendToJSONFileString(JsonOperator::TITLE_JSON, );
+                        InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, sectionName, selectObjParent, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
                     default:
                         break;
                     }
@@ -294,9 +298,9 @@ namespace Imgui_Obj
                 //削除ボタン
                 if (ImGui::Button("Delete"))
                 {
-                    if (selectObj != nullptr)
+                    if (pSelectObj != nullptr)
                     {
-                        selectObj->KillMe();
+                        pSelectObj->KillMe();
                     }                  
                 }
 

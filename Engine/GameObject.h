@@ -236,6 +236,22 @@ T* Instantiate(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3
 
 //モデル(や画像)の名前と位置、向き、拡大率を引数にボタンを作成するテンプレート
 template <class T>
+T* InstantiateButton(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+{
+	T* pNewObject = new T(pParent, fileName);
+	if (pParent != nullptr)
+	{
+		pParent->PushBackChild(pNewObject);
+	}
+	pNewObject->Initialize();
+	pNewObject->SetPosition(pos);
+	pNewObject->SetRotate(rot);
+	pNewObject->SetScale(sca);
+	return pNewObject;
+}
+
+//モデル(や画像)の名前と位置、向き、拡大率を引数にボタンを作成するテンプレート
+template <class T>
 T* InstantiateButton(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca, std::string uniqueName)
 {
 	T* pNewObject = new T(pParent, fileName);

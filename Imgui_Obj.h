@@ -1,6 +1,7 @@
 #pragma once
 
-class SceneManager;
+#include "Engine/SceneManager.h"
+#include "ButtonManager.h"
 
 //imguiを管理するクラス
 namespace Imgui_Obj
@@ -33,4 +34,6 @@ namespace Imgui_Obj
     /// シーンチェンジするImguiを生成する関数
     /// </summary>
     void SceneChangeImgui();
+    
+    
 };

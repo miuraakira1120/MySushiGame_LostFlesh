@@ -1,12 +1,11 @@
 #pragma once
 
+
 class Pause;
 class SceneManager;
 
 namespace GameManager
 {
-
-
 	enum class ParentNum
 	{
 		NOW_SCENE,
@@ -14,6 +13,8 @@ namespace GameManager
 		PLAYER,
 		PARENT_MAX
 	};
+
+	
 
 	/// <summary>
 	/// ‰Šú‰»
