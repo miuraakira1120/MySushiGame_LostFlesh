@@ -67,7 +67,7 @@ namespace
     std::string selectButtonKinds;//選択中のオブジェクトの種類
     string selectLoadFileNameStr;//選択中のオブジェクトが読み込む画像やモデルのファイル名
 
-
+    std::vector<GameObject*> pCreateList;//作ったオブジェクトのリスト
 }
 
 namespace Imgui_Obj
@@ -262,6 +262,11 @@ namespace Imgui_Obj
                         //親が今のシーンなら
                         if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
                         {    
+                            if (pSelectObj != nullptr)
+                            {
+                                pSelectObj->KillMe();
+                            }
+
                             int iSceneID = static_cast<int>(pSceneManager->GetNowSceneID());
                             selectObjParent = JsonOperator::SceneToString(static_cast<JsonOperator::CanParentObj>(iSceneID));
                             pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
@@ -282,27 +287,30 @@ namespace Imgui_Obj
                     }
                 } ImGui::SameLine();
 
-                //セーブボタン
-                if (ImGui::Button("Save"))
+                if (pSelectObj != nullptr)
                 {
-                    //タイトルシーンだったら
-                    switch (pSceneManager->GetNowSceneID())
+                    //セーブボタン
+                    if (ImGui::Button("Save"))
                     {
                         //タイトルシーンだったら
-                    case SCENE_ID::SCENE_ID_START:
-                        InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, sectionName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
-                    default:
-                        break;
-                    }
-                }ImGui::SameLine();
+                        switch (pSceneManager->GetNowSceneID())
+                        {
+                            //タイトルシーンだったら
+                        case SCENE_ID::SCENE_ID_START:
+                            pCreateList.push_back(pSelectObj);
+                            pSelectObj = nullptr;
+                            InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, sectionName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
+                        default:
+                            break;
+                        }
+                    }ImGui::SameLine();
 
-                //削除ボタン
-                if (ImGui::Button("Delete"))
-                {
-                    if (pSelectObj != nullptr)
+                    //削除ボタン
+                    if (ImGui::Button("Delete"))
                     {
                         pSelectObj->KillMe();
-                    }                  
+                        pSelectObj = nullptr;
+                    }
                 }
 
                 //キャンセルボタン

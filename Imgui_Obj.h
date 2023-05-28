@@ -35,5 +35,7 @@ namespace Imgui_Obj
     /// </summary>
     void SceneChangeImgui();
     
-    
+    //作ったオブジェクトの再移動等を出来るようにする
+
+
 };
