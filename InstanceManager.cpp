@@ -5,12 +5,11 @@
 
 namespace InstanceManager
 {
-	bool SaveButton(std::string filename, std::string section, std::string parentStr, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+	bool SaveButton(std::string filename, std::string section, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
 	{
 		
 		InstantiateInfoJSON info =
 		{
-			parentStr,
 			pathName,
 			objectName,
 			pos,
@@ -34,8 +33,6 @@ namespace InstanceManager
 
 	Button* CreateButtonOnInfo(InstanceManager::InstantiateInfoJSON info, GameObject* parent)
 	{
-		ButtonManager::ButtonKinds infoObject = JsonOperator::StringToButton(info.parentName);
-
 		//シーンチェンジボタンなら
 		if (info.objectName == "sceneChangeButton")
 		{

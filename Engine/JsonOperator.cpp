@@ -588,7 +588,6 @@ namespace JsonOperator
         //•¶š—ñ‚Ìî•ñ
         std::string infoStr[InstanceManager::INFO_STR] =
         {
-            info.parentName,
             info.loadFile,
             info.objectName
         };
@@ -636,7 +635,6 @@ namespace JsonOperator
         //•¶š—ñ‚Ìî•ñ
         std::string infoStr[InstanceManager::INFO_STR] =
         {
-            info.parentName,
             info.loadFile,
             info.objectName
         };
@@ -681,7 +679,6 @@ namespace JsonOperator
         {
             infoStr[0],
             infoStr[1],
-            infoStr[2],
             {infoFloat[0], infoFloat[1], infoFloat[2]},
             {infoFloat[3], infoFloat[4], infoFloat[5]},
             {infoFloat[6], infoFloat[7], infoFloat[8]}

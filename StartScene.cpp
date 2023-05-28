@@ -33,8 +33,8 @@ void StartScene::Initialize()
 	XMFLOAT3 aaa = { 7,8,9 };
 
 
-	InstanceManager::InstantiateInfoJSON testInfo = { "parent", "image", "name", a, aa, aaa };
-	JsonOperator::WhiteInstanceInfo(JsonOperator::TEST_JSON, "sec", testInfo);
+	//InstanceManager::InstantiateInfoJSON testInfo = { "parent", "image", "name", a, aa, aaa };
+	//JsonOperator::WhiteInstanceInfo(JsonOperator::TEST_JSON, "sec", testInfo);
 
 	InstanceManager::InstantiateInfoJSON getInfo;
 	JsonOperator::GetInstanceInfo(JsonOperator::TEST_JSON, "sec", getInfo);

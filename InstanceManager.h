@@ -13,7 +13,7 @@ class GameObject;
 namespace InstanceManager
 {
 	//文字列の要素が何個あるか
-	const int INFO_STR = 3;
+	const int INFO_STR = 2;
 	const int INFO_FLOAT = 9;
 
 	const std::string SUCCESS = "success";//成功したかどうかを判定する時に使う定数
@@ -22,7 +22,6 @@ namespace InstanceManager
 	//JSONの情報でオブジェクトを作成するための構造体
 	struct InstantiateInfoJSON
 	{
-		std::string parentName;			//親クラス
 		std::string loadFile;			//読み込む画像
 		std::string objectName;			//どんなオブジェクトを生成するか
 		///////////////////////////////////////////////////////////////////
@@ -46,14 +45,13 @@ namespace InstanceManager
 	/// </summary>
 	/// <param name="filename">ファイル名</param>
 	/// <param name="section">セクション名</param>
-	/// <param name="pParent">親オブジェクト</param>
 	/// <param name="pathName">読み込むファイルの名前</param>
 	/// <param name="objectName">作るボタンの種類</param>
 	/// <param name="pos">位置</param>
 	/// <param name="rot">向き</param>
 	/// <param name="sca">拡大率</param>
 	/// <returns>成功したかどうか</returns>
-	bool SaveButton(std::string filename, std::string section, std::string parentStr, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca);
+	bool SaveButton(std::string filename, std::string section, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca);
 
 	/// <summary>
 	/// InstantiateInfoJSONの情報を基にボタンを作成する関数

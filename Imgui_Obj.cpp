@@ -290,7 +290,7 @@ namespace Imgui_Obj
                     {
                         //タイトルシーンだったら
                     case SCENE_ID::SCENE_ID_START:
-                        InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, sectionName, selectObjParent, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
+                        InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, sectionName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
                     default:
                         break;
                     }
