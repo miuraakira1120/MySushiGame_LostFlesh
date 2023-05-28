@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include <vector>
+
 
 
 //スタートシーンを管理するクラス
@@ -12,6 +14,8 @@ class StartScene : public GameObject
 	int iniListButton;//タイトルシーンのボタンの番号
 
 	GameObject* pStartButton;
+
+	std::vector<GameObject*> instanceList;
 	
 public:
 	//コンストラクタ

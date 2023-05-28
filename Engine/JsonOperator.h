@@ -38,13 +38,24 @@ namespace JsonOperator
 	// 使用するJSONファイルの名前
 	const std::string PAUSE_JSON = "../Assets\\GameData\\PauseScene.json";
 	//////////////////////////////////////////////////////////////////////////////////////////////
-	//シーンを文字列にした時の定数
-	const std::vector<std::string> sceneStrList =
+	//親になる可能性のあるオブジェクトを文字列にした時の定数
+	const std::vector<std::string> parentStrList =
 	{
 		"playScene",
 		"startScene",    
 		"goalScene",
 		"gameOverScene"
+		"pause"
+	};
+
+	enum CanParentObj
+	{
+		SCENE_PLAY = 0,
+		SCENE_START,
+		SCENE_GOAL,
+		SCENE_GAMEOVER,
+		PAUSE,
+		MAX
 	};
 
 	//生成される可能性のあるボタンを文字列にした時の定数
@@ -290,11 +301,11 @@ namespace JsonOperator
 	bool CreateUniqueNameJSON(std::string filename, std::string& str);
 
 	/// <summary>
-	/// シーンを文字に変換
+	/// 親になる可能性のあるオブジェクトを文字に変換
 	/// </summary>
-	/// <param name="scene">文字列にするシーン</param>
+	/// <param name="scene">文字列にする親オブジェクト</param>
 	/// <returns>変換した文字列</returns>
-	std::string SceneToString(SCENE_ID scene);
+	std::string SceneToString(CanParentObj parent);
 
 	/// <summary>
 	/// ボタンを文字に変換
@@ -307,8 +318,8 @@ namespace JsonOperator
 	/// 文字をシーンに変換
 	/// </summary>
 	/// <param name="scene">シーンにする文字列</param>
-	/// <returns>変換したシーン</returns>
-	SCENE_ID StringToScene(std::string scene);
+	/// <returns>変換した親オブジェクト</returns>
+	CanParentObj StringToParent(std::string parent);
 
 	
 	/// <summary>

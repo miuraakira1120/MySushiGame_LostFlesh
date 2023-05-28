@@ -40,6 +40,8 @@ void StartScene::Initialize()
 	JsonOperator::GetInstanceInfo(JsonOperator::TEST_JSON, "sec", getInfo);
 	int b = 0;
 
+	InstanceManager::AllCreateButton(JsonOperator::TITLE_BUTTON_JSON, instanceList, this);
+
 }
 
 //çXêV

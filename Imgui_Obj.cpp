@@ -262,7 +262,8 @@ namespace Imgui_Obj
                         //êeÇ™ç°ÇÃÉVÅ[ÉìÇ»ÇÁ
                         if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
                         {    
-                            selectObjParent = JsonOperator::SceneToString(pSceneManager->GetNowSceneID());
+                            int iSceneID = static_cast<int>(pSceneManager->GetNowSceneID());
+                            selectObjParent = JsonOperator::SceneToString(static_cast<JsonOperator::CanParentObj>(iSceneID));
                             pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
                         }
 

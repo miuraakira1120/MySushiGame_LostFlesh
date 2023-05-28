@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include "ButtonManager.h"
+#include "Button.h"
 
 using namespace DirectX;
 
@@ -54,8 +55,20 @@ namespace InstanceManager
 	/// <returns>成功したかどうか</returns>
 	bool SaveButton(std::string filename, std::string section, std::string parentStr, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca);
 
-	//JSONを用いてボタン生成する（メンバーすべて）
-	std::vector<GameObject*> AllCreateButton();
+	/// <summary>
+	/// InstantiateInfoJSONの情報を基にボタンを作成する関数
+	/// </summary>
+	/// <param name="info"></param>
+	/// <returns></returns>
+	Button* CreateButtonOnInfo(InstanceManager::InstantiateInfoJSON info, GameObject* parent);
+
+	/// <summary>
+	/// JSONを用いてボタン生成する（メンバーすべて）
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="pButtonList">生成したボタンのポインタのリスト</param>
+	/// <returns>成功したかどうか</returns>
+	bool AllCreateButton(std::string filename, std::vector<GameObject*>& pButtonList, GameObject* parent);
 
 	//インスタンスオブジェクトみたいなので完結できるように
 };

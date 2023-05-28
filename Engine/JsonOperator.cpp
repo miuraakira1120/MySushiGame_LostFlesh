@@ -733,11 +733,11 @@ namespace JsonOperator
     }
 
     // シーンを文字に変換
-    std::string SceneToString(SCENE_ID scene)
+    std::string SceneToString(CanParentObj parent)
     {
-        if (sceneStrList.size() >= scene)
+        if (parentStrList.size() >= parent)
         {
-            return sceneStrList[scene];
+            return parentStrList[parent];
         }
         return "";
     }
@@ -753,17 +753,17 @@ namespace JsonOperator
     }
 
     //文字をシーンに変換
-    SCENE_ID StringToScene(std::string scene)
+    CanParentObj StringToParent(std::string parent)
     {
-        for (int i = 0; i < sceneStrList.size(); i++)
+        for (int i = 0; i < parentStrList.size(); i++)
         {
-            if (sceneStrList[i] == scene) 
+            if (parentStrList[i] == parent)
             {
-                return static_cast<SCENE_ID>(i);
+                return static_cast<CanParentObj>(i);
             }
         }
 
-        return SCENE_ID::SCENE_ID_MAX;
+        return CanParentObj::MAX;
     }
 
     /// 文字をボタンに変換
