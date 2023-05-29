@@ -5,8 +5,8 @@
 class PlayerControlButton : public Button
 {
 private:
-	const XMFLOAT3 IMAGE_SIZE_DEF = { 1.0f, 1.0f, 1.0f };
-	const XMFLOAT3 IMAGE_SIZE_MAG = { 1.1f, 1.1f, 1.0f };
+	XMFLOAT3 imageSizeDef ;
+	XMFLOAT3 imageSizeMag ;
 public:
 	/// <summary>
 	/// コンストラクタ

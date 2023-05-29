@@ -44,6 +44,9 @@ namespace
     //使用するiniファイルの名前
     const std::string iniFileName = "UI.ini";
 
+    //char型の配列のサイズ(2の8乗)
+    const int CHAR_SIZE = 256;
+
     //親を何にするか
     int parentNum;
 
@@ -54,13 +57,14 @@ namespace
     int nextScene;//次に行くシーン
     int SceneChangeNextScene; //SceneChangeの時に使う次に行くシーン
 
+    std::string selectUniqueName;//選択中のオブジェクトのユニークな名前
     
     GameObject* pSelectObj;//選択中のオブジェクト
     std::string selectButtonKinds;//選択中のオブジェクトの種類
     string selectLoadFileNameStr;//選択中のオブジェクトが読み込む画像やモデルのファイル名
 
-    char loadFileName[256] = "";//読み込むファイル名
-    char sectionName[256];//セクションの名前 
+    char loadFileName[CHAR_SIZE] = "";//読み込むファイル名
+    char sectionName[CHAR_SIZE];//セクションの名前 
     XMFLOAT3 iniPosition = { 0,0,0 };//位置
     XMFLOAT3 iniScale = { 1,1,1 };//拡大率
     XMFLOAT3 iniRotate = { 0,0,0 };//向き
@@ -212,11 +216,12 @@ namespace Imgui_Obj
 
                 //セクション名
                 ImGui::Text("ObjectName");
-                ImGui::InputText("name", sectionName, 256);
+                ImGui::InputText("name", sectionName, CHAR_SIZE);
+                selectUniqueName = sectionName;
 
                 //読み込むファイル名を入力
                 ImGui::Text("LoadFileName");
-                ImGui::InputText(".png", loadFileName, 256);               
+                ImGui::InputText(".png", loadFileName, CHAR_SIZE);
 
                 //Transfomの情報を入力
                 ImGui::Text("Transform");
@@ -282,8 +287,6 @@ namespace Imgui_Obj
                         //親が今のシーンなら
                         if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
                         {    
-                            //事前準備
-                            PreButtonInstantiate();
                             //生成
                             pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
                         }
@@ -313,12 +316,14 @@ namespace Imgui_Obj
                         {
                             //タイトルシーンだったら
                         case SCENE_ID::SCENE_ID_START:
-                            
-                            InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, sectionName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
-
+                            InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, selectUniqueName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
+                            break;
                         default:
                             break;
                         }
+                        //事後
+                        RearButtonInstantiate();
+
                     }ImGui::SameLine();
 
                     //削除ボタン
@@ -357,11 +362,11 @@ namespace Imgui_Obj
         ImGui::End();
     }
 
-    //imguiでボタンを生成する前にやること
-    void PreButtonInstantiate()
+    //imguiでボタンを保存する前にやること
+    void RearButtonInstantiate()
     {
         pCreateList.push_back(pSelectObj);
-        SettingInfo setting{ selectLoadFileNameStr, sectionName ,iniPosition, iniRotate, iniScale };
+        SettingInfo setting{ selectLoadFileNameStr, selectUniqueName ,iniPosition, iniRotate, iniScale };
         settingInfoList.push_back(setting);
         pSelectObj = nullptr;
     }
@@ -373,6 +378,36 @@ namespace Imgui_Obj
         for (int i = 0; i < pCreateList.size(); i++)
         {
             ImGui::Begin(settingInfoList[i].sectionName.c_str());
+            //セクション名
+            ImGui::Text("ObjectName");
+            char sec[CHAR_SIZE];
+            settingInfoList[i].sectionName.copy(sec, CHAR_SIZE - 1);
+            sec[settingInfoList[i].sectionName.length()] = '\0';
+            ImGui::InputText("name", sec, CHAR_SIZE);
+            settingInfoList[i].sectionName = sec;
+
+            //読み込むファイル名を入力
+            ImGui::Text("LoadFileName");
+            settingInfoList[i].loadFileName.copy(sec, CHAR_SIZE - 1);
+            sec[settingInfoList[i].loadFileName.length()] = '\0';
+            ImGui::InputText(".png", sec, CHAR_SIZE);
+            settingInfoList[i].loadFileName = sec;
+
+            //Transfomの情報を入力
+            ImGui::Text("Transform");
+
+            //位置
+            //参照で生成
+            float* iniPositionArray[3] = { &iniPosition.x, &iniPosition.y, &iniPosition.z };
+            ImGui::InputFloat3("Position", iniPositionArray[0]);
+
+            //向き
+            float* iniRotateArray[3] = { &iniRotate.x,&iniRotate.y, &iniRotate.z };
+            ImGui::InputFloat3("Rotate", iniRotateArray[0]);
+
+            //拡大率
+            float* iniiniScaleArray[3] = { &iniScale.x,&iniScale.y, &iniScale.z };
+            ImGui::InputFloat3("Scale", iniiniScaleArray[0]);
             ImGui::End();
         }
     }

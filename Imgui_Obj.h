@@ -36,9 +36,9 @@ namespace Imgui_Obj
     void SceneChangeImgui();
 
     /// <summary>
-    /// imguiでボタンを生成する前にやること
+    /// imguiでボタンを生成した後にやること
     /// </summary>
-    void PreButtonInstantiate();
+    void RearButtonInstantiate();
     
     //作ったオブジェクトの再移動等を出来るようにする
     void ReSetting();

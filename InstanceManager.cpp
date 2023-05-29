@@ -5,7 +5,7 @@
 
 namespace InstanceManager
 {
-	bool SaveButton(std::string filename, std::string section, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+	bool SaveButton(std::string filename, std::string& section, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
 	{
 		
 		InstantiateInfoJSON info =
@@ -24,6 +24,7 @@ namespace InstanceManager
 		{
 			return false;
 		}
+		section = uniqueStr;
 
 		//JSON‚ÉInstantiate‚É•K—v‚Èî•ñ‚ğ‘‚«‚Ş
 		JsonOperator::WhiteInstanceInfo(filename, uniqueStr, info);
