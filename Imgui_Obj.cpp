@@ -105,6 +105,7 @@ namespace Imgui_Obj
             ImguiIniObj();
         }
 
+        //楽にシーンチェンジ出来るようにする
         SceneChangeImgui();
 
         //タイトルシーンだったら
@@ -320,7 +321,6 @@ namespace Imgui_Obj
                     iniType = IniType::NONE;
                 }
                 ImGui::End();
-
             }
         }
         ImGui::End();
