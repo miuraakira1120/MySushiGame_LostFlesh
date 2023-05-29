@@ -34,8 +34,13 @@ namespace Imgui_Obj
     /// シーンチェンジするImguiを生成する関数
     /// </summary>
     void SceneChangeImgui();
+
+    /// <summary>
+    /// imguiでボタンを生成する前にやること
+    /// </summary>
+    void PreButtonInstantiate();
     
     //作ったオブジェクトの再移動等を出来るようにする
-
+    void ReSetting();
 
 };

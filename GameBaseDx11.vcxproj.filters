@@ -229,9 +229,6 @@
     <ClCompile Include="Goal.cpp">
       <Filter>02PlayScene\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Imgui_Obj.cpp">
-      <Filter>Imgui\ImClass</Filter>
-    </ClCompile>
     <ClCompile Include="Time.cpp">
       <Filter>00Engine\Time</Filter>
     </ClCompile>
@@ -268,6 +265,9 @@
       <Filter>00Engine\Button</Filter>
     </ClCompile>
     <ClCompile Include="InstanceManager.cpp" />
+    <ClCompile Include="Imgui_Obj.cpp">
+      <Filter>Imgui\ImClass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">

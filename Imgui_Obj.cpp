@@ -51,23 +51,36 @@ namespace
 
     IniType iniType = IniType::NONE;
 
-    char loadFileName[256] = "";//読み込むファイル名
+    int nextScene;//次に行くシーン
+    int SceneChangeNextScene; //SceneChangeの時に使う次に行くシーン
 
+    
+    GameObject* pSelectObj;//選択中のオブジェクト
+    std::string selectButtonKinds;//選択中のオブジェクトの種類
+    string selectLoadFileNameStr;//選択中のオブジェクトが読み込む画像やモデルのファイル名
+
+    char loadFileName[256] = "";//読み込むファイル名
+    char sectionName[256];//セクションの名前 
     XMFLOAT3 iniPosition = { 0,0,0 };//位置
     XMFLOAT3 iniScale = { 1,1,1 };//拡大率
     XMFLOAT3 iniRotate = { 0,0,0 };//向き
 
-    int nextScene;//次に行くシーン
-    int SceneChangeNextScene; //SceneChangeの時に使う次に行くシーン
+    //再設定したい情報
+    struct SettingInfo
+    {
+        SettingInfo(std::string loadFileName, std::string sectionName, XMFLOAT3 position, XMFLOAT3 scale, XMFLOAT3 rotate) :
+            loadFileName{ loadFileName }, sectionName{ sectionName }, iniPosition{ position }, iniScale{ scale }, iniRotate{ rotate } {}
 
-    char sectionName[256];//セクションの名前
-
-    GameObject* pSelectObj;//選択中のオブジェクト
-    std::string selectObjParent;//選択中のオブジェクトの親オブジェクト
-    std::string selectButtonKinds;//選択中のオブジェクトの種類
-    string selectLoadFileNameStr;//選択中のオブジェクトが読み込む画像やモデルのファイル名
+        std::string loadFileName = "";//読み込むファイル名
+        std::string sectionName;//セクションの名前 
+        XMFLOAT3 iniPosition;//位置
+        XMFLOAT3 iniScale;//拡大率
+        XMFLOAT3 iniRotate;//向き
+    };
 
     std::vector<GameObject*> pCreateList;//作ったオブジェクトのリスト
+    std::vector<SettingInfo> settingInfoList;//pCreateListに対応させるリスト 
+    
 }
 
 namespace Imgui_Obj
@@ -99,11 +112,11 @@ namespace Imgui_Obj
     //Imguiを生成する
     void InstantiateImgui()
     {
-        //ポーズ中だったら
-        //if (GameManager::GetIsPause())
-        {
-            ImguiIniObj();
-        }
+        //作成用のImguiを出す
+        ImguiIniObj();
+
+        //作ったオブジェクトの再設定を出来るようにする
+        ReSetting();
 
         //楽にシーンチェンジ出来るようにする
         SceneChangeImgui();
@@ -260,16 +273,18 @@ namespace Imgui_Obj
                         selectLoadFileNameStr = loadFileName;
                         selectLoadFileNameStr += ".png";
 
+                        //保存していないオブジェクトは消す
+                        if (pSelectObj != nullptr)
+                        {
+                            pSelectObj->KillMe();
+                        }
+
                         //親が今のシーンなら
                         if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
                         {    
-                            if (pSelectObj != nullptr)
-                            {
-                                pSelectObj->KillMe();
-                            }
-
-                            int iSceneID = static_cast<int>(pSceneManager->GetNowSceneID());
-                            selectObjParent = JsonOperator::SceneToString(static_cast<JsonOperator::CanParentObj>(iSceneID));
+                            //事前準備
+                            PreButtonInstantiate();
+                            //生成
                             pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
                         }
 
@@ -298,9 +313,9 @@ namespace Imgui_Obj
                         {
                             //タイトルシーンだったら
                         case SCENE_ID::SCENE_ID_START:
-                            pCreateList.push_back(pSelectObj);
-                            pSelectObj = nullptr;
+                            
                             InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, sectionName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
+
                         default:
                             break;
                         }
@@ -341,7 +356,28 @@ namespace Imgui_Obj
         }
         ImGui::End();
     }
+
+    //imguiでボタンを生成する前にやること
+    void PreButtonInstantiate()
+    {
+        pCreateList.push_back(pSelectObj);
+        SettingInfo setting{ selectLoadFileNameStr, sectionName ,iniPosition, iniRotate, iniScale };
+        settingInfoList.push_back(setting);
+        pSelectObj = nullptr;
+    }
+
+    //作ったオブジェクトの再移動等を出来るようにする
+    void ReSetting()
+    {
+        //pCreateListの分だけ回す
+        for (int i = 0; i < pCreateList.size(); i++)
+        {
+            ImGui::Begin(settingInfoList[i].sectionName.c_str());
+            ImGui::End();
+        }
+    }
 }
+
 
 
 //TREENODE
