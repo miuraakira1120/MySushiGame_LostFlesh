@@ -59,21 +59,20 @@ namespace
 
     std::string selectUniqueName;//選択中のオブジェクトのユニークな名前
     
-    GameObject* pSelectObj;//選択中のオブジェクト
-    std::string selectButtonKinds;//選択中のオブジェクトの種類
-    string selectLoadFileNameStr;//選択中のオブジェクトが読み込む画像やモデルのファイル名
-
-    char loadFileName[CHAR_SIZE] = "";//読み込むファイル名
-    char sectionName[CHAR_SIZE];//セクションの名前 
-    XMFLOAT3 iniPosition = { 0,0,0 };//位置
-    XMFLOAT3 iniScale = { 1,1,1 };//拡大率
-    XMFLOAT3 iniRotate = { 0,0,0 };//向き
-    std::string selectWriteFile;//選択中のオブジェクトが保存をする際に書き込んだJSONのファイル名
+    GameObject* pSelectObj;             //選択中のオブジェクト
+    std::string selectButtonKinds;      //選択中のオブジェクトの種類
+    string selectLoadFileNameStr;       //選択中のオブジェクトが読み込む画像やモデルのファイル名
+    char loadFileName[CHAR_SIZE] = "";  //選択中の読み込むファイル名
+    char sectionName[CHAR_SIZE];        //選択中のセクションの名前 
+    XMFLOAT3 iniPosition = { 0,0,0 };   //選択中の位置
+    XMFLOAT3 iniScale = { 1,1,1 };      //選択中の拡大率
+    XMFLOAT3 iniRotate = { 0,0,0 };     //選択中の向き
+    std::string selectWriteFile;        //選択中のオブジェクトが保存をする際に書き込んだJSONのファイル名
 
     //再設定の時に必要な情報
     struct SettingInfo
     {
-        SettingInfo(GameObject* obj, std::string loadFileName, std::string sectionName, std::string writeFileName, XMFLOAT3 position, XMFLOAT3 scale, XMFLOAT3 rotate) :
+        SettingInfo(GameObject* obj, std::string loadFileName, std::string sectionName, std::string writeFileName, XMFLOAT3 position, XMFLOAT3 rotate, XMFLOAT3 scale) :
             pObject{ obj },loadFileName { loadFileName }, sectionName{ sectionName }, writeFile{ writeFileName }, iniPosition
             {position}, iniRotate{ rotate }, iniScale{ scale } {}
 
@@ -237,14 +236,19 @@ namespace Imgui_Obj
                 //参照で生成
                 float* iniPositionArray[3] = { &iniPosition.x, &iniPosition.y, &iniPosition.z };
                 ImGui::DragFloat3("Position", iniPositionArray[0], speed, -1.0f, 1.0f);
+                if (pSelectObj != nullptr)
+                pSelectObj->SetPosition(iniPosition);
 
                 //向き
                 float* iniRotateArray[3] = { &iniRotate.x,&iniRotate.y, &iniRotate.z };
                 ImGui::DragFloat3("Rotate", iniRotateArray[0], speed, -1.0f, 1.0f);
+                if (pSelectObj != nullptr)
+                pSelectObj->SetRotate(iniRotate);
 
                 //拡大率
                 float* iniScaleArray[3] = { &iniScale.x,&iniScale.y, &iniScale.z };
                 ImGui::DragFloat3("Scale", iniScaleArray[0], speed, -1.0f, 1.0f);
+                pSelectObj->SetScale(iniScale);
 
                 //どんな種類のボタンを生成するか
                 ImGui::Text("ButtonType");
