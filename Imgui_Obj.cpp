@@ -68,22 +68,26 @@ namespace
     XMFLOAT3 iniPosition = { 0,0,0 };//位置
     XMFLOAT3 iniScale = { 1,1,1 };//拡大率
     XMFLOAT3 iniRotate = { 0,0,0 };//向き
+    std::string selectWriteFile;//選択中のオブジェクトが保存をする際に書き込んだJSONのファイル名
 
-    //再設定したい情報
+    //再設定の時に必要な情報
     struct SettingInfo
     {
-        SettingInfo(std::string loadFileName, std::string sectionName, XMFLOAT3 position, XMFLOAT3 scale, XMFLOAT3 rotate) :
-            loadFileName{ loadFileName }, sectionName{ sectionName }, iniPosition{ position }, iniScale{ scale }, iniRotate{ rotate } {}
+        SettingInfo(GameObject* obj, std::string loadFileName, std::string sectionName, std::string writeFileName, XMFLOAT3 position, XMFLOAT3 scale, XMFLOAT3 rotate) :
+            pObject{ obj },loadFileName { loadFileName }, sectionName{ sectionName }, writeFile{ writeFileName }, iniPosition
+            {position}, iniRotate{ rotate }, iniScale{ scale } {}
 
+        GameObject* pObject;
         std::string loadFileName = "";//読み込むファイル名
         std::string sectionName;//セクションの名前 
+        std::string writeFile;//保存をする際に書き込んだJSONのファイル名
         XMFLOAT3 iniPosition;//位置
-        XMFLOAT3 iniScale;//拡大率
         XMFLOAT3 iniRotate;//向き
+        XMFLOAT3 iniScale;//拡大率
+
     };
 
-    std::vector<GameObject*> pCreateList;//作ったオブジェクトのリスト
-    std::vector<SettingInfo> settingInfoList;//pCreateListに対応させるリスト 
+    std::vector<SettingInfo> settingInfoList;//作ったボタンのリスト 
     
 }
 
@@ -120,7 +124,7 @@ namespace Imgui_Obj
         ImguiIniObj();
 
         //作ったオブジェクトの再設定を出来るようにする
-        ReSetting();
+        ReSettingButton();
 
         //楽にシーンチェンジ出来るようにする
         SceneChangeImgui();
@@ -133,6 +137,8 @@ namespace Imgui_Obj
             ImGui::Begin("Botton Pos");
             //////////////////////スタートボタン/////////////////////////////////////////////////////
 
+            static float testFloat;
+            ImGui::InputFloat("x", &testFloat, -1, 1);
 
             if (ImGui::Button("MouseModeON"))
             {
@@ -227,17 +233,18 @@ namespace Imgui_Obj
                 ImGui::Text("Transform");
 
                 //位置
+                float speed = 0.05f;
                 //参照で生成
                 float* iniPositionArray[3] = { &iniPosition.x, &iniPosition.y, &iniPosition.z };
-                ImGui::InputFloat3("Position", iniPositionArray[0]);
+                ImGui::DragFloat3("Position", iniPositionArray[0], speed, -1.0f, 1.0f);
 
                 //向き
                 float* iniRotateArray[3] = { &iniRotate.x,&iniRotate.y, &iniRotate.z };
-                ImGui::InputFloat3("Rotate", iniRotateArray[0]);
+                ImGui::DragFloat3("Rotate", iniRotateArray[0], speed, -1.0f, 1.0f);
 
                 //拡大率
-                float* iniiniScaleArray[3] = { &iniScale.x,&iniScale.y, &iniScale.z };
-                ImGui::InputFloat3("Scale", iniiniScaleArray[0]);
+                float* iniScaleArray[3] = { &iniScale.x,&iniScale.y, &iniScale.z };
+                ImGui::DragFloat3("Scale", iniScaleArray[0], speed, -1.0f, 1.0f);
 
                 //どんな種類のボタンを生成するか
                 ImGui::Text("ButtonType");
@@ -304,10 +311,11 @@ namespace Imgui_Obj
                         }
                        
                     }
-                } ImGui::SameLine();
+                } 
 
                 if (pSelectObj != nullptr)
                 {
+                    ImGui::SameLine();
                     //セーブボタン
                     if (ImGui::Button("Save"))
                     {
@@ -362,53 +370,78 @@ namespace Imgui_Obj
         ImGui::End();
     }
 
-    //imguiでボタンを保存する前にやること
+    //imguiでボタンを保存した後にやること
     void RearButtonInstantiate()
     {
-        pCreateList.push_back(pSelectObj);
-        SettingInfo setting{ selectLoadFileNameStr, selectUniqueName ,iniPosition, iniRotate, iniScale };
+        SettingInfo setting{ pSelectObj, selectLoadFileNameStr, selectUniqueName , selectWriteFile,iniPosition, iniRotate, iniScale };
         settingInfoList.push_back(setting);
         pSelectObj = nullptr;
     }
 
-    //作ったオブジェクトの再移動等を出来るようにする
-    void ReSetting()
+    //作ったボタンの再移動等を出来るようにする
+    void ReSettingButton()
     {
-        //pCreateListの分だけ回す
-        for (int i = 0; i < pCreateList.size(); i++)
+        //ボタン
         {
-            ImGui::Begin(settingInfoList[i].sectionName.c_str());
-            //セクション名
-            ImGui::Text("ObjectName");
-            char sec[CHAR_SIZE];
-            settingInfoList[i].sectionName.copy(sec, CHAR_SIZE - 1);
-            sec[settingInfoList[i].sectionName.length()] = '\0';
-            ImGui::InputText("name", sec, CHAR_SIZE);
-            settingInfoList[i].sectionName = sec;
+            //pCreateListの分だけ回す
+            for (int i = 0; i < settingInfoList.size(); i++)
+            {
+                ImGui::Begin(settingInfoList[i].sectionName.c_str());
 
-            //読み込むファイル名を入力
-            ImGui::Text("LoadFileName");
-            settingInfoList[i].loadFileName.copy(sec, CHAR_SIZE - 1);
-            sec[settingInfoList[i].loadFileName.length()] = '\0';
-            ImGui::InputText(".png", sec, CHAR_SIZE);
-            settingInfoList[i].loadFileName = sec;
+                //読み込むファイル名を入力
+                ImGui::Text("LoadFileName");
+                char sec[CHAR_SIZE];
+                settingInfoList[i].loadFileName.copy(sec, CHAR_SIZE - 1);
+                sec[settingInfoList[i].loadFileName.length()] = '\0';
+                ImGui::InputText("LoadFile", sec, CHAR_SIZE);
+                settingInfoList[i].loadFileName = sec;
+                if (ImGui::Button("Decision"))
+                {
+                    settingInfoList[i].pObject->SetPathName(loadFileName);
+                }
 
-            //Transfomの情報を入力
-            ImGui::Text("Transform");
+                //Transfomの情報を入力
+                ImGui::Text("Transform");
+                float speed = 0.05f;
+                //位置
+                float* iniPositionArrayTmp[3] = { &settingInfoList[i].iniPosition.x, &settingInfoList[i].iniPosition.y, &settingInfoList[i].iniPosition.z };
+                ImGui::DragFloat3("Position", iniPositionArrayTmp[0], speed, -1.0f, 1.0f);
+                settingInfoList[i].pObject->SetPosition(settingInfoList[i].iniPosition);
 
-            //位置
-            //参照で生成
-            float* iniPositionArray[3] = { &iniPosition.x, &iniPosition.y, &iniPosition.z };
-            ImGui::InputFloat3("Position", iniPositionArray[0]);
+                //向き
+                float* iniRotateArrayTmp[3] = { &settingInfoList[i].iniRotate.x,&settingInfoList[i].iniRotate.y, &settingInfoList[i].iniRotate.z };
+                ImGui::DragFloat3("Rotate", iniRotateArrayTmp[0], speed, -1.0f, 1.0f);
+                settingInfoList[i].pObject->SetRotate(settingInfoList[i].iniRotate);
 
-            //向き
-            float* iniRotateArray[3] = { &iniRotate.x,&iniRotate.y, &iniRotate.z };
-            ImGui::InputFloat3("Rotate", iniRotateArray[0]);
+                //拡大率
+                float* iniScaleArrayTmp[3] = { &settingInfoList[i].iniScale.x,&settingInfoList[i].iniScale.y, &settingInfoList[i].iniScale.z };
+                ImGui::DragFloat3("Scale", iniScaleArrayTmp[0], speed, -1.0f, 1.0f);
+                settingInfoList[i].pObject->SetScale(settingInfoList[i].iniScale);
 
-            //拡大率
-            float* iniiniScaleArray[3] = { &iniScale.x,&iniScale.y, &iniScale.z };
-            ImGui::InputFloat3("Scale", iniiniScaleArray[0]);
-            ImGui::End();
+                //保存
+                if (ImGui::Button("Save"))
+                {
+                    InstanceManager::OverwriteSaveButton(
+                        settingInfoList[i].writeFile,
+                        settingInfoList[i].sectionName,
+                        settingInfoList[i].loadFileName, 
+                        settingInfoList[i].iniPosition, 
+                        settingInfoList[i].iniRotate, 
+                        settingInfoList[i].iniScale);
+                }
+                //削除
+                if (ImGui::Button("Delete"))
+                {
+                    settingInfoList[i].pObject->KillMe();
+
+                }
+
+                ImGui::End();
+            }
+        }
+        //オブジェクト
+        {
+
         }
     }
 }

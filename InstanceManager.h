@@ -41,7 +41,7 @@ namespace InstanceManager
 	/// <returns>成功したかどうか</returns>
 	
 	/// <summary>
-	/// JSONを用いてオブジェクトを保存する
+	/// JSONを用いてオブジェクトを保存する（セクションをユニークにする）
 	/// </summary>
 	/// <param name="filename">ファイル名</param>
 	/// <param name="section">セクション名(参照渡し)</param>
@@ -52,6 +52,18 @@ namespace InstanceManager
 	/// <param name="sca">拡大率</param>
 	/// <returns>成功したかどうか</returns>
 	bool SaveButton(std::string filename, std::string& section, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca);
+
+	/// <summary>
+	/// JSONを用いてオブジェクトを上書き保存する（セクションをユニークにしない）
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="section">セクション名</param>
+	/// <param name="pathName">読み込むファイルの名前</param>
+	/// <param name="pos">位置</param>
+	/// <param name="rot">向き</param>
+	/// <param name="sca">拡大率</param>
+	/// <returns></returns>
+	bool OverwriteSaveButton(std::string filename, std::string section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca);
 
 	/// <summary>
 	/// InstantiateInfoJSONの情報を基にボタンを作成する関数
@@ -68,6 +80,5 @@ namespace InstanceManager
 	/// <returns>成功したかどうか</returns>
 	bool AllCreateButton(std::string filename, std::vector<GameObject*>& pButtonList, GameObject* parent);
 
-	//インスタンスオブジェクトみたいなので完結できるように
 };
 

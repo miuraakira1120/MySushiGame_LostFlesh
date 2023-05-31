@@ -5,6 +5,7 @@
 
 namespace InstanceManager
 {
+	//JSONを用いてオブジェクトを保存する（セクションをユニークにする）
 	bool SaveButton(std::string filename, std::string& section, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
 	{
 		
@@ -28,6 +29,27 @@ namespace InstanceManager
 
 		//JSONにInstantiateに必要な情報を書き込む
 		JsonOperator::WhiteInstanceInfo(filename, uniqueStr, info);
+
+		return true;
+	}
+
+	//JSONを用いてオブジェクトを上書き保存する（セクションをユニークにしない）
+	bool OverwriteSaveButton(std::string filename, std::string section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+	{
+		std::string str;
+		JsonOperator::GetJSONString(filename, section,JsonOperator::InstantiateKeyString[2], str);
+
+		InstantiateInfoJSON info =
+		{
+			pathName,
+			str,
+			pos,
+			rot,
+			sca
+		};
+
+		//JSONにInstantiateに必要な情報を書き込む
+		JsonOperator::WhiteInstanceInfo(filename, section, info);
 
 		return true;
 	}

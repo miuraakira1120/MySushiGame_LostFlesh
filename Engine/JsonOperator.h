@@ -260,6 +260,13 @@ namespace JsonOperator
 	/// <returns>成功したかどうか</returns>
 	bool AppendToJSONFileFloat(const std::string& filename, const std::string& section, const std::string& key, float value);
 
+	/// <summary>
+	/// セクションのキーとセクションをすべて削除
+	/// </summary>
+	/// <param name="filename">削除するファイル名</param>
+	/// <param name="section">セクション名</param>
+	/// <returns>成功したかどうか</returns>
+	bool DeleteJSONSection(const std::string& filename, const std::string& section);
 	/////////////////////////////////////////////////////////////////////////////////////////
 
 	///////////////////////////////Instanceのための関数//////////////////////////////////////////////////////////

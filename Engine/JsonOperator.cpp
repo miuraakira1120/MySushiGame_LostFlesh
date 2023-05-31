@@ -582,6 +582,39 @@ namespace JsonOperator
         return true;
     }
 
+    //セクションのキーとセクションをすべて削除
+    bool DeleteJSONSection(const std::string& filename, const std::string& section)
+    {
+        //Document data;
+        ////ファイルを開けなかったらfalseを返す
+        //if (!LoadJSONFromFile(filename.c_str(), data))
+        //{
+        //    return false;
+        //}
+
+        //auto it = data.FindMember(section.c_str());
+
+        //while (it != data.MemberEnd())
+        //{
+        //    // メンバーを削除
+        //    data.EraseMember(it);
+
+        //    // 削除後のメンバーを再帰的に処理
+        //    it = data.FindMember(section.c_str());
+        //}
+
+        //// 入れ子のオブジェクトに対しても再帰的に処理
+        //for (auto& member : data) {
+        //{
+        //    if (member.value.IsObject()) 
+        //    {
+        //        DeleteJSONSection(member.value.GetObject(), section);
+        //    }
+        //}
+
+        return true;
+    }
+
     // オブジェクトを生成するための情報をJSONから書き込む(書き換えあり)
     bool WhiteInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info)
     {

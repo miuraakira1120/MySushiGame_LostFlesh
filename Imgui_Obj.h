@@ -40,7 +40,7 @@ namespace Imgui_Obj
     /// </summary>
     void RearButtonInstantiate();
     
-    //作ったオブジェクトの再移動等を出来るようにする
-    void ReSetting();
+    //作ったボタンの再移動等を出来るようにする
+    void ReSettingButton();
 
 };
