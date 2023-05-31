@@ -17,9 +17,7 @@ StartScene::StartScene(GameObject* parent)
 //èâä˙âª
 void StartScene::Initialize()
 {
-	XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
-
-	
+	XMFLOAT3 pos = { 0.0f,0.0f,0.0f };	
 
 	JsonOperator::GetJSONFloat(JsonOperator::TITLE_JSON, "ChangeSceneButton", "posX", pos.x);
 	JsonOperator::GetJSONFloat(JsonOperator::TITLE_JSON, "ChangeSceneButton", "posY", pos.y);
@@ -36,11 +34,10 @@ void StartScene::Initialize()
 	//InstanceManager::InstantiateInfoJSON testInfo = { "parent", "image", "name", a, aa, aaa };
 	//JsonOperator::WhiteInstanceInfo(JsonOperator::TEST_JSON, "sec", testInfo);
 
-	InstanceManager::InstantiateInfoJSON getInfo;
-	JsonOperator::GetInstanceInfo(JsonOperator::TEST_JSON, "sec", getInfo);
-	int b = 0;
-
+	//InstanceManager::CreateInfoJSON getInfo;
+	//JsonOperator::GetInstanceInfo(JsonOperator::TEST_JSON, "sec", getInfo);
 	InstanceManager::AllCreateButton(JsonOperator::TITLE_BUTTON_JSON, instanceList, this);
+	InstanceManager::AllCreateImage(JsonOperator::TITLE_IMAGE_JSON, instanceList, this);
 
 }
 

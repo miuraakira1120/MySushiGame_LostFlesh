@@ -32,6 +32,7 @@ namespace JsonOperator
 	//タイトル
 	const std::string TITLE_JSON = "../Assets\\GameData\\TitleScene.json";	
 	const std::string TITLE_BUTTON_JSON = "../Assets\\GameData\\TitleButton.json";
+	const std::string TITLE_IMAGE_JSON = "../Assets\\GameData\\TitleImage.json";
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// ポーズに関係ある定数
@@ -81,7 +82,6 @@ namespace JsonOperator
 	// 文字列を入れるkey(InstantiateInfoJSONの要素に対応させる) 
 	const std::vector<std::string> InstantiateKeyString =
 	{
-		"parentName",	//親クラス
      	"loadFile",		//読み込む画像
 		"objectName"	//どんなオブジェクトを生成するか
 	};	
@@ -98,6 +98,7 @@ namespace JsonOperator
 		"scaleX",		//拡大率
 		"scaleY",		//拡大率
 		"scaleZ",		//拡大率
+		"alpha"			//アルファ値
 	};
 	
 
@@ -279,23 +280,36 @@ namespace JsonOperator
 	/// <param name="key">キー</param>
 	/// <param name="info">値を入れる構造体</param>
 	/// <returns>成功したかどうか</returns>
-	bool WhiteInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info);
+	bool WhiteCreateInfo(const std::string& filename, const std::string& section, InstanceManager::CreateInfoJSON& info);
+
+	/// <summary>
+	/// 画像を生成するための情報をJSONから書き込む(書き換えあり)
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="section">セクション</param>
+	/// <param name="info">値を入れる構造体</param>
+	/// <returns>成功したかどうか</returns>
+	bool WhiteCreateImageInfo(const std::string& filename, const std::string& section, InstanceManager::CreateImageInfoJSON& info);
 
 	/// <summary>
 	/// オブジェクトを生成するための情報をJSONから読み込む
 	/// </summary>
-	/// <param name="filename">セクション</param>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="section">セクション</param>
 	/// <param name="key">キー</param>
 	/// <param name="info">値を入れる構造体</param>
 	/// <returns>成功したかどうか</returns>
-	bool GetInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info);
+	bool GetInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::CreateInfoJSON& info);
 
 	/// <summary>
-	/// 重複した文字列の後ろに数字をつけるプログラム
+	/// 画像を生成するための情報をJSONから読み込む
 	/// </summary>
-	/// <param name="filename">書き込むファイルの名前</param>
-	/// <param name="unique"></param>
-	/// 
+	/// <param name="filename">ファイル名</param>
+	/// <param name="section">セクション</param>
+	/// <param name="key">キー</param>
+	/// <param name="info">値を入れる構造体</param>
+	/// <returns>成功したかどうか</returns>
+	bool GetCreateImageInfo(const std::string& filename, const std::string& section, InstanceManager::CreateImageInfoJSON& info);
 	
 	/// <summary>
 	/// 重複した文字列の後ろに数字をつけるプログラム
@@ -334,36 +348,5 @@ namespace JsonOperator
 	/// <returns></returns>
 	ButtonManager::ButtonKinds StringToButton(std::string  button);
 
-//	template <class T = int>
-//	bool GetData(const std::string& filename, const std::string& section, const std::string& key, T& out)
-//	{
-//		Document data;
-//		//ファイルを開けなかったらfalseを返す
-//		if (!LoadJSONFromFile(filename.c_str(), data))
-//		{
-//			return false;
-//		}
-//
-//		//dataに読み取ったデータを入れる
-//		int name = 0.0f;
-//
-//		//引数のセクションがあるかどうか確認
-//		if (data.IsObject())
-//		{
-//			const Value& sectionData = data[section.c_str()];
-//
-//			//引数のキーがあるかどうか確認
-//			if (sectionData.HasMember(key.c_str()) && (typeid(sectionData[key.c_str()]) == typeid(T))) {
-//
-//				//読み取ったデータを入れる
-//				name = sectionData[key.c_str()].GetInt();
-//				out = name;
-//				return true;
-//			}
-//		}
-//
-//		//失敗したらfalseを返す
-//		return false;
-//	}
 };
 

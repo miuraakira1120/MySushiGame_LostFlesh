@@ -5,14 +5,12 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
 #include "../Json/rapidjson-master/include/rapidjson/stringbuffer.h"
 
 using namespace rapidjson;
 
 using std::string;
 using std::vector;
-
 
 namespace
 {
@@ -616,7 +614,7 @@ namespace JsonOperator
     }
 
     // オブジェクトを生成するための情報をJSONから書き込む(書き換えあり)
-    bool WhiteInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info)
+    bool WhiteCreateInfo(const std::string& filename, const std::string& section, InstanceManager::CreateInfoJSON& info)
     {
         //文字列の情報
         std::string infoStr[InstanceManager::INFO_STR] =
@@ -662,8 +660,56 @@ namespace JsonOperator
         return true;
     }
 
+    //画像を生成するための情報をJSONから書き込む(書き換えあり)
+    bool WhiteCreateImageInfo(const std::string& filename, const std::string& section, InstanceManager::CreateImageInfoJSON& info)
+    {
+        //文字列の情報
+        std::string infoStr[InstanceManager::IMAGE_INFO_STR] =
+        {
+            info.loadFile,
+        };
+
+        //数値の情報
+        float infoFloat[InstanceManager::IMAGE_INFO_FLOAT] =
+        {
+            info.position.x,
+            info.position.y,
+            info.position.z,
+
+            info.rotate.x,
+            info.rotate.y,
+            info.rotate.z,
+
+            info.scale.x,
+            info.scale.y,
+            info.scale.z,
+
+            info.alpha
+        };
+
+        //文字列の書き込み
+        for (auto i = 0; i < InstanceManager::IMAGE_INFO_STR; i++)
+        {
+            if (!AppendToJSONFileString(filename, section, InstantiateKeyString[i], infoStr[i]))
+            {
+                return false;
+            }
+        }
+
+        //数値の書き込み
+        for (auto i = 0; i < InstanceManager::IMAGE_INFO_FLOAT; i++)
+        {
+            if (!AppendToJSONFileFloat(filename, section, InstantiateKeyFloat[i], infoFloat[i]))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     //オブジェクトを生成するための情報をJSONから読み込む
-    bool GetInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::InstantiateInfoJSON& info)
+    bool GetInstanceInfo(const std::string& filename, const std::string& section, InstanceManager::CreateInfoJSON& info)
     {
         //文字列の情報
         std::string infoStr[InstanceManager::INFO_STR] =
@@ -708,7 +754,7 @@ namespace JsonOperator
         }
 
         //返す構造体を作成
-        InstanceManager::InstantiateInfoJSON result =
+        InstanceManager::CreateInfoJSON result =
         {
             infoStr[0],
             infoStr[1],
@@ -719,6 +765,67 @@ namespace JsonOperator
 
         info = result;
         return true;
+    }
+
+    //画像を生成するための情報をJSONから読み込む
+    bool GetCreateImageInfo(const std::string& filename, const std::string& section, InstanceManager::CreateImageInfoJSON& info)
+    {
+        //文字列の情報
+        std::string infoStr[InstanceManager::IMAGE_INFO_STR] =
+        {
+            info.loadFile,
+        };
+
+        //数値の情報
+        float infoFloat[InstanceManager::IMAGE_INFO_FLOAT] =
+        {
+            info.position.x,
+            info.position.y,
+            info.position.z,
+
+            info.rotate.x,
+            info.rotate.y,
+            info.rotate.z,
+
+            info.scale.x,
+            info.scale.y,
+            info.scale.z,
+
+            info.alpha
+        };
+
+        //文字列の読み込み
+        for (auto i = 0; i < InstanceManager::IMAGE_INFO_STR; i++)
+        {
+            if (!GetJSONString(filename, section, InstantiateKeyString[i], infoStr[i]))
+            {
+                return false;
+            }
+        }
+
+        //数値の読み込み
+        for (auto i = 0; i < InstanceManager::IMAGE_INFO_FLOAT; i++)
+        {
+            if (!GetJSONFloat(filename, section, InstantiateKeyFloat[i], infoFloat[i]))
+            {
+                return false;
+            }
+        }
+
+        //返す構造体を作成
+        InstanceManager::CreateImageInfoJSON result =
+        {
+            infoStr[0],
+            {infoFloat[0], infoFloat[1], infoFloat[2]},
+            {infoFloat[3], infoFloat[4], infoFloat[5]},
+            {infoFloat[6], infoFloat[7], infoFloat[8]},
+            infoFloat[9]
+        };
+
+        info = result;
+
+        return true;
+
     }
 
     //重複した文字列の後ろに数字をつけるプログラム

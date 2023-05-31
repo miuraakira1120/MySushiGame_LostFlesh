@@ -18,6 +18,9 @@
 #include "imgui/imgui_impl_win32.h"
 
 #include "GameManager.h"
+#include "ImageBase.h"
+
+#include <filesystem>
 
 //何のクラスを作成するか
 enum class IniType
@@ -25,6 +28,7 @@ enum class IniType
     NONE,
     BUTTON,
     ENEMY,
+    IMAGE,
     TYPE_MAX
 
 };
@@ -43,9 +47,17 @@ namespace
 
     //使用するiniファイルの名前
     const std::string iniFileName = "UI.ini";
+    const float DRAG_SPEED = 0.05f;//トランスフォームを調整するボタンの速度調整
 
     //char型の配列のサイズ(2の8乗)
     const int CHAR_SIZE = 256;
+
+    //拡張子
+    const int EXTENSION_PNG = 0;//png
+    const int EXTENSION_JPG = 1;//jpg
+    const int EXTENSION_FBX = 2;
+    int extension = 0;
+    
 
     //親を何にするか
     int parentNum;
@@ -53,6 +65,8 @@ namespace
     int buttonKinds = static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);//ボタンの種類
 
     IniType iniType = IniType::NONE;
+
+    
 
     int nextScene;//次に行くシーン
     int SceneChangeNextScene; //SceneChangeの時に使う次に行くシーン
@@ -68,6 +82,8 @@ namespace
     XMFLOAT3 iniScale = { 1,1,1 };      //選択中の拡大率
     XMFLOAT3 iniRotate = { 0,0,0 };     //選択中の向き
     std::string selectWriteFile;        //選択中のオブジェクトが保存をする際に書き込んだJSONのファイル名
+    int selectAlpha = 255;              //選択中のアルファ
+    bool canCreate = false;             //選択中のオブジェクトが生成できるか
 
     //再設定の時に必要な情報
     struct SettingInfo
@@ -181,18 +197,9 @@ namespace Imgui_Obj
         }
     }
 
+    //描画
     void Draw()
     {
-        //{
-        //    //Imguiスタート
-        //    ImGui_ImplDX11_NewFrame();
-        //    ImGui_ImplWin32_NewFrame();
-        //    ImGui::NewFrame();
-
-        //    //window作る
-        //    ImGui::Begin("StageCreater", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-        //    ImGui::End();
-        //}
         ImGui::Render();
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
     }
@@ -202,11 +209,16 @@ namespace Imgui_Obj
     {
         //Pause SettingのImguiを作成
         ImGui::Begin("Pause Setting");
-        if (ImGui::TreeNode("Instantiate"))
+        if (ImGui::TreeNode("Create"))
         {
+
             if (ImGui::Button("Button"))
             {
                 iniType = IniType::BUTTON;
+            }
+            if (ImGui::Button("Image"))
+            {
+                iniType = IniType::IMAGE;
             }
             if (ImGui::Button("Enemy"))
             {
@@ -217,142 +229,15 @@ namespace Imgui_Obj
             //ボタン作成モードなら
             if (iniType == IniType::BUTTON)
             {
-                ImGui::Begin("Button Instantiate");
+                //ボタン作成モードの時に出すimgui
+                CreateButtonImgui();
+            }
 
-                //セクション名
-                ImGui::Text("ObjectName");
-                ImGui::InputText("name", sectionName, CHAR_SIZE);
-                selectUniqueName = sectionName;
-
-                //読み込むファイル名を入力
-                ImGui::Text("LoadFileName");
-                ImGui::InputText(".png", loadFileName, CHAR_SIZE);
-
-                //Transfomの情報を入力
-                ImGui::Text("Transform");
-
-                //位置
-                float speed = 0.05f;
-                //参照で生成
-                float* iniPositionArray[3] = { &iniPosition.x, &iniPosition.y, &iniPosition.z };
-                ImGui::DragFloat3("Position", iniPositionArray[0], speed, -1.0f, 1.0f);
-                if (pSelectObj != nullptr)
-                pSelectObj->SetPosition(iniPosition);
-
-                //向き
-                float* iniRotateArray[3] = { &iniRotate.x,&iniRotate.y, &iniRotate.z };
-                ImGui::DragFloat3("Rotate", iniRotateArray[0], speed, -1.0f, 1.0f);
-                if (pSelectObj != nullptr)
-                pSelectObj->SetRotate(iniRotate);
-
-                //拡大率
-                float* iniScaleArray[3] = { &iniScale.x,&iniScale.y, &iniScale.z };
-                ImGui::DragFloat3("Scale", iniScaleArray[0], speed, -1.0f, 1.0f);
-                pSelectObj->SetScale(iniScale);
-
-                //どんな種類のボタンを生成するか
-                ImGui::Text("ButtonType");
-                //ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON)); ImGui::SameLine();
-                ImGui::RadioButton("PlayerControl", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON)); 
-
-                //シーンチェンジボタンを作成する予定なら
-                if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON))
-                {
-                    ImGui::Text("NextScene");
-                    ImGui::RadioButton("Title", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_START)); ImGui::SameLine();
-                    ImGui::RadioButton("Play", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_PLAY));
-                    ImGui::RadioButton("GameOver", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_GAMEOVER)); ImGui::SameLine();
-                    ImGui::RadioButton("Clear", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_GOAL));
-                }
-
-                //親オブジェクトは何か(どこで生成するか)
-                ImGui::Text("Parent");
-                ImGui::RadioButton("NowScene", &parentNum, static_cast<int>(GameManager::ParentNum::NOW_SCENE)); ImGui::SameLine();
-                ImGui::RadioButton("Pause", &parentNum, static_cast<int>(GameManager::ParentNum::PAUSE));               
-
-                //生成ボタン
-                if (ImGui::Button("Instantiate"))
-                {
-
-                    //シーンチェンジボタンを作成するなら
-                    if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON))
-                    {
-
-                    }
-
-                    //プレイヤーのボタン配置を変えるボタンを作成するなら
-                    if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
-                    {
-                        selectButtonKinds = JsonOperator::ButtonToString(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);
-
-                        //拡張子にpngを追加
-                        selectLoadFileNameStr = loadFileName;
-                        selectLoadFileNameStr += ".png";
-
-                        //保存していないオブジェクトは消す
-                        if (pSelectObj != nullptr)
-                        {
-                            pSelectObj->KillMe();
-                        }
-
-                        //親が今のシーンなら
-                        if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
-                        {    
-                            //生成
-                            pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
-                        }
-
-                        //親がポーズなら
-                        if (parentNum == static_cast<int>(GameManager::ParentNum::PAUSE))
-                        {
-
-                        }
-
-                        //親がプレイヤーなら
-                        if (parentNum == static_cast<int>(GameManager::ParentNum::PLAYER))
-                        {
-
-                        }
-                       
-                    }
-                } 
-
-                if (pSelectObj != nullptr)
-                {
-                    ImGui::SameLine();
-                    //セーブボタン
-                    if (ImGui::Button("Save"))
-                    {
-                        //タイトルシーンだったら
-                        switch (pSceneManager->GetNowSceneID())
-                        {
-                            //タイトルシーンだったら
-                        case SCENE_ID::SCENE_ID_START:
-                            InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, selectUniqueName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
-                            break;
-                        default:
-                            break;
-                        }
-                        //事後
-                        RearButtonInstantiate();
-
-                    }ImGui::SameLine();
-
-                    //削除ボタン
-                    if (ImGui::Button("Delete"))
-                    {
-                        pSelectObj->KillMe();
-                        pSelectObj = nullptr;
-                    }
-                }
-
-                //キャンセルボタン
-                if (ImGui::Button("Cancel"))
-                {
-
-                    iniType = IniType::NONE;
-                }
-                ImGui::End();
+            //画像作成モードなら
+            if (iniType == IniType::IMAGE)
+            {
+                //画像作成モードの時に出すimgui
+                CreateImageImgui();
             }
         }
         ImGui::End();
@@ -406,26 +291,25 @@ namespace Imgui_Obj
 
                 //Transfomの情報を入力
                 ImGui::Text("Transform");
-                float speed = 0.05f;
                 //位置
                 float* iniPositionArrayTmp[3] = { &settingInfoList[i].iniPosition.x, &settingInfoList[i].iniPosition.y, &settingInfoList[i].iniPosition.z };
-                ImGui::DragFloat3("Position", iniPositionArrayTmp[0], speed, -1.0f, 1.0f);
+                ImGui::DragFloat3("Position", iniPositionArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
                 settingInfoList[i].pObject->SetPosition(settingInfoList[i].iniPosition);
 
                 //向き
                 float* iniRotateArrayTmp[3] = { &settingInfoList[i].iniRotate.x,&settingInfoList[i].iniRotate.y, &settingInfoList[i].iniRotate.z };
-                ImGui::DragFloat3("Rotate", iniRotateArrayTmp[0], speed, -1.0f, 1.0f);
+                ImGui::DragFloat3("Rotate", iniRotateArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
                 settingInfoList[i].pObject->SetRotate(settingInfoList[i].iniRotate);
 
                 //拡大率
                 float* iniScaleArrayTmp[3] = { &settingInfoList[i].iniScale.x,&settingInfoList[i].iniScale.y, &settingInfoList[i].iniScale.z };
-                ImGui::DragFloat3("Scale", iniScaleArrayTmp[0], speed, -1.0f, 1.0f);
+                ImGui::DragFloat3("Scale", iniScaleArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
                 settingInfoList[i].pObject->SetScale(settingInfoList[i].iniScale);
 
                 //保存
                 if (ImGui::Button("Save"))
                 {
-                    InstanceManager::OverwriteSaveButton(
+                    InstanceManager::OverWriteSaveButton(
                         settingInfoList[i].writeFile,
                         settingInfoList[i].sectionName,
                         settingInfoList[i].loadFileName, 
@@ -437,7 +321,8 @@ namespace Imgui_Obj
                 if (ImGui::Button("Delete"))
                 {
                     settingInfoList[i].pObject->KillMe();
-
+                    //そのセクションの中身消す
+                    //ポインタも消す
                 }
 
                 ImGui::End();
@@ -446,6 +331,285 @@ namespace Imgui_Obj
         //オブジェクト
         {
 
+        }
+    }
+
+    //ボタン作成モードの時に出すimgui
+    void CreateButtonImgui()
+    {
+        ImGui::Begin("Create Button");
+
+        // オブジェクトを生成する時に基本的なImguiを出す(Beginの中で使う)
+        SettingBasicImgui();
+
+        //どんな種類のボタンを生成するか
+        ImGui::Text("ButtonType");
+        //ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON)); ImGui::SameLine();
+        ImGui::RadioButton("PlayerControl", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON));
+
+        //シーンチェンジボタンを作成する予定なら
+        if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON))
+        {
+            ImGui::Text("NextScene");
+            ImGui::RadioButton("Title", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_START)); ImGui::SameLine();
+            ImGui::RadioButton("Play", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_PLAY));
+            ImGui::RadioButton("GameOver", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_GAMEOVER)); ImGui::SameLine();
+            ImGui::RadioButton("Clear", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_GOAL));
+        }
+
+        //生成ボタン
+        if (ImGui::Button("Create"))
+        {
+            //プレイヤーのボタン配置を変えるボタンを作成するなら
+            if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
+            {
+                selectButtonKinds = JsonOperator::ButtonToString(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);
+
+                //拡張子を追加
+                selectLoadFileNameStr = std::string(loadFileName) + AddExtension();
+
+                //保存していないオブジェクトは消す
+                if (pSelectObj != nullptr)
+                {
+                    pSelectObj->KillMe();
+                }
+
+                //親が今のシーンなら
+                if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
+                {
+                    //生成
+                    pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
+                }
+
+                //親がポーズなら
+                if (parentNum == static_cast<int>(GameManager::ParentNum::PAUSE))
+                {
+
+                }
+
+                //親がプレイヤーなら
+                if (parentNum == static_cast<int>(GameManager::ParentNum::PLAYER))
+                {
+
+                }
+
+            }
+        }
+
+        if (pSelectObj != nullptr)
+        {
+            ImGui::SameLine();
+            //セーブボタン
+            if (ImGui::Button("Save"))
+            {
+                //タイトルシーンだったら
+                switch (pSceneManager->GetNowSceneID())
+                {
+                    //タイトルシーンだったら
+                case SCENE_ID::SCENE_ID_START:
+                    InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, selectUniqueName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
+                    break;
+                default:
+                    break;
+                }
+                //imguiでボタンを保存した後にやること
+                RearButtonInstantiate();
+
+            }ImGui::SameLine();
+
+            //削除ボタン
+            if (ImGui::Button("Delete"))
+            {
+                pSelectObj->KillMe();
+                pSelectObj = nullptr;
+            }
+        }
+
+        //キャンセルボタン
+        if (ImGui::Button("Cancel"))
+        {
+
+            iniType = IniType::NONE;
+        }
+        ImGui::End();
+    }
+
+    //画像作成モードの時に出すImgui
+    void CreateImageImgui()
+    {
+        //imguiを生成
+        ImGui::Begin("Create Image");
+
+        // オブジェクトを生成する時に基本的なImguiを出す(Beginの中で使う)
+        SettingBasicImgui();
+
+        //生成ボタン
+        if (canCreate && ImGui::Button("Create"))
+        {
+            //拡張子を追加
+            selectLoadFileNameStr = std::string(loadFileName) + AddExtension();
+
+            //保存していないオブジェクトは消す
+            if (pSelectObj != nullptr)
+            {
+                pSelectObj->KillMe();
+            }
+
+            //親が今のシーンなら
+            if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
+            {
+                pSelectObj = InstantiateImage<ImageBase>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale, selectAlpha);
+            }
+            //親がポーズなら
+            else if (parentNum == static_cast<int>(GameManager::ParentNum::PAUSE))
+            {
+            }
+        }
+
+        //オブジェクトを作っていたら
+        if (pSelectObj != nullptr)
+        {
+            ImGui::SameLine();
+            //セーブボタン
+            if (ImGui::Button("Save"))
+            {
+                //親が今のシーンなら
+                if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
+                {
+                    switch (pSceneManager->GetNowSceneID())
+                    {
+                        //タイトルシーンだったら
+                    case SCENE_ID::SCENE_ID_START:
+                        //保存する
+                        InstanceManager::SaveImage(JsonOperator::TITLE_IMAGE_JSON, selectUniqueName, selectLoadFileNameStr, iniPosition, iniRotate, iniScale, selectAlpha);
+                        break;
+
+                    default:
+                        break;
+                    }
+                }
+                
+                //imguiでボタンを保存した後にやること
+                RearButtonInstantiate();
+
+            }ImGui::SameLine();
+
+            //削除ボタン
+            if (ImGui::Button("Delete"))
+            {
+                pSelectObj->KillMe();
+                pSelectObj = nullptr;
+            }
+        }
+
+        //キャンセルボタン
+        if (ImGui::Button("Cancel"))
+        {
+
+            iniType = IniType::NONE;
+        }
+        ImGui::End();
+        }
+    
+
+    //Transformをいじるimguiを出す
+    void TransformImgui()
+    {
+        //Transfomの情報を入力
+        ImGui::Text("Transform");
+
+        //位置
+        //参照で生成
+        float* iniPositionArray[3] = { &iniPosition.x, &iniPosition.y, &iniPosition.z };
+        ImGui::DragFloat3("Position", iniPositionArray[0], DRAG_SPEED, -1.0f, 1.0f);
+        
+        //向き
+        float* iniRotateArray[3] = { &iniRotate.x,&iniRotate.y, &iniRotate.z };
+        ImGui::DragFloat3("Rotate", iniRotateArray[0], DRAG_SPEED, -1.0f, 1.0f);
+           
+        //拡大率
+        float* iniScaleArray[3] = { &iniScale.x,&iniScale.y, &iniScale.z };
+        ImGui::DragFloat3("Scale", iniScaleArray[0], DRAG_SPEED, -1.0f, 1.0f);           
+
+        //アルファ値を変える
+        ImGui::DragInt("alpha", &selectAlpha, 1, 0, 255);         
+
+        if (pSelectObj != nullptr)
+        {
+            pSelectObj->SetPosition(iniPosition);
+            pSelectObj->SetRotate(iniRotate);
+            pSelectObj->SetScale(iniScale);
+            pSelectObj->SetAlpha(selectAlpha);
+        }
+
+
+    }
+
+    //オブジェクトを生成する時に基本的なImguiを出す
+    void SettingBasicImgui()
+    {      
+        //セクション名
+        ImGui::Text("ObjectName");
+        ImGui::InputText("name", sectionName, CHAR_SIZE);
+        selectUniqueName = sectionName;
+
+        ImGui::NewLine();
+
+        //読み込むファイル名を入力
+        ImGui::Text("LoadFileName");
+        std::string filename = AddExtension();
+        ImGui::InputText(filename.c_str(), loadFileName, CHAR_SIZE);
+        ImGui::RadioButton("png", &extension, EXTENSION_PNG); ImGui::SameLine();
+        ImGui::RadioButton("jpg", &extension, EXTENSION_JPG); ImGui::SameLine();
+        ImGui::RadioButton("fbx", &extension, EXTENSION_FBX); 
+
+        //ファイル名+拡張子にする
+        std::string f = loadFileName + filename;
+
+        std::filesystem::directory_entry dir;
+        dir.assign(f);
+
+        //指定したファイルが存在するか
+        canCreate = dir.exists();
+        if (!canCreate)
+        {
+            ImGui::Text("file doesn't exist");
+        }
+        else
+        {
+            ImGui::Text("file exist");
+        }
+
+        ImGui::NewLine();
+
+        //Transformをいじるimguiを出す
+        TransformImgui();
+
+        ImGui::NewLine();
+
+        //親オブジェクトは何か(どこで生成するか)
+        ImGui::Text("Parent");
+        ImGui::RadioButton("NowScene", &parentNum, static_cast<int>(GameManager::ParentNum::NOW_SCENE)); ImGui::SameLine();
+        ImGui::RadioButton("Pause", &parentNum, static_cast<int>(GameManager::ParentNum::PAUSE));
+
+        ImGui::NewLine();
+
+    }
+
+    // 拡張子を追加する関数(変数extensionを参照)
+    std::string AddExtension()
+    {
+        switch (extension)
+        {
+        case EXTENSION_PNG :
+            return ".png";
+        case EXTENSION_JPG:
+            return ".jpg";
+        case EXTENSION_FBX:
+            return ".fbx";
+        default:
+            return "";
+            break;
         }
     }
 }

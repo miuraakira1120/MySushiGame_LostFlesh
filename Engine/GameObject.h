@@ -41,6 +41,9 @@ protected:
 	//オブジェクトごとのユニークな名前
 	std::string				 uniqueName_;
 
+	//アルファ値
+	int						 alpha_;
+
 
 public:
 	//コンストラクタ
@@ -163,6 +166,8 @@ public:
 	void SetMoved(XMVECTOR moved) { vMoved = moved; }
 	void SetPathName(std::string pathName) { pathName_ = pathName; }
 	void SetUniqueName(std::string uniqueName) { uniqueName_ = uniqueName; }
+	void SetAlpha(int alpha) { alpha_ = alpha; }
+
 
 private:
 
@@ -267,4 +272,19 @@ T* InstantiateButton(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XM
 	return pNewObject;
 }
 
+//モデル(や画像)の名前と位置、向き、拡大率を引数にオブジェクトを作成するテンプレート
+template <class T>
+T* InstantiateImage(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca, int alpha = 255)
+{
+	T* pNewObject = new T(pParent, fileName, alpha);
+	if (pParent != nullptr)
+	{
+		pParent->PushBackChild(pNewObject);
+	}
+	pNewObject->Initialize();
+	pNewObject->SetPosition(pos);
+	pNewObject->SetRotate(rot);
+	pNewObject->SetScale(sca);
+	return pNewObject;
+}
 

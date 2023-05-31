@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Engine/SceneManager.h"
 #include "ButtonManager.h"
 
@@ -42,5 +41,26 @@ namespace Imgui_Obj
     
     //作ったボタンの再移動等を出来るようにする
     void ReSettingButton();
+
+    /// <summary>
+    /// ボタン作成モードの時に出すimgui
+    /// </summary>
+    void CreateButtonImgui();
+
+    /// <summary>
+    /// 画像作成モードの時に出すImgui(Beginの中で使う)
+    /// </summary>
+    void CreateImageImgui();
+
+    /// <summary>
+    /// オブジェクトを生成する時に基本的なImguiを出す(Beginの中で使う)
+    /// </summary>
+    void SettingBasicImgui();
+
+    /// <summary>
+    /// 拡張子を追加する関数(変数extensionを参照)
+    /// </summary>
+    /// <returns>返す拡張子</returns>
+    std::string AddExtension();
 
 };

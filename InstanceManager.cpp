@@ -2,6 +2,8 @@
 #include "Engine/JsonOperator.h"
 #include "ChangeSceneButton.h"
 #include "PlayerControlButton.h"
+#include "ImageBase.h"
+#include "Engine/JsonOperator.h"
 
 namespace InstanceManager
 {
@@ -9,7 +11,7 @@ namespace InstanceManager
 	bool SaveButton(std::string filename, std::string& section, std::string pathName, std::string objectName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
 	{
 		
-		InstantiateInfoJSON info =
+		CreateInfoJSON info =
 		{
 			pathName,
 			objectName,
@@ -18,28 +20,29 @@ namespace InstanceManager
 			sca
 		};
 
-
 		//ユニークなセクション名を作る
 		std::string uniqueStr = section;
 		if (!JsonOperator::CreateUniqueNameJSON(filename, uniqueStr))
 		{
 			return false;
 		}
+
+		//引数に作成したユニークな名前を入れる
 		section = uniqueStr;
 
 		//JSONにInstantiateに必要な情報を書き込む
-		JsonOperator::WhiteInstanceInfo(filename, uniqueStr, info);
+		JsonOperator::WhiteCreateInfo(filename, uniqueStr, info);
 
 		return true;
 	}
 
 	//JSONを用いてオブジェクトを上書き保存する（セクションをユニークにしない）
-	bool OverwriteSaveButton(std::string filename, std::string section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+	bool OverWriteSaveButton(std::string filename, std::string section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
 	{
 		std::string str;
-		JsonOperator::GetJSONString(filename, section,JsonOperator::InstantiateKeyString[2], str);
+		JsonOperator::GetJSONString(filename, section,JsonOperator::InstantiateKeyString[1], str);
 
-		InstantiateInfoJSON info =
+		CreateInfoJSON info =
 		{
 			pathName,
 			str,
@@ -49,12 +52,13 @@ namespace InstanceManager
 		};
 
 		//JSONにInstantiateに必要な情報を書き込む
-		JsonOperator::WhiteInstanceInfo(filename, section, info);
+		JsonOperator::WhiteCreateInfo(filename, section, info);
 
 		return true;
 	}
 
-	Button* CreateButtonOnInfo(InstanceManager::InstantiateInfoJSON info, GameObject* parent)
+	//CreateInfoJSONの情報を基にボタンを作成する関数
+	Button* CreateButtonOnInfo(InstanceManager::CreateInfoJSON info, GameObject* parent)
 	{
 		//シーンチェンジボタンなら
 		if (info.objectName == "sceneChangeButton")
@@ -88,10 +92,10 @@ namespace InstanceManager
 
 		//読み取る
 		int i = 0;
-		std::vector <InstanceManager::InstantiateInfoJSON> infoList;
+		std::vector <InstanceManager::CreateInfoJSON> infoList;
 		for (auto it = data.MemberBegin(); it != data.MemberEnd(); ++it)
 		{
-			InstanceManager::InstantiateInfoJSON insInfo;
+			InstanceManager::CreateInfoJSON insInfo;
 			JsonOperator::GetInstanceInfo(filename, it->name.GetString(), insInfo);
 			infoList.push_back(insInfo);
 			i++;
@@ -103,6 +107,94 @@ namespace InstanceManager
 		}
 
 		pButtonList = resultList;
+
+		return true;
+	}
+
+	// JSONを用いて画像を保存する（セクションをユニークにする）
+	bool SaveImage(std::string filename, std::string& section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca, int alpha)
+	{
+		CreateImageInfoJSON info =
+		{
+			pathName,
+			pos,
+			rot,
+			sca,
+			alpha
+		};
+
+		//ユニークなセクション名を作る
+		std::string uniqueStr = section;
+		if (!JsonOperator::CreateUniqueNameJSON(filename, uniqueStr))
+		{
+			return false;
+		}
+
+		//引数に作成したユニークな名前を入れる
+		section = uniqueStr;
+
+		//JSONに画像をInstantiateに必要な情報を書き込む
+		JsonOperator::WhiteCreateImageInfo(filename, section, info);
+
+		return true;
+	}
+
+	// JSONを用いて画像を上書き保存する（セクションをユニークにしない）
+	bool OverWriteSaveImage(std::string filename, std::string section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+	{
+		CreateImageInfoJSON info =
+		{
+			pathName,
+			pos,
+			rot,
+			sca
+		};
+
+		//JSONにInstantiateに必要な情報を書き込む
+		JsonOperator::WhiteCreateImageInfo(filename, section, info);
+
+		return true;
+	}
+
+	// CreateInfoJSONの情報を基にボタンを作成する関数
+	GameObject* CreateImageOnInfo(InstanceManager::CreateImageInfoJSON info, GameObject* parent)
+	{
+		return InstantiateImage<ImageBase>(parent, info.loadFile, info.position, info.rotate, info.scale);
+	}
+
+	//JSONを用いて画像を生成する（メンバーすべて）
+	bool AllCreateImage(std::string filename, std::vector<GameObject*>& pImageList, GameObject* parent)
+	{
+		std::vector<GameObject*>resultList;
+		//ファイル読み込み
+		Document data;
+		if (!JsonOperator::LoadJSONFromFile(filename, data))
+		{
+			return false;
+		}
+
+		if (!data.IsObject())
+		{
+			return false;
+		}
+
+		//読み取る
+		int i = 0;
+		std::vector <InstanceManager::CreateImageInfoJSON> infoList;
+		for (auto it = data.MemberBegin(); it != data.MemberEnd(); ++it)
+		{
+			InstanceManager::CreateImageInfoJSON insInfo;
+			JsonOperator::GetCreateImageInfo(filename, it->name.GetString(), insInfo);
+			infoList.push_back(insInfo);
+			i++;
+		}
+
+		for (int i = 0; i < infoList.size(); i++)
+		{
+			resultList.push_back(CreateImageOnInfo(infoList[i], parent));
+		}
+
+		pImageList = resultList;
 
 		return true;
 	}
