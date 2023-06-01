@@ -57,6 +57,11 @@ namespace Imgui_Obj
     /// imguiでボタンを生成した後にやること
     /// </summary>
     void RearButtonInstantiate();
+
+    /// <summary>
+    /// imguiで画像を生成した後にやること
+    /// </summary>
+    void RearImageInstantiate();
     
     //作ったボタンの再移動等を出来るようにする
     void ReSettingButton();
@@ -100,4 +105,8 @@ namespace Imgui_Obj
     /// <param name="button">入れるポインタ</param>
     void AddImageList(std::string filename, std::string section, InstanceManager::CreateImageInfoJSON info, GameObject* image);
 
+    /// <summary>
+    /// 今あるリストをクリアする
+    /// </summary>
+    void ClearList();
 };

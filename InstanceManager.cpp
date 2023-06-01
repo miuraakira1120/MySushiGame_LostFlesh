@@ -180,14 +180,15 @@ namespace InstanceManager
 	}
 
 	// JSONを用いて画像を上書き保存する（セクションをユニークにしない）
-	bool OverWriteSaveImage(std::string filename, std::string section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca)
+	bool OverWriteSaveImage(std::string filename, std::string section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca, int alpha)
 	{
 		CreateImageInfoJSON info =
 		{
 			pathName,
 			pos,
 			rot,
-			sca
+			sca,
+			alpha
 		};
 
 		//JSONにInstantiateに必要な情報を書き込む
@@ -196,10 +197,10 @@ namespace InstanceManager
 		return true;
 	}
 
-	// CreateInfoJSONの情報を基にボタンを作成する関数
+	// CreateInfoJSONの情報を基に画像を作成する関数
 	GameObject* CreateImageOnInfo(InstanceManager::CreateImageInfoJSON info, GameObject* parent, std::string filename, std::string section)
 	{
-		GameObject* pResult = InstantiateImage<ImageBase>(parent, info.loadFile, info.position, info.rotate, info.scale);
+		GameObject* pResult = InstantiateImage<ImageBase>(parent, info.loadFile, info.position, info.rotate, info.scale, info.alpha);
 		Imgui_Obj::AddImageList(filename, section, info, pResult);
 		return pResult;
 	}

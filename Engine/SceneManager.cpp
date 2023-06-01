@@ -10,6 +10,8 @@
 #include "../GoalScene.h"
 #include "../GameOverScene.h"
 
+#include "../Imgui_Obj.h"
+
 
 //コンストラクタ
 SceneManager::SceneManager(GameObject * parent)
@@ -40,6 +42,9 @@ void SceneManager::Update()
 		Model::AllRelease();
 		Image::AllRelease();
 
+		//imguiのリストをクリアする
+		Imgui_Obj::ClearList();
+
 		//次のシーンを作成
 		switch (nextSceneID_)
 		{
@@ -50,6 +55,8 @@ void SceneManager::Update()
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;
+
+		
 	}
 }
 

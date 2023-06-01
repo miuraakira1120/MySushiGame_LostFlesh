@@ -583,32 +583,34 @@ namespace JsonOperator
     //セクションのキーとセクションをすべて削除
     bool DeleteJSONSection(const std::string& filename, const std::string& section)
     {
-        //Document data;
-        ////ファイルを開けなかったらfalseを返す
-        //if (!LoadJSONFromFile(filename.c_str(), data))
-        //{
-        //    return false;
-        //}
+        Document data;
+        //ファイルを開けなかったらfalseを返す
+        if (!LoadJSONFromFile(filename.c_str(), data))
+        {
+            return false;
+        }
 
-        //auto it = data.FindMember(section.c_str());
+        //セクションのメンバーを全て削除する
+        if(data.HasMember(section.c_str()))
+        {
+            data.RemoveMember(section.c_str());
+            data.EraseMember(section.c_str());
+        }
 
-        //while (it != data.MemberEnd())
-        //{
-        //    // メンバーを削除
-        //    data.EraseMember(it);
+        // 更新されたJSONデータを文字列に変換する
+        StringBuffer buffer;
+        Writer<StringBuffer> writer(buffer);
+        data.Accept(writer);
+        std::string updatedJsonStr = buffer.GetString();
 
-        //    // 削除後のメンバーを再帰的に処理
-        //    it = data.FindMember(section.c_str());
-        //}
+        // JSONファイルを上書きする
+        std::ofstream ofs(filename);
+        if (!ofs) {
+            return false;
+        }
 
-        //// 入れ子のオブジェクトに対しても再帰的に処理
-        //for (auto& member : data) {
-        //{
-        //    if (member.value.IsObject()) 
-        //    {
-        //        DeleteJSONSection(member.value.GetObject(), section);
-        //    }
-        //}
+        ofs << updatedJsonStr;
+        ofs.close();
 
         return true;
     }

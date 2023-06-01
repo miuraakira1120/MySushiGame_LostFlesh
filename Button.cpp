@@ -27,7 +27,7 @@ void Button::PreUpdate()
 
 //コンストラクタ
 Button::Button(GameObject* parent, const std::string& name)
-    :GameObject(parent, name), hPict_(-1), value_(0.0f), select_(false), operationRight_(true), shaderType_(Direct3D::SHADER_TYPE::SHADER_2D)
+    :GameObject(parent, name), hPict_(-1), value_(0.0f), select_(false), operationRight_(true), shaderType_(Direct3D::SHADER_TYPE::SHADER_2D), PrevPathName_(pathName_)
 {
     D3D11_BUFFER_DESC cb;
     cb.ByteWidth = sizeof(ConstantBuffer);
@@ -44,6 +44,7 @@ Button::Button(GameObject* parent, const std::string& name)
 //更新
 void Button::Update()
 {
+    //Updateの前に呼ぶ処理
     PreUpdate();
 
     //マウス操作
@@ -72,6 +73,16 @@ void Button::Update()
     }
 
     UnSelect();
+
+    //前フレームとpathName_が違うなら
+    if (PrevPathName_ != pathName_)
+    {
+        //リロード
+        //画像データのロード
+        hPict_ = Image::Load(pathName_);
+        assert(hPict_ >= 0);
+    }
+    PrevPathName_ = pathName_;
 }
 
 //描画

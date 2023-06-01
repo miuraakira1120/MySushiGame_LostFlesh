@@ -20,11 +20,22 @@ void ImageBase::Initialize()
     //画像データのロード
     hPict_ = Image::Load(pathName_);
     assert(hPict_ >= 0);
+
+    PrevPathName_ = pathName_;
 }
 
 //更新
 void ImageBase::Update()
 {
+    //前フレームとpathName_が違うなら
+    if (PrevPathName_ != pathName_)
+    {
+        //リロード
+        //画像データのロード
+        hPict_ = Image::Load(pathName_);
+        assert(hPict_ >= 0);
+    }
+    PrevPathName_ = pathName_;
 }
 
 //描画

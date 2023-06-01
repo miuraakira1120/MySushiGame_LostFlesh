@@ -249,71 +249,194 @@ namespace Imgui_Obj
         pSelectObj = nullptr;
     }
 
+    // imguiで画像を生成した後にやること
+    void RearImageInstantiate()
+    {
+        SettingInfo setting{ pSelectObj, selectLoadFileNameStr, selectUniqueName , selectWriteFile,iniPosition, iniRotate, iniScale, selectAlpha };
+        settingInfoImageList.push_back(setting);
+        pSelectObj = nullptr;
+    }
+
     //作ったボタンの再移動等を出来るようにする
     void ReSettingButton()
     {
+        ImGui::Begin("CreateList");
+
         //ボタン
+        if (ImGui::TreeNode("Button"))
         {
             //pCreateListの分だけ回す
             for (int i = 0; i < settingInfoButtonList.size(); i++)
             {
-                ImGui::Begin(settingInfoButtonList[i].sectionName_.c_str());
-
-                //読み込むファイル名を入力
-                ImGui::Text("LoadFileName");
-                char sec[CHAR_SIZE];
-                settingInfoButtonList[i].loadFileName_.copy(sec, CHAR_SIZE - 1);
-                sec[settingInfoButtonList[i].loadFileName_.length()] = '\0';
-                ImGui::InputText("LoadFile", sec, CHAR_SIZE);
-                settingInfoButtonList[i].loadFileName_ = sec;
-                if (ImGui::Button("Decision"))
+                if (ImGui::TreeNode(settingInfoButtonList[i].sectionName_.c_str()))
                 {
-                    settingInfoButtonList[i].pObject_->SetPathName(loadFileName);
-                }
+                    //読み込むファイル名を入力
+                    ImGui::Text("LoadFileName");
+                    //string型をChar型に変換
+                    char sec[CHAR_SIZE];
+                    settingInfoButtonList[i].loadFileName_.copy(sec, CHAR_SIZE - 1);
+                    sec[settingInfoButtonList[i].loadFileName_.length()] = '\0';
 
-                //Transfomの情報を入力
-                ImGui::Text("Transform");
-                //位置
-                float* iniPositionArrayTmp[3] = { &settingInfoButtonList[i].iniPosition_.x, &settingInfoButtonList[i].iniPosition_.y, &settingInfoButtonList[i].iniPosition_.z };
-                ImGui::DragFloat3("Position", iniPositionArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
-                settingInfoButtonList[i].pObject_->SetPosition(settingInfoButtonList[i].iniPosition_);
+                    //読み込むInputTextを表示
+                    ImGui::InputText("LoadFile", sec, CHAR_SIZE);
+                    settingInfoButtonList[i].loadFileName_ = sec;
 
-                //向き
-                float* iniRotateArrayTmp[3] = { &settingInfoButtonList[i].iniRotate_.x,&settingInfoButtonList[i].iniRotate_.y, &settingInfoButtonList[i].iniRotate_.z };
-                ImGui::DragFloat3("Rotate", iniRotateArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
-                settingInfoButtonList[i].pObject_->SetRotate(settingInfoButtonList[i].iniRotate_);
+                    std::filesystem::directory_entry dir;
+                    dir.assign(settingInfoButtonList[i].loadFileName_);
 
-                //拡大率
-                float* iniScaleArrayTmp[3] = { &settingInfoButtonList[i].iniScale_.x,&settingInfoButtonList[i].iniScale_.y, &settingInfoButtonList[i].iniScale_.z };
-                ImGui::DragFloat3("Scale", iniScaleArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
-                settingInfoButtonList[i].pObject_->SetScale(settingInfoButtonList[i].iniScale_);
+                    //指定したファイルが存在するか
+                    canCreate = dir.exists();
+                    if (!canCreate)
+                    {
+                        ImGui::Text("file doesn't exist");
+                    }
+                    else
+                    {
+                        //決定ボタンを表示
+                        if (ImGui::Button("Decision"))
+                        {
+                            settingInfoButtonList[i].pObject_->SetPathName(settingInfoButtonList[i].loadFileName_);
+                        }
+                    }
 
-                //保存
-                if (ImGui::Button("Save"))
-                {
-                    InstanceManager::OverWriteSaveButton(
-                        settingInfoButtonList[i].writeFile_,
-                        settingInfoButtonList[i].sectionName_,
-                        settingInfoButtonList[i].loadFileName_, 
-                        settingInfoButtonList[i].iniPosition_, 
-                        settingInfoButtonList[i].iniRotate_, 
-                        settingInfoButtonList[i].iniScale_);
-                }
-                //削除
-                if (ImGui::Button("Delete"))
-                {
-                    settingInfoButtonList[i].pObject_->KillMe();
-                    //そのセクションの中身消す
-                    //ポインタも消す
-                }
+                    //Transfomの情報を入力
+                    ImGui::Text("Transform");
+                    //位置
+                    float* iniPositionArrayTmp[3] = { &settingInfoButtonList[i].iniPosition_.x, &settingInfoButtonList[i].iniPosition_.y, &settingInfoButtonList[i].iniPosition_.z };
+                    ImGui::DragFloat3("Position", iniPositionArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
+                    settingInfoButtonList[i].pObject_->SetPosition(settingInfoButtonList[i].iniPosition_);
 
-                ImGui::End();
+                    //向き
+                    float* iniRotateArrayTmp[3] = { &settingInfoButtonList[i].iniRotate_.x,&settingInfoButtonList[i].iniRotate_.y, &settingInfoButtonList[i].iniRotate_.z };
+                    ImGui::DragFloat3("Rotate", iniRotateArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
+                    settingInfoButtonList[i].pObject_->SetRotate(settingInfoButtonList[i].iniRotate_);
+
+                    //拡大率
+                    float* iniScaleArrayTmp[3] = { &settingInfoButtonList[i].iniScale_.x,&settingInfoButtonList[i].iniScale_.y, &settingInfoButtonList[i].iniScale_.z };
+                    ImGui::DragFloat3("Scale", iniScaleArrayTmp[0], DRAG_SPEED, 0.0f, 100.0f);
+                    settingInfoButtonList[i].pObject_->SetScale(settingInfoButtonList[i].iniScale_);
+
+                    //保存
+                    if (ImGui::Button("Save"))
+                    {
+                        InstanceManager::OverWriteSaveButton(
+                            settingInfoButtonList[i].writeFile_,
+                            settingInfoButtonList[i].sectionName_,
+                            settingInfoButtonList[i].loadFileName_,
+                            settingInfoButtonList[i].iniPosition_,
+                            settingInfoButtonList[i].iniRotate_,
+                            settingInfoButtonList[i].iniScale_);
+                    }
+
+                    //削除
+                    if (ImGui::Button("Delete"))
+                    {
+                        //オブジェクトを削除
+                        settingInfoButtonList[i].pObject_->KillMe();
+
+                        //そのセクションの中身消す
+                        JsonOperator::DeleteJSONSection(settingInfoButtonList[i].writeFile_, settingInfoButtonList[i].sectionName_);
+                         
+                        //リストのポインタも消す
+                        settingInfoButtonList.erase(settingInfoButtonList.begin() + i);
+                    }
+                    ImGui::TreePop();
+                }               
             }
+            ImGui::TreePop();
         }
-        //オブジェクト
-        {
 
+        //画像
+        if (ImGui::TreeNode("Image"))
+        {
+            //pCreateListの分だけ回す
+            for (int i = 0; i < settingInfoImageList.size(); i++)
+            {
+                if (ImGui::TreeNode(settingInfoImageList[i].sectionName_.c_str()))
+                {
+                    //読み込むファイル名を入力
+                    ImGui::Text("LoadFileName");
+                    //string型をChar型に変換
+                    char sec[CHAR_SIZE];
+                    settingInfoImageList[i].loadFileName_.copy(sec, CHAR_SIZE - 1);
+                    sec[settingInfoImageList[i].loadFileName_.length()] = '\0';
+
+                    //読み込むInputTextを表示
+                    ImGui::InputText("LoadFile", sec, CHAR_SIZE);
+                    settingInfoImageList[i].loadFileName_ = sec;
+
+                    std::filesystem::directory_entry dir;
+                    dir.assign(settingInfoImageList[i].loadFileName_);
+
+                    //指定したファイルが存在するか
+                    canCreate = dir.exists();
+                    if (!canCreate)
+                    {
+                        ImGui::Text("file doesn't exist");
+                    }
+                    else
+                    {
+                        //決定ボタンを表示
+                        if (ImGui::Button("Decision"))
+                        {
+                            settingInfoImageList[i].pObject_->SetPathName(settingInfoImageList[i].loadFileName_);
+                        }
+                    }
+
+                    //Transfomの情報を入力
+                    ImGui::Text("Transform");
+                    //位置
+                    float* iniPositionArrayTmp[3] = { &settingInfoImageList[i].iniPosition_.x, &settingInfoImageList[i].iniPosition_.y, &settingInfoImageList[i].iniPosition_.z };
+                    ImGui::DragFloat3("Position", iniPositionArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
+                    settingInfoImageList[i].pObject_->SetPosition(settingInfoImageList[i].iniPosition_);
+
+                    //向き
+                    float* iniRotateArrayTmp[3] = { &settingInfoImageList[i].iniRotate_.x,&settingInfoImageList[i].iniRotate_.y, &settingInfoImageList[i].iniRotate_.z };
+                    ImGui::DragFloat3("Rotate", iniRotateArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
+                    settingInfoImageList[i].pObject_->SetRotate(settingInfoImageList[i].iniRotate_);
+
+                    //拡大率
+                    float* iniScaleArrayTmp[3] = { &settingInfoImageList[i].iniScale_.x,&settingInfoImageList[i].iniScale_.y, &settingInfoImageList[i].iniScale_.z };
+                    ImGui::DragFloat3("Scale", iniScaleArrayTmp[0], DRAG_SPEED, 0.0f, 100.0f);
+                    settingInfoImageList[i].pObject_->SetScale(settingInfoImageList[i].iniScale_);
+
+                    //アルファ値を変える
+                    ImGui::DragInt("alpha", &settingInfoImageList[i].alpha_, 1, 0, 255);
+                    settingInfoImageList[i].pObject_->SetAlpha(settingInfoImageList[i].alpha_);
+
+                    //保存
+                    if (ImGui::Button("Save"))
+                    {
+                        InstanceManager::OverWriteSaveImage(
+                            settingInfoImageList[i].writeFile_,
+                            settingInfoImageList[i].sectionName_,
+                            settingInfoImageList[i].loadFileName_,
+                            settingInfoImageList[i].iniPosition_,
+                            settingInfoImageList[i].iniRotate_,
+                            settingInfoImageList[i].iniScale_,
+                            settingInfoImageList[i].alpha_);
+                    }
+                    //削除
+                    if (ImGui::Button("Delete"))
+                    {
+                        //オブジェクトを削除
+                        settingInfoImageList[i].pObject_->KillMe();
+
+                        //そのセクションの中身消す
+                        JsonOperator::DeleteJSONSection(settingInfoImageList[i].writeFile_, settingInfoImageList[i].sectionName_);
+
+                        //リストのポインタも消す
+                        settingInfoImageList.erase(settingInfoImageList.begin() + i);
+                    }
+                    ImGui::TreePop();
+                }
+
+                
+            }
+            ImGui::TreePop();
         }
+
+        ImGui::End();
     }
 
     //ボタン作成モードの時に出すimgui
@@ -471,8 +594,8 @@ namespace Imgui_Obj
                     }
                 }
                 
-                //imguiでボタンを保存した後にやること
-                RearButtonInstantiate();
+                //imguiで画像を保存した後にやること
+                RearImageInstantiate();
 
             }ImGui::SameLine();
 
@@ -523,8 +646,6 @@ namespace Imgui_Obj
             pSelectObj->SetScale(iniScale);
             pSelectObj->SetAlpha(selectAlpha);
         }
-
-
     }
 
     //オブジェクトを生成する時に基本的なImguiを出す
@@ -547,7 +668,6 @@ namespace Imgui_Obj
 
         //ファイル名+拡張子にする
         std::string f = loadFileName + filename;
-
         std::filesystem::directory_entry dir;
         dir.assign(f);
 
@@ -605,8 +725,15 @@ namespace Imgui_Obj
     //作った画像のリストに入れる
     void AddImageList(std::string filename, std::string section, InstanceManager::CreateImageInfoJSON info, GameObject* image)
     {
-        SettingInfo SetInfo(image, info.loadFile, section, filename, info.position, info.rotate, info.scale);
+        SettingInfo SetInfo(image, info.loadFile, section, filename, info.position, info.rotate, info.scale, info.alpha);
         settingInfoImageList.push_back(SetInfo);
+    }
+
+    //今あるリストをクリアする
+    void ClearList()
+    {
+        settingInfoButtonList.clear();
+        settingInfoImageList.clear();
     }
 }
 

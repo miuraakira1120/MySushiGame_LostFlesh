@@ -339,7 +339,6 @@ namespace JsonOperator
 	/// <param name="scene">シーンにする文字列</param>
 	/// <returns>変換した親オブジェクト</returns>
 	CanParentObj StringToParent(std::string parent);
-
 	
 	/// <summary>
 	/// 文字をボタンに変換

@@ -38,8 +38,6 @@ public:
 	//今のシーンのポインタを返すゲッター
 	GameObject* GetNowScenePointer();
 
-	
-
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
 	SCENE_ID nextSceneID_;		//次のシーン

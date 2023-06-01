@@ -29,6 +29,7 @@ private:
     int value_;							    //状態
     bool select_;							//選ばれているか
     bool operationRight_;				    //操作権利
+    std::string PrevPathName_;              //1フレーム前の画像番号
 
     Direct3D::SHADER_TYPE shaderType_;	//シェーダーの種類
 

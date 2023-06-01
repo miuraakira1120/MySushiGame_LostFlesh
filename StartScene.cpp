@@ -36,8 +36,10 @@ void StartScene::Initialize()
 
 	//InstanceManager::CreateInfoJSON getInfo;
 	//JsonOperator::GetInstanceInfo(JsonOperator::TEST_JSON, "sec", getInfo);
-	InstanceManager::AllCreateButton(JsonOperator::TITLE_BUTTON_JSON, instanceList, this);
+	
 	InstanceManager::AllCreateImage(JsonOperator::TITLE_IMAGE_JSON, instanceList, this);
+	InstanceManager::AllCreateButton(JsonOperator::TITLE_BUTTON_JSON, instanceList, this);
+	
 
 }
 

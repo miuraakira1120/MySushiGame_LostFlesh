@@ -4,7 +4,8 @@
 //画像を出すだけのクラス
 class ImageBase : public GameObject
 {
-    int hPict_;    //画像番号
+    int hPict_;                //画像番号
+    std::string PrevPathName_; //1フレーム前の画像番号
 
 public:
     //コンストラクタ

@@ -122,8 +122,9 @@ namespace InstanceManager
 	/// <param name="pos">位置</param>
 	/// <param name="rot">向き</param>
 	/// <param name="sca">拡大率</param>
+	/// <param name="sca">アルファ値</param>
 	/// <returns></returns>
-	bool OverWriteSaveImage(std::string filename, std::string section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca);
+	bool OverWriteSaveImage(std::string filename, std::string section, std::string pathName, XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 sca, int alpha);
 	
 	/// <summary>
 	/// CreateInfoJSONの情報を基にボタンを作成する関数
