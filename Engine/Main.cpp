@@ -55,9 +55,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//Direct3D準備
 	Direct3D::Initialize(hWnd, screenWidth, screenHeight);
 
+	//GUI初期化
 	{
-		//GUI初期化
-#if _DEBUG
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
@@ -69,7 +68,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplWin32_Init(hWnd);
 		ImGui_ImplDX11_Init(Direct3D::pDevice_, Direct3D::pContext_);
 		ImGui::SetNextWindowSize(ImVec2(320, 100));
-#endif
 	}
 
 	//カメラを準備
@@ -102,10 +100,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//Timeのイニシャライズ
 	Time::Initialize(FPS);
 
-#if _DEBUG
 	//imguiのイニシャライズ
 	Imgui_Obj::Initialize(pSceneManager);
-#endif
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -247,9 +243,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Audio::Release();
 	Model::AllRelease();
 	Image::AllRelease();
-#if _DEBUG
 	Imgui_Obj::Release();
-#endif
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
 	Direct3D::Release();

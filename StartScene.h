@@ -7,8 +7,6 @@
 //スタートシーンを管理するクラス
 class StartScene : public GameObject
 {
-	//使用するiniファイルの名前
-	const std::string iniFileName = "UI.ini";
 
 	int hPict_;    //画像番号
 	int iniListButton;//タイトルシーンのボタンの番号

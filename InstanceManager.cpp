@@ -4,6 +4,7 @@
 #include "PlayerControlButton.h"
 #include "ImageBase.h"
 #include "Engine/JsonOperator.h"
+#include "Imgui_Obj.h"
 
 namespace InstanceManager
 {
@@ -58,8 +59,10 @@ namespace InstanceManager
 	}
 
 	//CreateInfoJSONの情報を基にボタンを作成する関数
-	Button* CreateButtonOnInfo(InstanceManager::CreateInfoJSON info, GameObject* parent)
+	Button* CreateButtonOnInfo(InstanceManager::CreateInfoJSON info, GameObject* parent, std::string filename, std::string section)
 	{
+		Button* pResult = nullptr;
+		
 		//シーンチェンジボタンなら
 		if (info.objectName == "sceneChangeButton")
 		{
@@ -68,10 +71,14 @@ namespace InstanceManager
 
 		//プレイヤーコントロールボタンなら
 		if (info.objectName == "playerControlButton")
-		{
-			return InstantiateButton<PlayerControlButton>(parent, info.loadFile, info.position, info.rotate, info.scale);
+		{			
+			pResult = InstantiateButton<PlayerControlButton>(parent, info.loadFile, info.position, info.rotate, info.scale);
 		}		
-		return nullptr;
+
+		//ボタンのリストにポインタを追加
+		Imgui_Obj::AddButtonList(filename, section, info, pResult);
+
+		return pResult;
 	}
 
 	//JSONを用いてボタン生成する（メンバーすべて）
@@ -95,18 +102,51 @@ namespace InstanceManager
 		std::vector <InstanceManager::CreateInfoJSON> infoList;
 		for (auto it = data.MemberBegin(); it != data.MemberEnd(); ++it)
 		{
+			std::string section = it->name.GetString();
 			InstanceManager::CreateInfoJSON insInfo;
-			JsonOperator::GetInstanceInfo(filename, it->name.GetString(), insInfo);
+			JsonOperator::GetInstanceInfo(filename, section, insInfo);
 			infoList.push_back(insInfo);
+
+			//ボタンを作成してリストに入れる
+			resultList.push_back(CreateButtonOnInfo(infoList[i], parent, filename, section));
 			i++;
 		}
 
-		for (int i = 0; i < infoList.size(); i++)
+		pButtonList = resultList;
+
+		return true;
+	}
+
+	//JSONを用いてボタン生成する（メンバーすべて）
+	bool AllCreateButton(std::string filename, GameObject* parent)
+	{
+		std::vector<GameObject*>resultList;
+		//ファイル読み込み
+		Document data;
+		if (!JsonOperator::LoadJSONFromFile(filename, data))
 		{
-			resultList.push_back(CreateButtonOnInfo(infoList[i], parent));
+			return false;
 		}
 
-		pButtonList = resultList;
+		if (!data.IsObject())
+		{
+			return false;
+		}
+
+		//読み取る
+		int i = 0;
+		std::vector <InstanceManager::CreateInfoJSON> infoList;
+		for (auto it = data.MemberBegin(); it != data.MemberEnd(); ++it)
+		{
+			std::string section = it->name.GetString();
+			InstanceManager::CreateInfoJSON insInfo;
+			JsonOperator::GetInstanceInfo(filename, section, insInfo);
+			infoList.push_back(insInfo);
+
+			//ボタンを作成してリストに入れる
+			resultList.push_back(CreateButtonOnInfo(infoList[i], parent, filename, section));
+			i++;
+		}
 
 		return true;
 	}
@@ -157,9 +197,11 @@ namespace InstanceManager
 	}
 
 	// CreateInfoJSONの情報を基にボタンを作成する関数
-	GameObject* CreateImageOnInfo(InstanceManager::CreateImageInfoJSON info, GameObject* parent)
+	GameObject* CreateImageOnInfo(InstanceManager::CreateImageInfoJSON info, GameObject* parent, std::string filename, std::string section)
 	{
-		return InstantiateImage<ImageBase>(parent, info.loadFile, info.position, info.rotate, info.scale);
+		GameObject* pResult = InstantiateImage<ImageBase>(parent, info.loadFile, info.position, info.rotate, info.scale);
+		Imgui_Obj::AddImageList(filename, section, info, pResult);
+		return pResult;
 	}
 
 	//JSONを用いて画像を生成する（メンバーすべて）
@@ -179,22 +221,55 @@ namespace InstanceManager
 		}
 
 		//読み取る
-		int i = 0;
+		int j = 0;
 		std::vector <InstanceManager::CreateImageInfoJSON> infoList;
 		for (auto it = data.MemberBegin(); it != data.MemberEnd(); ++it)
 		{
+			std::string section = it->name.GetString();
 			InstanceManager::CreateImageInfoJSON insInfo;
-			JsonOperator::GetCreateImageInfo(filename, it->name.GetString(), insInfo);
+			JsonOperator::GetCreateImageInfo(filename, section, insInfo);
 			infoList.push_back(insInfo);
-			i++;
-		}
 
-		for (int i = 0; i < infoList.size(); i++)
-		{
-			resultList.push_back(CreateImageOnInfo(infoList[i], parent));
+			//画像を作成してリストに入れる
+			resultList.push_back(CreateImageOnInfo(infoList[j], parent, filename, section));
+			j++;
 		}
 
 		pImageList = resultList;
+
+		return true;
+	}
+
+	//JSONを用いて画像を生成する（メンバーすべて）
+	bool AllCreateImage(std::string filename, GameObject* parent)
+	{
+		std::vector<GameObject*>resultList;
+		//ファイル読み込み
+		Document data;
+		if (!JsonOperator::LoadJSONFromFile(filename, data))
+		{
+			return false;
+		}
+
+		if (!data.IsObject())
+		{
+			return false;
+		}
+
+		//読み取る
+		int j = 0;
+		std::vector <InstanceManager::CreateImageInfoJSON> infoList;
+		for (auto it = data.MemberBegin(); it != data.MemberEnd(); ++it)
+		{
+			std::string section = it->name.GetString();
+			InstanceManager::CreateImageInfoJSON insInfo;
+			JsonOperator::GetCreateImageInfo(filename, section, insInfo);
+			infoList.push_back(insInfo);
+
+			//画像を作成してリストに入れる
+			resultList.push_back(CreateImageOnInfo(infoList[j], parent, filename, section));
+			j++;
+		}
 
 		return true;
 	}

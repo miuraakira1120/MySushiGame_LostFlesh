@@ -1,10 +1,29 @@
 #pragma once
 #include "Engine/SceneManager.h"
 #include "ButtonManager.h"
+#include "InstanceManager.h"
 
 //imguiを管理するクラス
 namespace Imgui_Obj
 {
+    //再設定の時に必要な情報
+    struct SettingInfo
+    {
+        SettingInfo(GameObject* obj, std::string loadFileName, std::string sectionName, std::string writeFileName, XMFLOAT3 position, XMFLOAT3 rotate, XMFLOAT3 scale, int alpha = 255) :
+            pObject_{ obj }, loadFileName_{ loadFileName }, sectionName_{ sectionName }, writeFile_{ writeFileName }, iniPosition_
+            { position }, iniRotate_{ rotate }, iniScale_{ scale }, alpha_{ alpha } {}
+
+        GameObject* pObject_;
+        std::string loadFileName_;      //読み込むファイル名
+        std::string sectionName_;       //セクションの名前 
+        std::string writeFile_;         //保存をする際に書き込んだJSONのファイル名
+        XMFLOAT3    iniPosition_;       //位置
+        XMFLOAT3    iniRotate_;         //向き
+        XMFLOAT3    iniScale_;          //拡大率
+        int         alpha_;             //アルファ値 
+
+    };
+
     //初期化
     void Initialize(SceneManager* pSceneManager_);
 
@@ -62,5 +81,23 @@ namespace Imgui_Obj
     /// </summary>
     /// <returns>返す拡張子</returns>
     std::string AddExtension();
+
+    /// <summary>
+    /// 作ったボタンのリストに入れる
+    /// </summary>
+    /// <param name="filename">ファイル名</param>
+    /// <param name="section">セクション名</param>
+    /// <param name="info">生成する時に必要な情報</param>
+    /// <param name="button">入れるポインタ</param>
+    void AddButtonList(std::string filename, std::string section, InstanceManager::CreateInfoJSON info, Button* button);
+
+    /// <summary>
+    /// 作った画像のリストに入れる
+    /// </summary>
+    /// <param name="filename">ファイル名</param>
+    /// <param name="section">セクション名</param>
+    /// <param name="info">生成する時に必要な情報</param>
+    /// <param name="button">入れるポインタ</param>
+    void AddImageList(std::string filename, std::string section, InstanceManager::CreateImageInfoJSON info, GameObject* image);
 
 };

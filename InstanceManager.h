@@ -76,8 +76,10 @@ namespace InstanceManager
 	/// </summary>
 	/// <param name="info">値を読み取る構造体</param>
 	/// <param name="parent">親オブジェクト</param>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="section">セクション名</param>
 	/// <returns>作成したオブジェクトのポインタ</returns>
-	Button* CreateButtonOnInfo(InstanceManager::CreateInfoJSON info, GameObject* parent);
+	Button* CreateButtonOnInfo(InstanceManager::CreateInfoJSON info, GameObject* parent, std::string filename, std::string section);
 
 	/// <summary>
 	/// JSONを用いてボタン生成する（メンバーすべて）
@@ -86,6 +88,14 @@ namespace InstanceManager
 	/// <param name="pButtonList">生成したボタンのポインタのリスト</param>
 	/// <returns>成功したかどうか</returns>
 	bool AllCreateButton(std::string filename, std::vector<GameObject*>& pButtonList, GameObject* parent);
+
+	/// <summary>
+	/// JSONを用いてボタン生成する（メンバーすべて）
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="parent">生成したボタンのポインタのリスト</param>
+	/// <returns>成功したかどうか</returns>
+	bool AllCreateButton(std::string filename, GameObject* parent);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -120,8 +130,10 @@ namespace InstanceManager
 	/// </summary>
 	/// <param name="info">値を入れる構造体</param>
 	/// <param name="parent">親オブジェクト</param>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="section">セクション名</param>
 	/// <returns>作成したオブジェクトのポインタ</returns>
-	GameObject* CreateImageOnInfo(InstanceManager::CreateImageInfoJSON info, GameObject* parent);
+	GameObject* CreateImageOnInfo(InstanceManager::CreateImageInfoJSON info, GameObject* parent, std::string filename, std::string section);
 
 	/// <summary>
 	/// JSONを用いて画像を生成する（メンバーすべて）
@@ -131,6 +143,14 @@ namespace InstanceManager
 	/// <param name="parent">親オブジェクト</param>
 	/// <returns>成功したかどうか</returns>
 	bool AllCreateImage(std::string filename, std::vector<GameObject*>& pImageList, GameObject* parent);
+
+	/// <summary>
+	/// JSONを用いて画像を生成する（メンバーすべて）
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="parent">親オブジェクト</param>
+	/// <returns>成功したかどうか</returns>
+	bool AllCreateImage(std::string filename, GameObject* parent);
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 };
 

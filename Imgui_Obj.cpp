@@ -66,8 +66,6 @@ namespace
 
     IniType iniType = IniType::NONE;
 
-    
-
     int nextScene;//次に行くシーン
     int SceneChangeNextScene; //SceneChangeの時に使う次に行くシーン
 
@@ -85,24 +83,8 @@ namespace
     int selectAlpha = 255;              //選択中のアルファ
     bool canCreate = false;             //選択中のオブジェクトが生成できるか
 
-    //再設定の時に必要な情報
-    struct SettingInfo
-    {
-        SettingInfo(GameObject* obj, std::string loadFileName, std::string sectionName, std::string writeFileName, XMFLOAT3 position, XMFLOAT3 rotate, XMFLOAT3 scale) :
-            pObject{ obj },loadFileName { loadFileName }, sectionName{ sectionName }, writeFile{ writeFileName }, iniPosition
-            {position}, iniRotate{ rotate }, iniScale{ scale } {}
-
-        GameObject* pObject;
-        std::string loadFileName = "";//読み込むファイル名
-        std::string sectionName;//セクションの名前 
-        std::string writeFile;//保存をする際に書き込んだJSONのファイル名
-        XMFLOAT3 iniPosition;//位置
-        XMFLOAT3 iniRotate;//向き
-        XMFLOAT3 iniScale;//拡大率
-
-    };
-
-    std::vector<SettingInfo> settingInfoList;//作ったボタンのリスト 
+    std::vector<Imgui_Obj::SettingInfo> settingInfoButtonList;//作ったボタンのリスト
+    std::vector<Imgui_Obj::SettingInfo> settingInfoImageList; //作った画像のリスト
     
 }
 
@@ -263,7 +245,7 @@ namespace Imgui_Obj
     void RearButtonInstantiate()
     {
         SettingInfo setting{ pSelectObj, selectLoadFileNameStr, selectUniqueName , selectWriteFile,iniPosition, iniRotate, iniScale };
-        settingInfoList.push_back(setting);
+        settingInfoButtonList.push_back(setting);
         pSelectObj = nullptr;
     }
 
@@ -273,54 +255,54 @@ namespace Imgui_Obj
         //ボタン
         {
             //pCreateListの分だけ回す
-            for (int i = 0; i < settingInfoList.size(); i++)
+            for (int i = 0; i < settingInfoButtonList.size(); i++)
             {
-                ImGui::Begin(settingInfoList[i].sectionName.c_str());
+                ImGui::Begin(settingInfoButtonList[i].sectionName_.c_str());
 
                 //読み込むファイル名を入力
                 ImGui::Text("LoadFileName");
                 char sec[CHAR_SIZE];
-                settingInfoList[i].loadFileName.copy(sec, CHAR_SIZE - 1);
-                sec[settingInfoList[i].loadFileName.length()] = '\0';
+                settingInfoButtonList[i].loadFileName_.copy(sec, CHAR_SIZE - 1);
+                sec[settingInfoButtonList[i].loadFileName_.length()] = '\0';
                 ImGui::InputText("LoadFile", sec, CHAR_SIZE);
-                settingInfoList[i].loadFileName = sec;
+                settingInfoButtonList[i].loadFileName_ = sec;
                 if (ImGui::Button("Decision"))
                 {
-                    settingInfoList[i].pObject->SetPathName(loadFileName);
+                    settingInfoButtonList[i].pObject_->SetPathName(loadFileName);
                 }
 
                 //Transfomの情報を入力
                 ImGui::Text("Transform");
                 //位置
-                float* iniPositionArrayTmp[3] = { &settingInfoList[i].iniPosition.x, &settingInfoList[i].iniPosition.y, &settingInfoList[i].iniPosition.z };
+                float* iniPositionArrayTmp[3] = { &settingInfoButtonList[i].iniPosition_.x, &settingInfoButtonList[i].iniPosition_.y, &settingInfoButtonList[i].iniPosition_.z };
                 ImGui::DragFloat3("Position", iniPositionArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
-                settingInfoList[i].pObject->SetPosition(settingInfoList[i].iniPosition);
+                settingInfoButtonList[i].pObject_->SetPosition(settingInfoButtonList[i].iniPosition_);
 
                 //向き
-                float* iniRotateArrayTmp[3] = { &settingInfoList[i].iniRotate.x,&settingInfoList[i].iniRotate.y, &settingInfoList[i].iniRotate.z };
+                float* iniRotateArrayTmp[3] = { &settingInfoButtonList[i].iniRotate_.x,&settingInfoButtonList[i].iniRotate_.y, &settingInfoButtonList[i].iniRotate_.z };
                 ImGui::DragFloat3("Rotate", iniRotateArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
-                settingInfoList[i].pObject->SetRotate(settingInfoList[i].iniRotate);
+                settingInfoButtonList[i].pObject_->SetRotate(settingInfoButtonList[i].iniRotate_);
 
                 //拡大率
-                float* iniScaleArrayTmp[3] = { &settingInfoList[i].iniScale.x,&settingInfoList[i].iniScale.y, &settingInfoList[i].iniScale.z };
+                float* iniScaleArrayTmp[3] = { &settingInfoButtonList[i].iniScale_.x,&settingInfoButtonList[i].iniScale_.y, &settingInfoButtonList[i].iniScale_.z };
                 ImGui::DragFloat3("Scale", iniScaleArrayTmp[0], DRAG_SPEED, -1.0f, 1.0f);
-                settingInfoList[i].pObject->SetScale(settingInfoList[i].iniScale);
+                settingInfoButtonList[i].pObject_->SetScale(settingInfoButtonList[i].iniScale_);
 
                 //保存
                 if (ImGui::Button("Save"))
                 {
                     InstanceManager::OverWriteSaveButton(
-                        settingInfoList[i].writeFile,
-                        settingInfoList[i].sectionName,
-                        settingInfoList[i].loadFileName, 
-                        settingInfoList[i].iniPosition, 
-                        settingInfoList[i].iniRotate, 
-                        settingInfoList[i].iniScale);
+                        settingInfoButtonList[i].writeFile_,
+                        settingInfoButtonList[i].sectionName_,
+                        settingInfoButtonList[i].loadFileName_, 
+                        settingInfoButtonList[i].iniPosition_, 
+                        settingInfoButtonList[i].iniRotate_, 
+                        settingInfoButtonList[i].iniScale_);
                 }
                 //削除
                 if (ImGui::Button("Delete"))
                 {
-                    settingInfoList[i].pObject->KillMe();
+                    settingInfoButtonList[i].pObject_->KillMe();
                     //そのセクションの中身消す
                     //ポインタも消す
                 }
@@ -611,6 +593,20 @@ namespace Imgui_Obj
             return "";
             break;
         }
+    }
+
+    //作ったボタンのリストに入れる
+    void AddButtonList(std::string filename, std::string section, InstanceManager::CreateInfoJSON info, Button* button)
+    {
+        SettingInfo SetInfo((GameObject*)button, info.loadFile, section, filename, info.position, info.rotate, info.scale);
+        settingInfoButtonList.push_back(SetInfo);
+    }
+
+    //作った画像のリストに入れる
+    void AddImageList(std::string filename, std::string section, InstanceManager::CreateImageInfoJSON info, GameObject* image)
+    {
+        SettingInfo SetInfo(image, info.loadFile, section, filename, info.position, info.rotate, info.scale);
+        settingInfoImageList.push_back(SetInfo);
     }
 }
 

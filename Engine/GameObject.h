@@ -151,6 +151,7 @@ public:
 	Transform GetTransform() { return transform_; }
 	std::string GetName() { return objectName_; }
 	std::string GetUniqueName() { return uniqueName_; }
+	std::string GetPathName() { return pathName_; }
 
 
 	void SetPosition(XMFLOAT3 position) { transform_.position_ = position; }
