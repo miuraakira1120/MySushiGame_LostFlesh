@@ -121,4 +121,10 @@ namespace GameManager
 		//ゲーム内時間が動いていたら停止し、止まっていたら動かす
 		TimeMovingReverse();
 	}
+
+	// ポーズ状態を設定する関数
+	void SetPause(bool pause)
+	{
+		isPause = pause;
+	}
 }

@@ -3,6 +3,9 @@
 #include "GameManager.h"
 #include "BackUI.h"
 #include "Engine/SceneManager.h"
+#include "Engine/JsonOperator.h"
+#include "InstanceManager.h"
+
 
 //コンストラクタ
 Pause::Pause()
@@ -22,6 +25,12 @@ void Pause::Initialize()
 //更新
 void Pause::Update()
 {
+	//もしポーズしていなかったら
+	if (GameManager::GetIsPause())
+	{
+		return;
+	}
+
 	//UIリストの中身の更新を全部呼ぶ
 	AllPauseUIUpdate();
 }
@@ -47,13 +56,14 @@ void Pause::Release()
 //UIの作成
 void Pause::CreateUI()
 {
-	XMFLOAT3 pos = { 0,0,0 };
-	//ポーズ中に出したいUIをInitiarizeする
-	GameObject* tmp = Instantiate<BackUI>(GameManager::GetpSceneManagerPointor(), "BlackBack.jpg", pos);
+	std::vector<GameObject*> tmp;
+	InstanceManager::AllCreateImage(JsonOperator::PAUSE_IMAGE_JSON, tmp, GameManager::GetpSceneManagerPointor()->GetNowScenePointer());
 
-	//UIListに入れる
-	AddUIList(tmp);
-
+	for (auto i = 0; i < tmp.size(); i++)
+	{
+		//UIListに入れる
+		AddUIList(tmp[i]);
+	}
 }
 
 //UIの削除

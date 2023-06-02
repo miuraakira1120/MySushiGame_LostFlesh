@@ -11,6 +11,7 @@
 #include "../GameOverScene.h"
 
 #include "../Imgui_Obj.h"
+#include "../EditScene.h"
 
 
 //コンストラクタ
@@ -52,6 +53,7 @@ void SceneManager::Update()
 		case SCENE_ID_START: pNowScene[SCENE_ID_START] = Instantiate<StartScene>(this); break;
 		case SCENE_ID_GOAL: pNowScene[SCENE_ID_GOAL] = Instantiate<GoalScene>(this); break;
 		case SCENE_ID_GAMEOVER: pNowScene[SCENE_ID_GAMEOVER] = Instantiate<GameOverScene>(this); break;
+		case SCENE_ID_EDIT: pNowScene[SCENE_ID_EDIT] = Instantiate<EditScene>(this); break;
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;

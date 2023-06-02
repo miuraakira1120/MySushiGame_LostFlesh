@@ -37,7 +37,8 @@ namespace JsonOperator
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// ポーズに関係ある定数
 	// 使用するJSONファイルの名前
-	const std::string PAUSE_JSON = "../Assets\\GameData\\PauseScene.json";
+	const std::string PAUSE_IMAGE_JSON = "../Assets\\GameData\\PauseImage.json";
+	const std::string PAUSE_BUTTON_JSON = "../Assets\\GameData\\PauseButton.json";
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	//親になる可能性のあるオブジェクトを文字列にした時の定数
 	const std::vector<std::string> parentStrList =

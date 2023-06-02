@@ -20,6 +20,8 @@
 #include "GameManager.h"
 #include "ImageBase.h"
 
+#include "EditScene.h"
+
 #include <filesystem>
 
 //何のクラスを作成するか
@@ -39,6 +41,8 @@ namespace
     int gameTimerID;
     ChangeSceneButton* pChangeSceneButton;
     SceneManager* pSceneManager;
+
+    int modeUI;//UI作成の時に使うどんなUIを作成するか決める
 
     float changeSceneButtonX;
     float changeSceneButtonY;
@@ -66,10 +70,12 @@ namespace
 
     IniType iniType = IniType::NONE;
 
-    int nextScene;//次に行くシーン
-    int SceneChangeNextScene; //SceneChangeの時に使う次に行くシーン
+    int nextScene;                      //次に行くシーン
+    bool isEditScene;                   //今、エディットシーンにいるかどうか
 
-    std::string selectUniqueName;//選択中のオブジェクトのユニークな名前
+    int SceneChangeNextScene;           //SceneChangeの時に使う次に行くシーン
+
+    std::string selectUniqueName;       //選択中のオブジェクトのユニークな名前
     
     GameObject* pSelectObj;             //選択中のオブジェクト
     std::string selectButtonKinds;      //選択中のオブジェクトの種類
@@ -85,6 +91,9 @@ namespace
 
     std::vector<Imgui_Obj::SettingInfo> settingInfoButtonList;//作ったボタンのリスト
     std::vector<Imgui_Obj::SettingInfo> settingInfoImageList; //作った画像のリスト
+
+    std::vector<Imgui_Obj::SettingInfo> settingInfoButtonFromPauseList;//作ったボタンのリスト(ポーズ画面)
+    std::vector<Imgui_Obj::SettingInfo> settingInfoImageFromPauseList; //作った画像のリスト(ポーズ画面)
     
 }
 
@@ -125,6 +134,13 @@ namespace Imgui_Obj
 
         //楽にシーンチェンジ出来るようにする
         SceneChangeImgui();
+
+        //今エディットシーンにいたら
+        if (pSceneManager->GetNowSceneID() == SCENE_ID::SCENE_ID_EDIT)
+        {
+            //UIモードを選択するImguiを作成する
+            UISelectModeImgui();
+        }
 
         //タイトルシーンだったら
         if (pSceneManager->GetNowSceneID() == SCENE_ID::SCENE_ID_START)
@@ -233,9 +249,20 @@ namespace Imgui_Obj
         ImGui::RadioButton("Play", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_PLAY));
         ImGui::RadioButton("Goal", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GOAL)); ImGui::SameLine();
         ImGui::RadioButton("GameOver", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GAMEOVER));
+        ImGui::RadioButton("Edit", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_EDIT));
 
         if (ImGui::Button("Scene Change"))
         {
+            //もしもエディットシーンに行く予定なら
+            if (nextScene == SCENE_ID::SCENE_ID_EDIT)
+            {
+                isEditScene = true;
+            }
+            else
+            {
+                isEditScene = false;
+            }
+            
             pSceneManager->ChangeScene(static_cast<SCENE_ID>(nextScene));
         }
         ImGui::End();
@@ -416,6 +443,7 @@ namespace Imgui_Obj
                             settingInfoImageList[i].iniScale_,
                             settingInfoImageList[i].alpha_);
                     }
+
                     //削除
                     if (ImGui::Button("Delete"))
                     {
@@ -463,7 +491,7 @@ namespace Imgui_Obj
         }
 
         //生成ボタン
-        if (ImGui::Button("Create"))
+        if (canCreate && ImGui::Button("Create"))
         {
             //プレイヤーのボタン配置を変えるボタンを作成するなら
             if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
@@ -479,24 +507,8 @@ namespace Imgui_Obj
                     pSelectObj->KillMe();
                 }
 
-                //親が今のシーンなら
-                if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
-                {
-                    //生成
-                    pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
-                }
-
-                //親がポーズなら
-                if (parentNum == static_cast<int>(GameManager::ParentNum::PAUSE))
-                {
-
-                }
-
-                //親がプレイヤーなら
-                if (parentNum == static_cast<int>(GameManager::ParentNum::PLAYER))
-                {
-
-                }
+                //オブジェクトを作成しポインタを保存しておく
+                pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
 
             }
         }
@@ -507,19 +519,29 @@ namespace Imgui_Obj
             //セーブボタン
             if (ImGui::Button("Save"))
             {
-                //タイトルシーンだったら
-                switch (pSceneManager->GetNowSceneID())
+                //親が今のシーンなら
+                if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
                 {
                     //タイトルシーンだったら
-                case SCENE_ID::SCENE_ID_START:
-                    InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, selectUniqueName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
-                    break;
-                default:
-                    break;
+                    switch (pSceneManager->GetNowSceneID())
+                    {
+                        //タイトルシーンだったら
+                    case SCENE_ID::SCENE_ID_START:
+                        InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, selectUniqueName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
+                        break;
+                    default:
+                        break;
+                    }
                 }
+                //ポーズだったら
+                else if (parentNum == static_cast<int>(GameManager::ParentNum::PAUSE))
+                {
+                    //保存する
+                    InstanceManager::SaveButton(JsonOperator::PAUSE_BUTTON_JSON, selectUniqueName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
+                }
+
                 //imguiでボタンを保存した後にやること
                 RearButtonInstantiate();
-
             }ImGui::SameLine();
 
             //削除ボタン
@@ -560,15 +582,8 @@ namespace Imgui_Obj
                 pSelectObj->KillMe();
             }
 
-            //親が今のシーンなら
-            if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
-            {
-                pSelectObj = InstantiateImage<ImageBase>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale, selectAlpha);
-            }
-            //親がポーズなら
-            else if (parentNum == static_cast<int>(GameManager::ParentNum::PAUSE))
-            {
-            }
+            //オブジェクトを作成しポインタを保存しておく
+            pSelectObj = InstantiateImage<ImageBase>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale, selectAlpha);
         }
 
         //オブジェクトを作っていたら
@@ -593,10 +608,15 @@ namespace Imgui_Obj
                         break;
                     }
                 }
-                
+                //ポーズだったら
+                else if (parentNum == static_cast<int>(GameManager::ParentNum::PAUSE))
+                {
+                    //保存する
+                    InstanceManager::SaveImage(JsonOperator::PAUSE_IMAGE_JSON, selectUniqueName, selectLoadFileNameStr, iniPosition, iniRotate, iniScale, selectAlpha);
+                }
+
                 //imguiで画像を保存した後にやること
                 RearImageInstantiate();
-
             }ImGui::SameLine();
 
             //削除ボタン
@@ -614,7 +634,7 @@ namespace Imgui_Obj
             iniType = IniType::NONE;
         }
         ImGui::End();
-        }
+    }
     
 
     //Transformをいじるimguiを出す
@@ -691,9 +711,16 @@ namespace Imgui_Obj
 
         //親オブジェクトは何か(どこで生成するか)
         ImGui::Text("Parent");
-        ImGui::RadioButton("NowScene", &parentNum, static_cast<int>(GameManager::ParentNum::NOW_SCENE)); ImGui::SameLine();
-        ImGui::RadioButton("Pause", &parentNum, static_cast<int>(GameManager::ParentNum::PAUSE));
 
+        //エディットシーンじゃなかったら
+        if (!isEditScene)
+        {
+            ImGui::RadioButton("NowScene", &parentNum, static_cast<int>(GameManager::ParentNum::NOW_SCENE)); ImGui::SameLine();
+        }        
+        else
+        {
+            ImGui::RadioButton("Pause", &parentNum, static_cast<int>(GameManager::ParentNum::PAUSE));
+        }
         ImGui::NewLine();
 
     }
@@ -734,6 +761,21 @@ namespace Imgui_Obj
     {
         settingInfoButtonList.clear();
         settingInfoImageList.clear();
+    }
+
+    //UIモードを選択するImguiを作成する
+    void UISelectModeImgui()
+    {
+        ImGui::Begin("UI_TYPE");
+        ImGui::RadioButton("NONE", &modeUI, static_cast<int>(UI_Type::NONE)); ImGui::SameLine();
+        ImGui::RadioButton("PAUSE", &modeUI, static_cast<int>(UI_Type::PAUSE)); 
+        ImGui::End();
+    }
+
+    // modeUIのゲッター
+    int GetUIType()
+    {
+        return modeUI;
     }
 }
 

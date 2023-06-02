@@ -26,17 +26,6 @@ void StartScene::Initialize()
 	JsonOperator::AppendToJSONFileString(JsonOperator::TITLE_JSON, "sec", "key", "hello");
 	JsonOperator::AppendToJSONFileFloat(JsonOperator::TITLE_JSON, "OptionButton", "posX", 100);
 
-	XMFLOAT3 a = { 1,2,3 };
-	XMFLOAT3 aa = { 4,5,6 };
-	XMFLOAT3 aaa = { 7,8,9 };
-
-
-	//InstanceManager::InstantiateInfoJSON testInfo = { "parent", "image", "name", a, aa, aaa };
-	//JsonOperator::WhiteInstanceInfo(JsonOperator::TEST_JSON, "sec", testInfo);
-
-	//InstanceManager::CreateInfoJSON getInfo;
-	//JsonOperator::GetInstanceInfo(JsonOperator::TEST_JSON, "sec", getInfo);
-	
 	InstanceManager::AllCreateImage(JsonOperator::TITLE_IMAGE_JSON, instanceList, this);
 	InstanceManager::AllCreateButton(JsonOperator::TITLE_BUTTON_JSON, instanceList, this);
 	

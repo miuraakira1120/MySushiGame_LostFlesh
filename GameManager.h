@@ -74,6 +74,12 @@ namespace GameManager
 	void PauseReverse();
 
 	/// <summary>
+	/// ポーズ状態を設定する関数
+	/// </summary>
+	/// <param name="pause">ポーズするかどうか</param>
+	void SetPause(bool pause);
+
+	/// <summary>
 	/// pPauseのゲッター
 	/// </summary>
 	/// <returns></returns>

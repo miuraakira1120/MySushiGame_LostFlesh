@@ -269,6 +269,7 @@
       <Filter>Imgui\ImClass</Filter>
     </ClCompile>
     <ClCompile Include="ImageBase.cpp" />
+    <ClCompile Include="EditScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -452,6 +453,7 @@
     </ClInclude>
     <ClInclude Include="InstanceManager.h" />
     <ClInclude Include="ImageBase.h" />
+    <ClInclude Include="EditScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -47,10 +47,11 @@ namespace Imgui_Obj
     /// オブジェクトを生成するImguiを出す関数
     /// </summary>
     void ImguiIniObj();
-
+    
     /// <summary>
     /// シーンチェンジするImguiを生成する関数
     /// </summary>
+    /// <param name="isPause">ポーズ画面かどうか</param>
     void SceneChangeImgui();
 
     /// <summary>
@@ -109,4 +110,17 @@ namespace Imgui_Obj
     /// 今あるリストをクリアする
     /// </summary>
     void ClearList();
+
+    /// <summary>
+    /// UIモードを選択するImguiを作成する
+    /// </summary>
+    void UISelectModeImgui();
+
+    //modeUIのゲッター
+
+    /// <summary>
+    /// modeUIのゲッター
+    /// </summary>
+    /// <returns>modeUI</returns>
+    int GetUIType();
 };
