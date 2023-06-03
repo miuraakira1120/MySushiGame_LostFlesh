@@ -115,8 +115,9 @@ void Button::Release()
 //画像の設定
 void Button::SetImage(const std::string& name)
 {
+    std::string fullPath = Image::DIRECTORY_BUTTON + name;
     //画像データのロード
-    hPict_ = Image::Load(name);
+    hPict_ = Image::Load(fullPath);
     //ロードされたか確認
     assert(hPict_ >= 0);
 }

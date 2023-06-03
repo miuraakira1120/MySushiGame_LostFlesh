@@ -8,11 +8,25 @@
 #include "Transform.h"
 #include "Direct3D.h"
 
+//UIの種類
+enum UI_Type
+{
+	NONE = 0,
+	PAUSE,
+	TYPE_MAX
+};
+
 //-----------------------------------------------------------
 //2D画像を管理する
 //-----------------------------------------------------------
 namespace Image
 {
+	//ボタンファイルのディレクトリ名
+	const std::string DIRECTORY_BUTTON = ".\\Button/"; 
+
+	//ポーズファイルのディレクトリ名
+	const std::string DIRECTORY_UI = ".\\Image/";
+
 	//画像情報
 	struct ImageData
 	{

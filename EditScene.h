@@ -1,21 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
-
-//UIの種類
-enum UI_Type
-{
-	NONE = 0,
-	PAUSE,
-	TYPE_MAX
-};
-
+#include "Engine/Image.h"
 
 //UIなどを作るときに使用するシーンを管理するクラス
 class EditScene : public GameObject
 {
 	UI_Type modeUI;				//どのUIをいじっているか
-	UI_Type prevModeUI;		//1f前までどのUIをいじっていたか
-
+	UI_Type prevModeUI;			//1f前までどのUIをいじっていたか
 
 public:
 	//コンストラクタ

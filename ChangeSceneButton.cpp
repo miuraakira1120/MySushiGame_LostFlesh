@@ -8,8 +8,8 @@ ChangeSceneButton::ChangeSceneButton(GameObject* parent, SCENE_ID name, std::str
 
 void ChangeSceneButton::Initialize()
 {
-	std::string ImageFullName = ".\\Button/" + pathName_;
-	SetImage(ImageFullName);
+	//‰æ‘œ‚Ìİ’è‚ğ‚·‚é
+	SetImage(pathName_);
 }
 
 void ChangeSceneButton::Event()

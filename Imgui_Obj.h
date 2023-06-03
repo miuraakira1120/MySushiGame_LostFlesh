@@ -123,4 +123,11 @@ namespace Imgui_Obj
     /// </summary>
     /// <returns>modeUI</returns>
     int GetUIType();
+    
+    /// <summary>
+    /// ファイルがあるか確認
+    /// </summary>
+    /// <param name="filename">調べるファイル名</param>
+    /// <returns><returns>存在するかどうか</returns></returns>
+    bool existFile(std::string filename);
 };

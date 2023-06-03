@@ -56,9 +56,6 @@
     <Filter Include="02PlayScene\Stage">
       <UniqueIdentifier>{77c72eb4-8333-48ce-9646-a9ed8f923b92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02PlayScene\UI">
-      <UniqueIdentifier>{611c71c3-d7c1-4591-a4ae-9b96a9f3baf4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02PlayScene\Object\Player">
       <UniqueIdentifier>{81983803-514a-41f0-bc4d-6ccf4ee28d1e}</UniqueIdentifier>
     </Filter>
@@ -91,6 +88,9 @@
     </Filter>
     <Filter Include="00Engine\Button\ButtonBase">
       <UniqueIdentifier>{36b28fd9-2cda-4156-9659-0f7367bdef56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{611c71c3-d7c1-4591-a4ae-9b96a9f3baf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -203,7 +203,7 @@
       <Filter>02PlayScene\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Gauge.cpp">
-      <Filter>02PlayScene\UI</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Crab.cpp">
       <Filter>02PlayScene\Object\Player</Filter>
@@ -233,7 +233,7 @@
       <Filter>00Engine\Time</Filter>
     </ClCompile>
     <ClCompile Include="Pause.cpp">
-      <Filter>02PlayScene\UI</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Particle.cpp">
       <Filter>00Engine\Effect</Filter>
@@ -387,7 +387,7 @@
       <Filter>02PlayScene\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Gauge.h">
-      <Filter>02PlayScene\UI</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Crab.h">
       <Filter>02PlayScene\Object\Player</Filter>
@@ -420,7 +420,7 @@
       <Filter>00Engine\Time</Filter>
     </ClInclude>
     <ClInclude Include="Pause.h">
-      <Filter>02PlayScene\UI</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="PoryLine.h">
       <Filter>00Engine\Effect</Filter>

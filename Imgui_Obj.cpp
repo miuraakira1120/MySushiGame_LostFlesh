@@ -23,6 +23,7 @@
 #include "EditScene.h"
 
 #include <filesystem>
+#include<Windows.h>
 
 //何のクラスを作成するか
 enum class IniType
@@ -42,7 +43,8 @@ namespace
     ChangeSceneButton* pChangeSceneButton;
     SceneManager* pSceneManager;
 
-    int modeUI;//UI作成の時に使うどんなUIを作成するか決める
+    int modeUI = static_cast<int>(UI_Type::NONE);//UI作成の時に使うどんなUIを作成するか決める
+    int prevModeUI = static_cast<int>(UI_Type::NONE);//前フレームまでのmodeUI
 
     float changeSceneButtonX;
     float changeSceneButtonY;
@@ -680,6 +682,7 @@ namespace Imgui_Obj
 
         //読み込むファイル名を入力
         ImGui::Text("LoadFileName");
+
         std::string filename = AddExtension();
         ImGui::InputText(filename.c_str(), loadFileName, CHAR_SIZE);
         ImGui::RadioButton("png", &extension, EXTENSION_PNG); ImGui::SameLine();
@@ -688,11 +691,9 @@ namespace Imgui_Obj
 
         //ファイル名+拡張子にする
         std::string f = loadFileName + filename;
-        std::filesystem::directory_entry dir;
-        dir.assign(f);
 
-        //指定したファイルが存在するか
-        canCreate = dir.exists();
+        //ファイルがあるか確認
+        canCreate = existFile(f);
         if (!canCreate)
         {
             ImGui::Text("file doesn't exist");
@@ -759,6 +760,9 @@ namespace Imgui_Obj
     //今あるリストをクリアする
     void ClearList()
     {
+        //リストを消す
+        settingInfoButtonFromPauseList.clear();
+        settingInfoImageFromPauseList.clear();
         settingInfoButtonList.clear();
         settingInfoImageList.clear();
     }
@@ -767,8 +771,19 @@ namespace Imgui_Obj
     void UISelectModeImgui()
     {
         ImGui::Begin("UI_TYPE");
+
+        //ラジオボタン作成
         ImGui::RadioButton("NONE", &modeUI, static_cast<int>(UI_Type::NONE)); ImGui::SameLine();
         ImGui::RadioButton("PAUSE", &modeUI, static_cast<int>(UI_Type::PAUSE)); 
+
+        //前フレームと作成するUIが違ったら
+        if (modeUI != prevModeUI)
+        {
+            //リストを消す
+            ClearList();
+        }
+
+        prevModeUI = modeUI;
         ImGui::End();
     }
 
@@ -776,6 +791,36 @@ namespace Imgui_Obj
     int GetUIType()
     {
         return modeUI;
+    }
+
+    // ファイルがあるか確認
+    bool existFile(std::string filename)
+    {
+        std::string fullFilename = "";
+        //作成タイプによって探すディレクトリを変える
+        switch (iniType)
+        {
+        case IniType::NONE:
+            break;
+        case IniType::BUTTON:
+            fullFilename += Image::DIRECTORY_BUTTON;
+            break;
+        case IniType::ENEMY:
+            break;
+        case IniType::IMAGE:
+            fullFilename += Image::DIRECTORY_UI;
+            break;
+        case IniType::TYPE_MAX:
+            break;
+        default:
+            break;
+        }
+        fullFilename += filename;
+        std::filesystem::directory_entry dir;
+        dir.assign(fullFilename);
+
+        //指定したファイルが存在するか
+        return dir.exists();
     }
 }
 

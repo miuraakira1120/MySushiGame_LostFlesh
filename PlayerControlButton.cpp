@@ -11,10 +11,9 @@ void PlayerControlButton::Initialize()
 {
 	imageSizeDef = transform_.scale_;
 	imageSizeMag = Math::Float3Mul(imageSizeDef, 1.1f);
-	std::string ImageFullName = ".\\Button/" + pathName_;
 
 	//外枠を囲うようなシェーダー作る
-	SetImage(ImageFullName, Direct3D::SHADER_2D);
+	SetImage(pathName_, Direct3D::SHADER_2D);
 
 }
 
