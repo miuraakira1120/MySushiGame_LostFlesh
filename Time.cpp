@@ -31,7 +31,6 @@ namespace Time
 		Minuts_ = 0;
 		for (int i = 0; i < TIMER_MAX; i++)
 		{
-
 			Seconds_[i] = 0;
 		}
 		FPS_ = FPS;

@@ -6,6 +6,13 @@
 
 namespace Audio
 {
+	//デフォルトのマスターボリュームの音量
+	const float MASTER_VOLUME_DEF = 0.5f;
+
+	//マスターボリューム(0.0から1.0, 1.0が最大)
+	float masterVolume = MASTER_VOLUME_DEF;
+	float bgm;
+
 	//XAudio本体
 	IXAudio2* pXAudio = nullptr;
 
@@ -21,7 +28,7 @@ namespace Audio
 		//ソースボイス
 		IXAudio2SourceVoice** pSourceVoice = nullptr;
 
-		//同時再生最大数
+		//同時再生最大数(同じ音源)
 		int svNum;
 
 		//ファイル名
@@ -41,9 +48,9 @@ void Audio::Initialize()
 }
 
 //サウンドファイル(.wav）をロード
-int Audio::Load(std::string fileName, int svNum)
+int Audio::Load(std::string fileName, bool loopFlg, float volume, int svNum)
 {
-	//すでに同じファイルを使ってないかチェック
+	//すでに同じファイルを使ってないかチェック 
 	for (int i = 0; i < audioDatas.size(); i++)
 	{
 		if (audioDatas[i].fileName == fileName)
@@ -52,56 +59,92 @@ int Audio::Load(std::string fileName, int svNum)
 		}
 	}
 
-
+	//チャンク構造体
 	struct Chunk
 	{
-		char	id[4]; 		// ID
-		unsigned int	size;	// サイズ
+		char id[5] = ""; // ID
+		unsigned int size = 0; // サイズ 
 	};
 
+	//ファイルを開く 
 	HANDLE hFile;
 	hFile = CreateFile(fileName.c_str(), GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	DWORD dwBytes = 0;
-
-	Chunk riffChunk;
-	ReadFile(hFile, &riffChunk, 8, &dwBytes, NULL);
+	Chunk riffChunk = {};
+	ReadFile(hFile, &riffChunk.id, 4, &dwBytes, NULL);
+	ReadFile(hFile, &riffChunk.size, 4, &dwBytes, NULL);
 
 	char wave[4];
 	ReadFile(hFile, &wave, 4, &dwBytes, NULL);
 
 	Chunk formatChunk;
-	ReadFile(hFile, &formatChunk, 8, &dwBytes, NULL);
+	while (formatChunk.id[0] != 'f')
+	{
+		ReadFile(hFile, &formatChunk.id, 4, &dwBytes, NULL);
+	}
+	ReadFile(hFile, &formatChunk.size, 4, &dwBytes, NULL); //フォーマットを読み取る //https://learn.microsoft.com/ja-jp/windows/win32/api/mmeapi/ns-mmeapi-waveformatex 
 
-	WAVEFORMATEX	fmt;
-	ReadFile(hFile, &fmt, formatChunk.size, &dwBytes, NULL);
+	WAVEFORMATEX fmt;
+	ReadFile(hFile, &fmt.wFormatTag, 2, &dwBytes, NULL); //形式 
+	ReadFile(hFile, &fmt.nChannels, 2, &dwBytes, NULL); //チャンネル（モノラル/ステレオ） 
+	ReadFile(hFile, &fmt.nSamplesPerSec, 4, &dwBytes, NULL); //サンプリング数 
+	ReadFile(hFile, &fmt.nAvgBytesPerSec, 4, &dwBytes, NULL); //1秒あたりのバイト数 
+	ReadFile(hFile, &fmt.nBlockAlign, 2, &dwBytes, NULL); //ブロック配置 
+	ReadFile(hFile, &fmt.wBitsPerSample, 2, &dwBytes, NULL); //サンプル当たりのビット数 
 
-	Chunk data;
-	ReadFile(hFile, &data, 8, &dwBytes, NULL);
+	//波形データの読み込み 
+	Chunk data = { 0 };
+	while (true)
+	{
+		//次のデータのIDを調べる 
+		ReadFile(hFile, &data.id, 4, &dwBytes, NULL);
 
+		//「data」だったらループを抜けて次に進む 
+		if (data.id[0] == 'd' || data.id[1] == 'a')
+			break;
+		//それ以外の情報ならサイズ調べて読み込む→使わない 
+		else
+		{
+			//サイズ調べて
+			ReadFile(hFile, &data.size, 4, &dwBytes, NULL);
+			char* pBuffer = new char[data.size]; //無駄に読み込む 
+			ReadFile(hFile, pBuffer, data.size, &dwBytes, NULL);
+		}
+	}
+
+	//データチャンクのサイズを取得 
+	ReadFile(hFile, &data.size, 4, &dwBytes, NULL); //波形データを読み込む 
 	char* pBuffer = new char[data.size];
 	ReadFile(hFile, pBuffer, data.size, &dwBytes, NULL);
-
 	CloseHandle(hFile);
 
-
 	AudioData ad;
-
 	ad.fileName = fileName;
-
 	ad.buf.pAudioData = (BYTE*)pBuffer;
+	if (loopFlg)
+	{
+		ad.buf.LoopCount = XAUDIO2_LOOP_INFINITE;
+	}
 	ad.buf.Flags = XAUDIO2_END_OF_STREAM;
 	ad.buf.AudioBytes = data.size;
+	ad.pSourceVoice = new IXAudio2SourceVoice * [svNum];
 
-	ad.pSourceVoice = new IXAudio2SourceVoice*[svNum];
 	for (int i = 0; i < svNum; i++)
 	{
 		pXAudio->CreateSourceVoice(&ad.pSourceVoice[i], &fmt);
-	}
-	ad.svNum = svNum;
-	audioDatas.push_back(ad);
 
-	//SAFE_DELETE_ARRAY(pBuffer);
+		//音量調節
+		if (volume != 1.0f)
+		{
+			ad.pSourceVoice[i]->SetVolume(volume);
+		}
+	}
+
+	ad.svNum = svNum;
+
+
+	audioDatas.push_back(ad); //SAFE_DELETE_ARRAY(pBuffer); 
 
 	return (int)audioDatas.size() - 1;
 }
@@ -123,6 +166,35 @@ void Audio::Play(int ID)
 	}
 }
 
+// 流れてる音楽の停止を行う関数
+void Audio::Stop(int ID)
+{
+	for (int i = 0; i < audioDatas[ID].svNum; i++)
+	{
+		audioDatas[ID].pSourceVoice[i]->Stop();
+		audioDatas[ID].pSourceVoice[i]->FlushSourceBuffers();
+	}
+}
+
+// 再生終了したかどうかを調べる関数
+bool Audio::IsEndPlayBack(int ID)
+{
+	for (int i = 0; i < audioDatas[ID].svNum; i++)
+	{
+		XAUDIO2_VOICE_STATE state;
+		audioDatas[ID].pSourceVoice[0]->GetState(&state);
+
+
+		return state.BuffersQueued > 0;
+	}
+}
+
+// マスターボリュームを変更する
+void Audio::SetMasterVolume(float vol)
+{
+	masterVolume = vol * 0.01f;
+}
+
 //すべて開放
 void Audio::Release()
 {
@@ -134,6 +206,12 @@ void Audio::Release()
 		}
 		SAFE_DELETE_ARRAY(audioDatas[i].buf.pAudioData);
 	}
+	audioDatas.clear();
+}
+
+void Audio::AllRelease()
+{
+	Release();
 
 	CoUninitialize();
 	if (pMasteringVoice)

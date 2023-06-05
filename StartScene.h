@@ -7,7 +7,7 @@
 //スタートシーンを管理するクラス
 class StartScene : public GameObject
 {
-
+	int hSound_;    //サウンド番号
 	int hPict_;    //画像番号
 	int iniListButton;//タイトルシーンのボタンの番号
 

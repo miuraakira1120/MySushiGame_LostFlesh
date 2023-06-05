@@ -7,10 +7,12 @@
 #include "Imgui_Obj.h"
 #include "Pause.h"
 #include "Engine/JsonOperator.h"
+#include "Engine/Audio.h"
+
 
 //コンストラクタ
 StartScene::StartScene(GameObject* parent)
-	: GameObject(parent, "StartScene"), hPict_(-1)
+	: GameObject(parent, "StartScene"), hPict_(-1), hSound_(-1)
 {
 }
 
@@ -29,12 +31,18 @@ void StartScene::Initialize()
 	InstanceManager::AllCreateImage(JsonOperator::TITLE_IMAGE_JSON, instanceList, this);
 	InstanceManager::AllCreateButton(JsonOperator::TITLE_BUTTON_JSON, instanceList, this);
 	
-
+	//サウンドデータのロード
+	hSound_ = Audio::Load("TestHello.wav", false, 1.0f);
+	assert(hSound_ >= 0);
 }
 
 //更新
 void StartScene::Update()
 {	
+	if (Input::IsKeyDown(DIK_2))
+	{
+		Audio::Play(hSound_);
+	}
 }
 
 //描画
