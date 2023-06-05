@@ -481,6 +481,7 @@ namespace Imgui_Obj
         ImGui::Text("ButtonType");
         //ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON)); ImGui::SameLine();
         ImGui::RadioButton("PlayerControl", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON));
+        ImGui::RadioButton("Slinder", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SLIDER));
 
         //シーンチェンジボタンを作成する予定なら
         if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON))
@@ -495,23 +496,28 @@ namespace Imgui_Obj
         //生成ボタン
         if (canCreate && ImGui::Button("Create"))
         {
+            selectButtonKinds = JsonOperator::ButtonToString(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);
+
+            //拡張子を追加
+            selectLoadFileNameStr = std::string(loadFileName) + AddExtension();
+
+            //保存していないオブジェクトは消す
+            if (pSelectObj != nullptr)
+            {
+                pSelectObj->KillMe();
+            }
+
             //プレイヤーのボタン配置を変えるボタンを作成するなら
             if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
-            {
-                selectButtonKinds = JsonOperator::ButtonToString(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);
-
-                //拡張子を追加
-                selectLoadFileNameStr = std::string(loadFileName) + AddExtension();
-
-                //保存していないオブジェクトは消す
-                if (pSelectObj != nullptr)
-                {
-                    pSelectObj->KillMe();
-                }
-
+            {       
                 //オブジェクトを作成しポインタを保存しておく
                 pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
-
+            }
+            //スライダーを作成するなら
+            if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
+            {
+                //オブジェクトを作成しポインタを保存しておく
+                pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
             }
         }
 

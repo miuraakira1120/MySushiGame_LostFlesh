@@ -74,7 +74,7 @@ public:
 		float abX = a.x - b.x;
 		float abY = a.y - b.y;
 		float abZ = a.z - b.z;
-		return sqrt((abX * abX) + (abY + abY) + (abZ + abZ));
+		return (float)sqrt((abX * abX) + (abY + abY) + (abZ + abZ));
 	}
 
 	/// <summary>Œ´“_‚ð’Ê‚é”CˆÓŽ²‰ñ“]</summary>

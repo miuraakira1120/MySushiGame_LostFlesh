@@ -176,6 +176,7 @@
     <ClCompile Include="Imgui_Obj.cpp" />
     <ClCompile Include="InstanceManager.cpp" />
     <ClCompile Include="Maguro.cpp" />
+    <ClCompile Include="MoveByMouthButton.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pause.cpp" />
@@ -184,6 +185,7 @@
     <ClCompile Include="PoryLine.cpp" />
     <ClCompile Include="RedBox.cpp" />
     <ClCompile Include="SalmonRoe.cpp" />
+    <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="ChangeSceneButton.cpp" />
     <ClCompile Include="StartScene.cpp" />
@@ -242,6 +244,7 @@
     <ClInclude Include="Imgui_Obj.h" />
     <ClInclude Include="InstanceManager.h" />
     <ClInclude Include="Maguro.h" />
+    <ClInclude Include="MoveByMouthButton.h" />
     <ClInclude Include="OBB.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pause.h" />
@@ -250,6 +253,7 @@
     <ClInclude Include="PoryLine.h" />
     <ClInclude Include="RedBox.h" />
     <ClInclude Include="SalmonRoe.h" />
+    <ClInclude Include="Slider.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="ChangeSceneButton.h" />
     <ClInclude Include="StartScene.h" />

@@ -131,3 +131,7 @@ namespace Imgui_Obj
     /// <returns><returns>存在するかどうか</returns></returns>
     bool existFile(std::string filename);
 };
+
+//追加するボタンを増やす手順
+//1 CreateButtonImguiの中のどんな種類のボタンを生成するかに追加
+//2 生成ボタンに追加

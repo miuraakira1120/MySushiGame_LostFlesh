@@ -9,6 +9,8 @@ namespace ButtonManager
     {
         SCENE_CHANGE_BUTTON,
         PLAYER_CONTROL_BUTTON,
+        SLIDER,
+        MOVE_BY_MOUTH_BUTTON,
         BUTTON_KINDS_MAX
     };
 
@@ -40,6 +42,25 @@ namespace ButtonManager
     /// <param name="fileName">表示させる画像の名前</param>
     /// <returns>ボタンのポインタ</returns>
     GameObject* CreatePlayerControlButton(GameObject* pParent, XMFLOAT3 position, std::string imageName);
+
+    /// <summary>
+    /// スライダーの作成
+    /// </summary>
+    /// <param name="pParent">親オブジェクト</param>
+    /// <param name="position">ボタンの位置</param>
+    /// <param name="imageName">表示させる画像の名前</param>
+    /// <param name="childImageName">スラーダーのボタンに表示させる画像の名前</param>
+    /// <returns>スライダーのポインタ</returns>
+    GameObject* CreateSliderButton(GameObject* pParent, XMFLOAT3 position, std::string imageName, std::string childImageName);
+
+    /// <summary>
+    /// マウスによって動くボタンの作成
+    /// </summary>
+    /// <param name="pParent">親オブジェクト</param>
+    /// <param name="position">ボタンの位置</param>
+    /// <param name="imageName">表示させる画像の名前</param>
+    /// <returns>このボタンのポインタ</returns>
+    GameObject* CreateMoveByMouthButton(GameObject* pParent, XMFLOAT3 position, std::string imageName);
 
 };
 

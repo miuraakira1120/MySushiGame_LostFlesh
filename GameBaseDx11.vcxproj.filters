@@ -270,6 +270,8 @@
     </ClCompile>
     <ClCompile Include="ImageBase.cpp" />
     <ClCompile Include="EditScene.cpp" />
+    <ClCompile Include="Slider.cpp" />
+    <ClCompile Include="MoveByMouthButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -454,6 +456,8 @@
     <ClInclude Include="InstanceManager.h" />
     <ClInclude Include="ImageBase.h" />
     <ClInclude Include="EditScene.h" />
+    <ClInclude Include="Slider.h" />
+    <ClInclude Include="MoveByMouthButton.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
