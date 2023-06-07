@@ -64,7 +64,8 @@ namespace JsonOperator
 	const std::vector<std::string> buttonStrList =
 	{
 		"sceneChangeButton",
-		"playerControlButton"
+		"playerControlButton",
+		"slider"
 	};
 
 	//生成される可能性のあるオブジェクトを文字列にした時の定数

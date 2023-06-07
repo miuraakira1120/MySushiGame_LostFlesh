@@ -25,6 +25,8 @@
 #include <filesystem>
 #include<Windows.h>
 
+#include "Slider.h"
+
 //何のクラスを作成するか
 enum class IniType
 {
@@ -495,9 +497,7 @@ namespace Imgui_Obj
 
         //生成ボタン
         if (canCreate && ImGui::Button("Create"))
-        {
-            selectButtonKinds = JsonOperator::ButtonToString(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);
-
+        {       
             //拡張子を追加
             selectLoadFileNameStr = std::string(loadFileName) + AddExtension();
 
@@ -510,14 +510,21 @@ namespace Imgui_Obj
             //プレイヤーのボタン配置を変えるボタンを作成するなら
             if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
             {       
+                //ボタンの種類
+                selectButtonKinds = JsonOperator::ButtonToString(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);
+
                 //オブジェクトを作成しポインタを保存しておく
                 pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
             }
+
             //スライダーを作成するなら
-            if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
+            if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SLIDER))
             {
+                //ボタンの種類
+                selectButtonKinds = JsonOperator::ButtonToString(ButtonManager::ButtonKinds::SLIDER);
+
                 //オブジェクトを作成しポインタを保存しておく
-                pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
+                pSelectObj = InstantiateButton<Slider>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
             }
         }
 

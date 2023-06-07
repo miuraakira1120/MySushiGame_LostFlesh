@@ -6,12 +6,17 @@
 
 namespace Audio
 {
-	//デフォルトのマスターボリュームの音量
-	const float MASTER_VOLUME_DEF = 0.5f;
+	//音量の最大値
+	const float VOLUME_MAX = 1.0f;
 
-	//マスターボリューム(0.0から1.0, 1.0が最大)
-	float masterVolume = MASTER_VOLUME_DEF;
-	float bgm;
+	//ボリュームの調整
+	float soundVolume[static_cast<int>(Audio::Sound_Type::SOUND_MAX)]
+	{
+		VOLUME_MAX,
+		VOLUME_MAX,
+		VOLUME_MAX,
+		VOLUME_MAX
+	};
 
 	//XAudio本体
 	IXAudio2* pXAudio = nullptr;
@@ -33,6 +38,9 @@ namespace Audio
 
 		//ファイル名
 		std::string fileName;
+
+		//サウンドタイプ
+		Sound_Type soundType;
 	};
 	std::vector<AudioData>	audioDatas;
 }
@@ -50,6 +58,7 @@ void Audio::Initialize()
 //サウンドファイル(.wav）をロード
 int Audio::Load(std::string fileName, bool loopFlg, float volume, int svNum)
 {
+
 	//すでに同じファイルを使ってないかチェック 
 	for (int i = 0; i < audioDatas.size(); i++)
 	{
@@ -189,10 +198,12 @@ bool Audio::IsEndPlayBack(int ID)
 	}
 }
 
-// マスターボリュームを変更する
-void Audio::SetMasterVolume(float vol)
+//ボリュームを変更する
+void Audio::SetVolume(float vol, Sound_Type type)
 {
-	masterVolume = vol * 0.01f;
+	//音量の変更
+	//XAudioの単位に戻す
+	soundVolume[static_cast<int>(type)] = vol * 0.01;
 }
 
 //すべて開放
