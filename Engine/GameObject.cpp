@@ -27,6 +27,18 @@ GameObject::GameObject(GameObject * parent, const std::string& name)
 
 }
 
+//コンストラクタ（pathnameの引数あり）
+GameObject::GameObject(GameObject* parent, const std::string& name, const std::string& pathFilename)
+	: pParent_(parent), objectName_(name),pathName_(pathFilename)
+{
+	childList_.clear();
+	state_ = { 0, 1, 1, 0 };
+
+	if (parent)
+		transform_.pParent_ = &parent->transform_;
+
+}
+
 //デストラクタ
 GameObject::~GameObject()
 {

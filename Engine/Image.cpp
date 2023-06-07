@@ -71,8 +71,6 @@ namespace Image
 		return handle;
 	}
 
-
-
 	//•`‰æ
 	void Draw(int handle, Direct3D::SHADER_TYPE type)
 	{

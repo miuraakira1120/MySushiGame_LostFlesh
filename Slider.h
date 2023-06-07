@@ -5,7 +5,7 @@
 //◆◆◆を管理するクラス
 class Slider : public Button
 {
-	const std::string DEF_CHILD_PATH = "testButton";
+	const std::string DEF_CHILD_PATH = "testButton.png";
 	std::string childPathName;//スライダーのボタンの画像ファイル名
 
 public:
