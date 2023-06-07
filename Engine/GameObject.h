@@ -50,6 +50,7 @@ public:
 	GameObject();
 	GameObject(GameObject* parent);
 	GameObject(GameObject* parent, const std::string& name);
+	GameObject(GameObject* parent, const std::string& name, const std::string& pathFilename);
 
 	//デストラクタ
 	virtual ~GameObject();

@@ -272,6 +272,7 @@
     <ClCompile Include="EditScene.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="MoveByMouthButton.cpp" />
+    <ClCompile Include="PlayerBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -458,6 +459,7 @@
     <ClInclude Include="EditScene.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="MoveByMouthButton.h" />
+    <ClInclude Include="PlayerBase.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

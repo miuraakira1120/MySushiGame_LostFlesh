@@ -180,6 +180,7 @@
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="PlayerBase.cpp" />
     <ClCompile Include="PlayerControlButton.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PoryLine.cpp" />
@@ -248,6 +249,7 @@
     <ClInclude Include="OBB.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="PlayerBase.h" />
     <ClInclude Include="PlayerControlButton.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PoryLine.h" />

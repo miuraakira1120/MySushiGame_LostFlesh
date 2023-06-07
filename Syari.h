@@ -144,6 +144,7 @@ public:
     //開放
     void Release() override;
 
+    //モデルのゲッター
     int GetModelHandle() { return hModel_; }
 
     /// <summary>

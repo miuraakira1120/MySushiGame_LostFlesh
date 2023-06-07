@@ -22,4 +22,9 @@ public:
 	XMVECTOR GetDirect(int elem);   // 指定軸番号の方向ベクトルを取得
 	float GetLen_W(int elem);       // 指定軸方向の長さを取得
 	XMVECTOR GetPos_W();            // 位置を取得
+
+	/// <summary>
+	/// OBBと平面の衝突判定
+	/// </summary>
+	bool OBBvsPlane(OBB& obb, XMFLOAT3 pos, XMVECTOR nomal, float* Len = 0);
 };

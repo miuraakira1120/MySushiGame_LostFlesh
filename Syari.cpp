@@ -312,7 +312,7 @@ void Syari::Update()
         //床のOBB衝突判定
         RayCastData syariOBBData;
         syariOBBData.start = transform_.position_;   //レイの発射位置
-        syariOBBData.dir = direction[i];       //レイの方向
+        syariOBBData.dir   = direction[i];       //レイの方向
         Model::RayCast(hGroundModel, &syariOBBData); //レイを発射
         float length;
         if (syariOBBData.hit && OBBvsPlane(syariOBB, syariOBBData.pos, syariOBBData.normal, &length))
