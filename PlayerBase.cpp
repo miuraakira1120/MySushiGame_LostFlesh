@@ -147,3 +147,74 @@ bool PlayerBase::CheckIfCollided(int hStageModel, XMFLOAT3 vec, float& length)
     }
     return FALSE;
 }
+
+//姿勢を地面の法線に添わせる
+void PlayerBase::PostureGroundFollow(int hStageModel)
+{
+    if (isGround)
+    {
+        //rotate_を使わずに回転
+        //回転計算を変える(これをしないと回転しない)
+        transform_.SetRotateMode(TRANS_NONROTATE);
+
+        //各軸に対するベクトルを求める
+        XMMATRIX rotateX, rotateY, rotateZ;
+        rotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+        rotateY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+        rotateZ = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
+
+        //回転行列を求める
+        XMMATRIX m = rotateZ * rotateX * rotateY;
+
+        //y軸のベクトルを取得
+        XMFLOAT3 fUpVec = { 0, size.y, 0 };
+
+        //XMFLOAT3に変換
+        XMVECTOR vUpVec = XMLoadFloat3(&fUpVec);
+
+        //vUpVecを行列ｍで変形
+        vUpVec = XMVector3TransformCoord(vUpVec, m);
+
+        //現在地をXMVECTOR型に変換する
+        XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+
+        //fBoneDirVecにvUpVecの逆ベクトルを入れる
+        XMFLOAT3 fBoneDirVec;
+        XMStoreFloat3(&fBoneDirVec, -vUpVec);
+
+        RayCastData GroundData;                               //シャリの位置からレイを飛ばして、ゴールとぶつかるかを調べる
+        GroundData.start = transform_.position_;              //レイの発射位置
+        GroundData.dir = fBoneDirVec;                         //レイの方向
+        Model::RayCast(hStageModel, &GroundData);             //レイを発射
+
+        XMVECTOR nor = XMVector3Normalize(GroundData.normal); //法線
+        XMVECTOR up = XMVector3Normalize(vUpVec);             //上ベクトル
+
+        //外積が0だとまずいので確認
+        if (XMVectorGetX(nor) != XMVectorGetX(up) || XMVectorGetY(nor) != XMVectorGetY(up) || XMVectorGetZ(nor) != XMVectorGetZ(up))
+        {
+            //ベクトル間のラジアン角度求める
+            float dot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(nor), XMVector3Normalize(up)));
+
+            //外積求める
+            XMVECTOR cross = XMVector3Cross(nor, up);
+
+            if (dot >= -1 && dot != 0 && dot <= 1)
+            {
+                XMMATRIX y;
+                y = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+                //回転行列求める
+                transform_.changeMatRotate_ = y * XMMatrixRotationAxis(cross, -acos(dot));
+            }
+        }
+        else
+        {
+            XMMATRIX x, y, z;
+            x = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+            y = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+            z = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
+            XMMATRIX mat = z * x * y;
+            transform_.changeMatRotate_ = mat;
+        }
+    }
+}

@@ -78,5 +78,16 @@ public:
     /// <param name="length">戻す距離</param>
     /// <returns>衝突したかどうか</returns>
     bool CheckIfCollided(int hStageModel, XMFLOAT3 vec, float &length);
+
+    /// <summary>
+    /// 姿勢を地面の法線に添わせる
+    /// </summary>
+    /// 
+    
+    /// <summary>
+    /// 姿勢を地面の法線に添わせる
+    /// </summary>
+    /// <param name="hStageModel">ステージのモデル</param>
+    void PostureGroundFollow(int hStageModel);
 };
 
