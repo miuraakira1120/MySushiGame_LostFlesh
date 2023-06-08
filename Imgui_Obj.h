@@ -78,6 +78,11 @@ namespace Imgui_Obj
     void CreateImageImgui();
 
     /// <summary>
+    /// 3Dオブジェクト作成モードの時に出すImgui(Beginの中で使う)
+    /// </summary>
+    void CreateObjectImgui();
+
+    /// <summary>
     /// オブジェクトを生成する時に基本的なImguiを出す(Beginの中で使う)
     /// </summary>
     void SettingBasicImgui();

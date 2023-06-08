@@ -24,7 +24,7 @@ void Stage::Initialize()
     assert(hModel_ >= 0);
     //transform_.position_.y = -5;
     //transform_.scale_ = { 20.0f, 20.0f, 20.0f };
-    Instantiate<Goal>(this);
+    //Instantiate<Goal>(this);
 
     XMFLOAT3 setPos[4] =
     {
@@ -41,8 +41,8 @@ void Stage::Initialize()
         pSalmonRoe->SetRotate(0,270,0);
     }
 
-    Goal* pGoal = Instantiate<Goal>(this);
-    pGoal->SetPosition(4.5, 13, 285);
+    //Goal* pGoal = Instantiate<Goal>(this);
+    //pGoal->SetPosition(4.5, 13, 285);
 }
 
 //çXêV

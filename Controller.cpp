@@ -82,10 +82,8 @@ XMFLOAT3 Controller::GetRotate()
     return transform_.rotate_;
 }
 
-XMFLOAT3 Controller::GetCameraPos()
+XMFLOAT3 Controller::GetCameraPos(XMFLOAT3 position)
 {
-    Syari* pSyari = (Syari*)FindObject("Syari");
-    Maguro* pMaguro = (Maguro*)FindObject("Maguro");
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
 
     XMVECTOR vCam = XMVectorSet(0.0f, 4.0f, 10.0f, 0.0f);
@@ -94,6 +92,6 @@ XMFLOAT3 Controller::GetCameraPos()
     vCam = XMVector3TransformCoord(vCam, mRotate);
     XMFLOAT3 camPos;
     XMStoreFloat3(&camPos, vPos + vCam);
-    transform_.position_ = pSyari->GetPosition();
+    transform_.position_ = position;
     return camPos;
 }

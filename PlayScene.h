@@ -14,13 +14,13 @@ class PlayScene : public GameObject
 	struct ConstantBuffer
 	{
 		XMMATRIX	dummy_;		// 空
-		float	pos;		// uvの移動する位置
+		float		pos;		// uvの移動する位置
 	};
 
 	float pos;
 	Microsoft::WRL::ComPtr<ID3D11Buffer>pConstantBuffer_;	//コンスタントバッファ
 
-	int hPict_;								//画像番号
+	int hPict_;					//画像番号
 
 public:
 	//コンストラクタ

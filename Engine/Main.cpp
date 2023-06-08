@@ -188,18 +188,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				{
 					Direct3D::SetViewPort(0);
 
-					Syari* pSyari = (Syari*)pRootObject->FindObject("Syari");
-					//controllerクラスのポインタを入れる
-					Controller* pController = (Controller*)pRootObject->FindObject("Controller");
-
-					if (pSyari != nullptr)
-					{
-						Camera::SetTarget(pSyari->GetPosition());
-						Camera::SetPosition(pController->GetCameraPos());
-					}
-					
-
-
 					//Camera::SetPosition(XMFLOAT3(0, 0, -10));
 					Camera::Update();
 

@@ -12,6 +12,7 @@
 
 #include "../Imgui_Obj.h"
 #include "../EditScene.h"
+#include "../TutorialScene.h"
 
 
 //コンストラクタ
@@ -54,11 +55,10 @@ void SceneManager::Update()
 		case SCENE_ID_GOAL: pNowScene[SCENE_ID_GOAL] = Instantiate<GoalScene>(this); break;
 		case SCENE_ID_GAMEOVER: pNowScene[SCENE_ID_GAMEOVER] = Instantiate<GameOverScene>(this); break;
 		case SCENE_ID_EDIT: pNowScene[SCENE_ID_EDIT] = Instantiate<EditScene>(this); break;
+		case SCENE_ID_TUTORIAL: pNowScene[SCENE_ID_TUTORIAL] = Instantiate<TutorialScene>(this); break;
 		}
 		Audio::Initialize();
-		currentSceneID_ = nextSceneID_;
-
-		
+		currentSceneID_ = nextSceneID_;		
 	}
 }
 

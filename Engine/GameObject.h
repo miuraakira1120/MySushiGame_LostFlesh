@@ -24,7 +24,7 @@ protected:
 	Transform				 transform_;
 
 	//オブジェクトの名前
-	std::string				 objectName_;
+	const std::string		 objectName_;
 
 	//衝突判定リスト
 	std::list<Collider*>	 colliderList_;	
@@ -61,6 +61,10 @@ public:
 	virtual void Draw() = 0;
 	virtual void Release(void) = 0;
 
+	//継承元で使用使用するための関数
+	//更新が呼ばれる前に設定しておきたいものがある時に使う
+	virtual void SetUp() {};
+
 	//自分の該当関数を読んだ後、子供の関数も呼ぶ
 	void UpdateSub();
 	void DrawSub();
@@ -88,6 +92,8 @@ public:
 	void SetInitialized();	// 初期化済みにする
 	bool IsEntered();		// Update実行していいか
 	bool IsVisibled();		// Draw実行していいか
+	void DoSetUp();			//セットアップが完了した状態にする
+	bool IsSetUp();			//セットアップが完了しているか
 
 
 	//子オブジェクトリストを取得
@@ -185,6 +191,7 @@ private:
 		unsigned entered : 1;		//更新するか
 		unsigned visible : 1;		//描画するか
 		unsigned dead : 1;			//削除するか
+		unsigned setUp : 1;			//セットアップしているか
 	};
 	OBJECT_STATE state_;
 
@@ -289,4 +296,18 @@ T* InstantiateImage(GameObject* pParent, std::string fileName, XMFLOAT3 pos, XMF
 	pNewObject->SetScale(sca);
 	return pNewObject;
 }
+
+//キャラクターを作成するテンプレート
+template <class T>
+T* CharacterInstantiate(GameObject* pParent, std::string fileName)
+{
+	T* pNewObject = new T(pParent, fileName);
+	if (pParent != nullptr)
+	{
+		pParent->PushBackChild(pNewObject);
+	}
+	pNewObject->Initialize();
+	return pNewObject;
+}
+
 

@@ -20,7 +20,7 @@ GameObject::GameObject(GameObject * parent, const std::string& name)
 	: pParent_(parent),objectName_(name)
 {
 	childList_.clear();
-	state_ = { 0, 1, 1, 0};
+	state_ = { 0, 1, 1, 0, 0};
 
 	if(parent)
 		transform_.pParent_ = &parent->transform_;
@@ -107,6 +107,18 @@ bool GameObject::IsEntered()
 bool GameObject::IsVisibled()
 {
 	return (state_.visible != 0);
+}
+
+//セットアップが完了した状態にする
+void GameObject::DoSetUp()
+{
+	state_.setUp = 1;
+}
+
+//セットアップが完了しているか
+bool GameObject::IsSetUp()
+{
+	return (state_.setUp != 0);
 }
 
 //子オブジェクトリストを取得
@@ -289,6 +301,12 @@ GameObject * GameObject::GetRootJob()
 
 void GameObject::UpdateSub()
 {
+	if (!IsSetUp())
+	{
+		SetUp();
+		DoSetUp();
+	}
+
 	Update();
 	Transform();
 
@@ -316,6 +334,8 @@ void GameObject::UpdateSub()
 
 void GameObject::DrawSub()
 {
+	
+
 	Draw();
 
 

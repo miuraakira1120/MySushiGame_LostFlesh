@@ -48,6 +48,9 @@ public:
     //開放
     virtual void Release() {};
 
+    //セットアップする関数
+    virtual void SetUp();
+
     //何かに当たった
    //引数：pTarget 当たった相手
     virtual void OnCollision(GameObject* pTarget) {};
@@ -61,9 +64,6 @@ public:
     /// <param name="isInverse">バックするかどうか</param>
     void Move(bool isInverse = false);
 
-    //空中にいるかどうか調べる関数
-    bool isFly();
-
     //モデルのゲッター
     int GetModelHandle() { return hModel_; }
 
@@ -74,20 +74,28 @@ public:
     /// 衝突しているか調べる
     /// </summary>
     /// <param name="hStageModel">ステージのモデル</param>
-    /// <param name="vec">レイを飛ばす方法</param>
+    /// <param name="vec">レイを飛ばす方向</param>
+    /// <param name="rayPos">レイをどこから飛ばすか</param>
     /// <param name="length">戻す距離</param>
     /// <returns>衝突したかどうか</returns>
-    bool CheckIfCollided(int hStageModel, XMFLOAT3 vec, float &length);
-
-    /// <summary>
-    /// 姿勢を地面の法線に添わせる
-    /// </summary>
-    /// 
+    bool CheckIfCollided(int hStageModel, XMFLOAT3 vec,XMFLOAT3 rayPos, float &length);
     
     /// <summary>
     /// 姿勢を地面の法線に添わせる
     /// </summary>
     /// <param name="hStageModel">ステージのモデル</param>
     void PostureGroundFollow(int hStageModel);
+
+    /// <summary>
+    /// このオブジェクトにカメラをセットする
+    /// </summary>
+    void SetCameraController();
+
+
+    /// <summary>
+    /// 地面にめり込んだ時の処理
+    /// </summary>
+    /// <param name="hStageModel">ステージのモデル</param>
+    void RevertProcess(int hStageModel);
 };
 

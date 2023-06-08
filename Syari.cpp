@@ -16,6 +16,7 @@
 #include "Engine/SceneManager.h"
 #include "OBB.h"
 #include "Ball.h"
+#include "Engine/Global.h"
 
 
 using std::vector;
@@ -42,7 +43,7 @@ void Syari::Initialize()
     assert(hModel_ >= 0);
 
     //子オブジェクトの生成
-    Instantiate<Maguro>(this);
+    //Instantiate<Maguro>(this);
 
     //当たり判定の生成
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
@@ -62,7 +63,7 @@ void Syari::Initialize()
     Time::UnLock(TimerID);
     pGauge_->SetMaxHP(300 * 60);
 
-    transform_.position_.y = -37;
+    //transform_.position_.y = -37;
 }
 
 //更新
@@ -94,8 +95,8 @@ void Syari::Update()
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
     int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
 
-    Goal* pGoal = (Goal*)FindObject("Goal");        //ゴールオブジェクトを探す
-    int hGoalModel = pGoal->GetModelHandle();       //モデル番号を取得
+    //Goal* pGoal = (Goal*)FindObject("Goal");        //ゴールオブジェクトを探す
+    //int hGoalModel = pGoal->GetModelHandle();       //モデル番号を取得
 
     //一番低いところと高いところを探す
     int lowest = 0;
@@ -146,7 +147,7 @@ void Syari::Update()
     RayCastData GoalData;                       //シャリの位置からレイを飛ばして、ゴールとぶつかるかを調べる
     GoalData.start = transform_.position_;      //レイの発射位置
     GoalData.dir = XMFLOAT3(0, -1, 0);          //レイの方向
-    Model::RayCast(hGoalModel, &GoalData);      //レイを発射
+    //Model::RayCast(hGoalModel, &GoalData);      //レイを発射
 
     /////////////////////////////////////////////////////
 
@@ -393,6 +394,11 @@ void Syari::Update()
     {
         prevBonePos[i] = vertexBonePos[i];
     }
+
+    //カメラのコントローラーを探す
+    Controller* pController = (Controller*)FindObject("Controller");
+    Camera::SetTarget(transform_.position_);
+    Camera::SetPosition(pController->GetCameraPos(transform_.position_));
 }
 
 //描画
