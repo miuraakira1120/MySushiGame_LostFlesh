@@ -6,7 +6,7 @@
 
 //コンストラクタ
 ImageBase::ImageBase(GameObject* parent, std::string pathName, int alpha)
-    :GameObject(parent, "ImageBase"),hPict_(-1)
+    :GameObject(parent, "ImageBase"),hPict_(-1), isParentMove(false)
 {
     SetPathName(pathName);
     SetAlpha(alpha);
@@ -48,11 +48,23 @@ void ImageBase::Update()
 //描画
 void ImageBase::Draw()
 {
+    //アルファ値をセットする
     Image::SetAlpha(hPict_, alpha_);
 
-    Transform scrTransform = transform_;
-    scrTransform.position_ = parentObjectPositionByImagePosition();
-    Image::SetTransform(hPict_, scrTransform);
+    //通常の状態
+    if (!isParentMove)
+    {
+        Image::SetTransform(hPict_, transform_);
+    }
+    //親オブジェクトの位置にって画像の位置を変える状態
+    else
+    {       
+        Transform scrTransform = transform_;
+        scrTransform.position_ = parentObjectPositionByImagePosition();
+        Image::SetTransform(hPict_, scrTransform);
+    }
+
+    //描画
     Image::Draw(hPict_);
 }
 
@@ -70,6 +82,14 @@ XMFLOAT3 ImageBase::parentObjectPositionByImagePosition()
     XMFLOAT3 scrParentPos = Camera::ToWorldCalcScreen(pPlayer->GetPosition());
     scrParentPos = Math::Float3Add( scrParentPos, transform_.position_);
     return scrParentPos;
+}
+
+
+
+//親オブジェクトの位置にって画像の位置を変える状態にする
+void ImageBase::SetParentMove(bool flag)
+{
+    isParentMove = flag;
 }
 
 

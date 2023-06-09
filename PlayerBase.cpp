@@ -24,8 +24,12 @@ void PlayerBase::Draw()
 //セットアップする関数
 void PlayerBase::SetUp()
 {
+    //モデルをロード
     hModel_ = Model::Load(pathName_);
     assert(hModel_ >= 0);
+
+    //カメラのコントローラーを探す
+    pController = (Controller*)FindObject("Controller");
 }
 
 //ジャンプ
@@ -42,9 +46,6 @@ void PlayerBase::Jump()
 //移動する関数
 void PlayerBase::Move(bool isInverse)
 {
-    //カメラのコントローラーを探す
-    Controller* pController = (Controller*)FindObject("Controller");
-
     //カメラの向きにこのオブジェクトを設定する
     transform_.rotate_.y = pController->GetRotate().y;
 
@@ -228,12 +229,10 @@ void PlayerBase::PostureGroundFollow(int hStageModel)
 }
 
 //このオブジェクトにカメラをセットする
-void PlayerBase::SetCameraController()
+void PlayerBase::SetCameraController(XMFLOAT3 ShiftPos)
 {
-    //カメラのコントローラーを探す
-    Controller* pController = (Controller*)FindObject("Controller");
     Camera::SetTarget(transform_.position_);
-    Camera::SetPosition(pController->GetCameraPos(transform_.position_));
+    Camera::SetPosition(pController->GetCameraPos(Math::Float3Add(transform_.position_, ShiftPos)));
 }
 
 //地面にめり込んだ時の処理

@@ -4,6 +4,8 @@
 #include "Engine/GameObject.h"
 #include "Engine/Direct3D.h"
 
+class Controller;
+
 using namespace DirectX;
 
 class PlayerBase : public GameObject
@@ -30,6 +32,7 @@ private:
     bool  canMove;               //動くことができるか
     XMFLOAT3 size;               //プレイヤーのサイズ
     Direct3D::SHADER_TYPE type;  //描画に使用するシェーダー
+    Controller* pController;
 
 public:
 
@@ -89,7 +92,7 @@ public:
     /// <summary>
     /// このオブジェクトにカメラをセットする
     /// </summary>
-    void SetCameraController();
+    void SetCameraController(XMFLOAT3 ShiftPos = XMFLOAT3(0.0f,0.0f,0.0f));
 
 
     /// <summary>

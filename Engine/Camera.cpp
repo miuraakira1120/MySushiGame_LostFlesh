@@ -87,7 +87,7 @@ XMFLOAT3 Camera::ToWorldCalcScreen(XMFLOAT3 position)
 	// スクリーン座標の取得
 	XMFLOAT3 screenPosition;
 	XMStoreFloat3(&screenPosition, screenPositionVec);
-
+	
 	//ピクセルから-1から1の範囲に変換
 	screenPosition = Math::PixelToTransform(screenPosition);
 

@@ -20,10 +20,6 @@ Controller::~Controller()
 //初期化
 void Controller::Initialize()
 {
-    //transform_.position_ = { 7, -10, 7 };
-//    XMFLOAT3 fCam = { 7, 10, -10 };
-//    Camera::SetPosition(fCam);
-
     //画像データのロード
     hPict_ = Image::Load("water.png");
     assert(hPict_ >= 0);

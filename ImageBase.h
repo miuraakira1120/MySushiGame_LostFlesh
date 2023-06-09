@@ -5,7 +5,9 @@
 class ImageBase : public GameObject
 {
     int hPict_;                //画像番号
-    std::string PrevPathName_; //1フレーム前の画像番号   
+    std::string PrevPathName_; //1フレーム前の画像番号  
+
+    bool isParentMove;//親オブジェクトの位置にって画像の位置を変える
 
 public:
     //コンストラクタ
@@ -31,4 +33,11 @@ public:
     /// </summary>
     /// <returns>変更後のスクリーン座標</returns>
     XMFLOAT3 parentObjectPositionByImagePosition();
+
+    /// <summary>
+    /// 親オブジェクトの位置にって画像の位置を変える状態にする
+    /// </summary>
+    /// <returns>変更後のスクリーン座標</returns>
+    void SetParentMove(bool flag);
+
 };
