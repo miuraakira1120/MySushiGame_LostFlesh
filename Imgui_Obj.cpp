@@ -97,6 +97,8 @@ namespace
 
     std::vector<Imgui_Obj::SettingInfo> settingInfoButtonFromPauseList;//作ったボタンのリスト(ポーズ画面)
     std::vector<Imgui_Obj::SettingInfo> settingInfoImageFromPauseList; //作った画像のリスト(ポーズ画面)
+
+    std::vector<GameObject*> debugLogList; //デバッグログを表示するオブジェクトのリスト
     
 }
 
@@ -137,6 +139,9 @@ namespace Imgui_Obj
 
         //楽にシーンチェンジ出来るようにする
         SceneChangeImgui();
+
+        //デバッグログを表示するImguiを出す
+        CreateDebugLog();
 
         //今エディットシーンにいたら
         if (pSceneManager->GetNowSceneID() == SCENE_ID::SCENE_ID_EDIT)
@@ -844,6 +849,27 @@ namespace Imgui_Obj
 
     }
 
+    //デバッグログを表示するImguiを出す
+    void CreateDebugLog()
+    {
+        ImGui::Begin("Debug Log");
+
+        for (int i = 0; i < debugLogList.size(); i++)
+        {
+            ImGui::Text("Position");
+            ImGui::Text("%f", debugLogList[i]->GetPosition().x);
+            ImGui::Text("%f", debugLogList[i]->GetPosition().y);
+            ImGui::Text("%f", debugLogList[i]->GetPosition().z);
+        }
+        ImGui::End();
+    }
+
+    //デバッグログを表示するリストに追加する
+    void AddDebugLogList(GameObject* obj)
+    {
+        debugLogList.push_back(obj);
+    }
+
     // 拡張子を追加する関数(変数extensionを参照)
     std::string AddExtension()
     {
@@ -883,6 +909,7 @@ namespace Imgui_Obj
         settingInfoImageFromPauseList.clear();
         settingInfoButtonList.clear();
         settingInfoImageList.clear();
+        debugLogList.clear();
     }
 
     //UIモードを選択するImguiを作成する

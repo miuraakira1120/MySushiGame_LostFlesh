@@ -1,5 +1,8 @@
 #include "ImageBase.h"
 #include "Engine/Image.h"
+#include "Engine/Camera.h"
+#include "Player.h"
+#include "Imgui_Obj.h"
 
 //コンストラクタ
 ImageBase::ImageBase(GameObject* parent, std::string pathName, int alpha)
@@ -23,6 +26,8 @@ void ImageBase::Initialize()
     assert(hPict_ >= 0);
 
     PrevPathName_ = pathName_;
+
+    Imgui_Obj::AddDebugLogList(this);
 }
 
 //更新
@@ -44,7 +49,10 @@ void ImageBase::Update()
 void ImageBase::Draw()
 {
     Image::SetAlpha(hPict_, alpha_);
-    Image::SetTransform(hPict_, transform_);
+
+    Transform scrTransform = transform_;
+    scrTransform.position_ = parentObjectPositionByImagePosition();
+    Image::SetTransform(hPict_, scrTransform);
     Image::Draw(hPict_);
 }
 
@@ -52,3 +60,17 @@ void ImageBase::Draw()
 void ImageBase::Release()
 {
 }
+
+//親オブジェクトの位置にって画像の位置を変える
+XMFLOAT3 ImageBase::parentObjectPositionByImagePosition()
+{
+    Player* pPlayer = (Player*)FindObject("Player");    //ステージオブジェクトを探す
+
+    //親オブジェクトをスクリーン座標に変換
+    XMFLOAT3 scrParentPos = Camera::ToWorldCalcScreen(pPlayer->GetPosition());
+    scrParentPos = Math::Float3Add( scrParentPos, transform_.position_);
+    return scrParentPos;
+}
+
+
+

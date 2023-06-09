@@ -35,4 +35,17 @@ namespace Camera
 
 	//ビルボード用回転行列を取得
 	XMMATRIX GetBillboardMatrix();
+
+	/// <summary>
+	/// ワールド座標をスクリーン座標に変換
+	/// </summary>
+	/// <returns>変換後の座標</returns>
+	/// 
+	
+	/// <summary>
+	/// ワールド座標をスクリーン座標に変換
+	/// </summary>
+	/// <param name="position">ワールド座標</param>
+	/// <returns>変換後の座標</returns>
+	XMFLOAT3 ToWorldCalcScreen(XMFLOAT3 position);
 };

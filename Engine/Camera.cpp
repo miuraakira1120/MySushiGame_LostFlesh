@@ -73,3 +73,57 @@ void Camera::SetViewFlag(int flag)
 //ビルボード用回転行列を取得
 XMMATRIX Camera::GetBillboardMatrix() { return _billBoard; }
 
+//ワールド座標をスクリーン座標に変換
+XMFLOAT3 Camera::ToWorldCalcScreen(XMFLOAT3 position)
+{
+	//positionをXMVECTORに変換
+	XMVECTOR worldPositionVec = XMLoadFloat3(&position);
+
+	// ワールド座標をスクリーン座標に変換
+	XMVECTOR screenPositionVec = XMVector3Project(worldPositionVec, 0, 0,
+		Direct3D::vp_left.Width, Direct3D::vp_left.Height, Direct3D::vp_left.MinDepth, Direct3D::vp_left.MaxDepth,
+		_proj, _view, XMMatrixIdentity());
+
+	// スクリーン座標の取得
+	XMFLOAT3 screenPosition;
+	XMStoreFloat3(&screenPosition, screenPositionVec);
+
+	//ピクセルから-1から1の範囲に変換
+	screenPosition = Math::PixelToTransform(screenPosition);
+
+	return screenPosition;
+}
+////必要な変数を作成
+	//XMMATRIX invView, invPrj, viewPor, invViewport;
+
+	////positionのXMVECTORに変換
+	//XMVECTOR vPos = XMLoadFloat3(&position);
+
+	////各行列の逆行列を算出
+	//invView = XMMatrixInverse(nullptr, _view);
+	//invPrj	= XMMatrixInverse(nullptr, _proj);
+
+	////ビューポートをXMMATRIXに変換
+	//viewPor = XMMatrixIdentity();
+	//viewPor.r[0] = XMVectorSet(Direct3D::vp_left.Width / 2.0f, 0.0f, 0.0f, 0.0f);
+	//viewPor.r[1] = XMVectorSet(0.0f, -Direct3D::vp_left.Height / 2.0f, 0.0f, 0.0f);
+	//viewPor.r[3] = XMVectorSet(Direct3D::vp_left.TopLeftX + Direct3D::vp_left.Width / 2.0f, Direct3D::vp_left.TopLeftY + Direct3D::vp_left.Height / 2.0f, 0.0f, 1.0f);
+
+	//invViewport = XMMatrixInverse(nullptr, viewPor);
+
+	//// 逆変換
+	//XMMATRIX tmp = invView * invPrj * invViewport;
+	//XMVECTOR pout = XMVector3TransformCoord(vPos, tmp);
+
+	//XMFLOAT3 fPort;
+	//XMStoreFloat3(&fPort, pout);
+	//return fPort;
+
+
+
+
+
+
+
+
+

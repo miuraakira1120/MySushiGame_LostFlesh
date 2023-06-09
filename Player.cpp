@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Stage.h"
 #include "Engine/Input.h"
+#include "ImageBase.h"
 
 
 Player::Player(GameObject* parent, std::string pathName)

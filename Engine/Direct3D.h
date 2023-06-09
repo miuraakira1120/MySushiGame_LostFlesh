@@ -26,6 +26,9 @@ namespace Direct3D
 	//GPUに命令を出すためのやつ
 	extern ID3D11DeviceContext*    pContext_;
 
+	//ビューポート
+	extern D3D11_VIEWPORT vp_left;
+
 
 	//■シェーダー関連で必要なセット
 	enum SHADER_TYPE

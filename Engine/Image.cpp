@@ -82,8 +82,6 @@ namespace Image
 		_datas[handle]->pSprite->Draw(_datas[handle]->transform, _datas[handle]->rect, _datas[handle]->alpha, type);
 	}
 
-
-
 	//”CˆÓ‚Ì‰æ‘œ‚ðŠJ•ú
 	void Release(int handle)
 	{

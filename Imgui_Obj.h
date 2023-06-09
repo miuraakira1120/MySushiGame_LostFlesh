@@ -88,6 +88,18 @@ namespace Imgui_Obj
     void SettingBasicImgui();
 
     /// <summary>
+    /// デバッグログを表示するImguiを出す
+    /// </summary>
+    void CreateDebugLog();
+    
+    /// <summary>
+    /// デバッグログを表示するリストに追加する
+    /// </summary>
+    /// <param name="obj">追加するオブジェクト</param>
+    void AddDebugLogList(GameObject* obj);
+
+
+    /// <summary>
     /// 拡張子を追加する関数(変数extensionを参照)
     /// </summary>
     /// <returns>返す拡張子</returns>
@@ -135,6 +147,8 @@ namespace Imgui_Obj
     /// <param name="filename">調べるファイル名</param>
     /// <returns><returns>存在するかどうか</returns></returns>
     bool existFile(std::string filename);
+
+    
 };
 
 //追加するボタンを増やす手順

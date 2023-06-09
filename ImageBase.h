@@ -25,4 +25,10 @@ public:
 
     //開放
     void Release() override;
+
+    /// <summary>
+    /// 親オブジェクトの位置にって画像の位置を変える
+    /// </summary>
+    /// <returns>変更後のスクリーン座標</returns>
+    XMFLOAT3 parentObjectPositionByImagePosition();
 };
