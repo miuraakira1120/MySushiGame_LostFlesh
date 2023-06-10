@@ -164,3 +164,5 @@ void Sprite::Draw(Transform& transform, RECT rect, float alpha, Direct3D::SHADER
 	Direct3D::SetDepthBafferWriteEnable(true);
 
 }
+
+

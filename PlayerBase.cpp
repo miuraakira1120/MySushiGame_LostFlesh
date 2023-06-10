@@ -1,8 +1,11 @@
 #include "PlayerBase.h"
 #include "Controller.h"
-#include "OBB.h"
 #include "Engine/Fbx.h"
 #include "Engine/Model.h"
+#include "Engine/Camera.h"
+#include "Controller.h"
+#include "OBB.h"
+#include "Engine/Global.h"
 
 
 //コンストラクタ
@@ -18,12 +21,24 @@ void PlayerBase::Draw()
     Model::Draw(hModel_);
 }
 
+//セットアップする関数
+void PlayerBase::SetUp()
+{
+    //モデルをロード
+    hModel_ = Model::Load(pathName_);
+    assert(hModel_ >= 0);
+
+    //カメラのコントローラーを探す
+    pController = (Controller*)FindObject("Controller");
+}
+
 //ジャンプ
 void PlayerBase::Jump()
 {
     //陸についていたら
     if (isGround)
     {
+        //重力がマイナスになることで上昇する
         gravity -= SPEED_OF_JUMP;
     }
 }
@@ -31,9 +46,6 @@ void PlayerBase::Jump()
 //移動する関数
 void PlayerBase::Move(bool isInverse)
 {
-    //カメラのコントローラーを探す
-    Controller* pController = (Controller*)FindObject("Controller");
-
     //カメラの向きにこのオブジェクトを設定する
     transform_.rotate_.y = pController->GetRotate().y;
 
@@ -85,7 +97,7 @@ void PlayerBase::Gravity()
 }
 
 //衝突しているか調べる
-bool PlayerBase::CheckIfCollided(int hStageModel, XMFLOAT3 vec, float& length)
+bool PlayerBase::CheckIfCollided(int hStageModel, XMFLOAT3 vec, XMFLOAT3 rayPos, float& length)
 {
     //シャリの現在地をXMVECTORに変換
     XMVECTOR vPos;
@@ -113,7 +125,7 @@ bool PlayerBase::CheckIfCollided(int hStageModel, XMFLOAT3 vec, float& length)
         //vBoneDirにポジションを足す
         vBoneDir += vPos;
 
-        //XMFLOATに直す
+        //XMFLOAT3に直す
         XMStoreFloat3(&fBoneDir[i], vBoneDir);
 
         //リストに追加する
@@ -134,7 +146,7 @@ bool PlayerBase::CheckIfCollided(int hStageModel, XMFLOAT3 vec, float& length)
 
     //床のOBB衝突判定
     RayCastData prayerOBBData;
-    prayerOBBData.start = transform_.position_;   //レイの発射位置
+    prayerOBBData.start = rayPos;   //レイの発射位置
     prayerOBBData.dir = vec;                      //レイの方向
     Model::RayCast(hStageModel, &prayerOBBData);  //レイを発射
 
@@ -151,70 +163,153 @@ bool PlayerBase::CheckIfCollided(int hStageModel, XMFLOAT3 vec, float& length)
 //姿勢を地面の法線に添わせる
 void PlayerBase::PostureGroundFollow(int hStageModel)
 {
-    if (isGround)
+    //rotate_を使わずに回転
+    //回転計算を変える(これをしないと回転しない)
+    transform_.SetRotateMode(TRANS_NONROTATE);
+
+    //各軸に対するベクトルを求める
+    XMMATRIX rotateX, rotateY, rotateZ;
+    rotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+    rotateY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+    rotateZ = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
+
+    //回転行列を求める
+    XMMATRIX m = rotateZ * rotateX * rotateY;
+
+    //y軸のベクトルを取得
+    XMFLOAT3 fUpVec = { 0, size.y, 0 };
+
+    //XMFLOAT3に変換
+    XMVECTOR vUpVec = XMLoadFloat3(&fUpVec);
+
+    //vUpVecを行列ｍで変形
+    vUpVec = XMVector3TransformCoord(vUpVec, m);
+
+    //現在地をXMVECTOR型に変換する
+    XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+
+    //fBoneDirVecにvUpVecの逆ベクトルを入れる
+    XMFLOAT3 fBoneDirVec;
+    XMStoreFloat3(&fBoneDirVec, -vUpVec);
+
+    RayCastData GroundData;                               //シャリの位置からレイを飛ばして、ゴールとぶつかるかを調べる
+    GroundData.start = transform_.position_;              //レイの発射位置
+    GroundData.dir = fBoneDirVec;                         //レイの方向
+    Model::RayCast(hStageModel, &GroundData);             //レイを発射
+
+    XMVECTOR nor = XMVector3Normalize(GroundData.normal); //法線
+    XMVECTOR up = XMVector3Normalize(vUpVec);             //上ベクトル
+
+    //外積が0だとまずいので確認
+    if (XMVectorGetX(nor) != XMVectorGetX(up) || XMVectorGetY(nor) != XMVectorGetY(up) || XMVectorGetZ(nor) != XMVectorGetZ(up))
     {
-        //rotate_を使わずに回転
-        //回転計算を変える(これをしないと回転しない)
-        transform_.SetRotateMode(TRANS_NONROTATE);
+        //ベクトル間のラジアン角度求める
+        float dot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(nor), XMVector3Normalize(up)));
 
-        //各軸に対するベクトルを求める
-        XMMATRIX rotateX, rotateY, rotateZ;
-        rotateX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
-        rotateY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-        rotateZ = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
+        //外積求める
+        XMVECTOR cross = XMVector3Cross(nor, up);
 
-        //回転行列を求める
-        XMMATRIX m = rotateZ * rotateX * rotateY;
-
-        //y軸のベクトルを取得
-        XMFLOAT3 fUpVec = { 0, size.y, 0 };
-
-        //XMFLOAT3に変換
-        XMVECTOR vUpVec = XMLoadFloat3(&fUpVec);
-
-        //vUpVecを行列ｍで変形
-        vUpVec = XMVector3TransformCoord(vUpVec, m);
-
-        //現在地をXMVECTOR型に変換する
-        XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
-
-        //fBoneDirVecにvUpVecの逆ベクトルを入れる
-        XMFLOAT3 fBoneDirVec;
-        XMStoreFloat3(&fBoneDirVec, -vUpVec);
-
-        RayCastData GroundData;                               //シャリの位置からレイを飛ばして、ゴールとぶつかるかを調べる
-        GroundData.start = transform_.position_;              //レイの発射位置
-        GroundData.dir = fBoneDirVec;                         //レイの方向
-        Model::RayCast(hStageModel, &GroundData);             //レイを発射
-
-        XMVECTOR nor = XMVector3Normalize(GroundData.normal); //法線
-        XMVECTOR up = XMVector3Normalize(vUpVec);             //上ベクトル
-
-        //外積が0だとまずいので確認
-        if (XMVectorGetX(nor) != XMVectorGetX(up) || XMVectorGetY(nor) != XMVectorGetY(up) || XMVectorGetZ(nor) != XMVectorGetZ(up))
+        if (dot >= -1 && dot != 0 && dot <= 1)
         {
-            //ベクトル間のラジアン角度求める
-            float dot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(nor), XMVector3Normalize(up)));
-
-            //外積求める
-            XMVECTOR cross = XMVector3Cross(nor, up);
-
-            if (dot >= -1 && dot != 0 && dot <= 1)
-            {
-                XMMATRIX y;
-                y = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-                //回転行列求める
-                transform_.changeMatRotate_ = y * XMMatrixRotationAxis(cross, -acos(dot));
-            }
-        }
-        else
-        {
-            XMMATRIX x, y, z;
-            x = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+            XMMATRIX y;
             y = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-            z = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
-            XMMATRIX mat = z * x * y;
-            transform_.changeMatRotate_ = mat;
+            //回転行列求める
+            transform_.changeMatRotate_ = y * XMMatrixRotationAxis(cross, -acos(dot));
         }
     }
+    else
+    {
+        XMMATRIX x, y, z;
+        x = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+        y = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+        z = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
+        XMMATRIX mat = z * x * y;
+        transform_.changeMatRotate_ = mat;
+    }
 }
+
+//このオブジェクトにカメラをセットする
+void PlayerBase::SetCameraController(XMFLOAT3 ShiftPos)
+{
+    Camera::SetTarget(transform_.position_);
+    Camera::SetPosition(pController->GetCameraPos(Math::Float3Add(transform_.position_, ShiftPos)));
+}
+
+//地面にめり込んだ時の処理
+void PlayerBase::RevertProcess(int hStageModel)
+{
+    //ボーンの位置を取得
+    const std::string vertexName[8] = {
+        "Vertex_Hight_Right_Front",
+        "Vertex_Hight_Right_Back",
+        "Vertex_Hight_Left_Front",
+        "Vertex_Hight_Left_Back",
+        "Vertex_Low_Right_Front",
+        "Vertex_Low_Right_Back",
+        "Vertex_Low_Left_Front",
+        "Vertex_Low_Left_Back"
+    };
+
+    const int VERMAX = COUNTOF(vertexName);
+    XMFLOAT3 vertexBonePos[VERMAX];
+
+    //各頂点の位置を調べる
+    for (int i = 0; i < VERMAX; i++)
+    {
+        vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
+    }
+     
+    //レイをたくさん飛ばす
+    //レイ分ループ
+    
+   //真下へのベクトルを用意
+    XMFLOAT3 vec[6] = 
+    {
+        XMFLOAT3(0,-1,0),//下
+        XMFLOAT3(0,1,0), //上
+        Math::Float3Sub(transform_.position_, vertexBonePos[4]), //右
+        Math::Float3Sub(transform_.position_, vertexBonePos[5]),//左
+        Math::Float3Sub(transform_.position_, vertexBonePos[6]),//手前
+        Math::Float3Sub(transform_.position_, vertexBonePos[7]), //奥
+    };
+
+    //レイのスタート地点
+    XMFLOAT3 pos = { 0,0,0 };
+
+    for (int i = 0; i < 6; i++)
+    {
+        float length;
+        //衝突しているか調べる
+        if (CheckIfCollided(hStageModel, vec[i], pos, length))
+        {
+            //vecをXMVECTORに変換
+            XMVECTOR vector = XMLoadFloat3(&vec[i]);
+
+            //逆ベクトルにする
+            vector *= -1;
+
+            //正規化
+            vector = XMVector3Normalize(vector);
+
+            //ベクトルをlengthの長さにする
+            vector *= length;
+
+            //現在地をXMVECTOR型にする
+            XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+
+            //現在地をvectorの分移動する
+            vPos += vector;
+
+            //現在地をXMFLOAT3型にする
+            XMStoreFloat3(&transform_.position_, vPos);
+
+            //地面についている場合にやる処理
+            if(i == 0)
+            {
+                isGround = true;
+                gravity = 0;
+            }
+        }
+    }  
+}
+

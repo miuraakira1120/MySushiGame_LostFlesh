@@ -49,7 +49,7 @@ XMVECTOR OBB::GetPos_W()
 bool OBB::OBBvsPlane(OBB& obb, XMFLOAT3 pos, XMVECTOR nomal, float* Len)
 {
     // 平面の法線に対するOBBの射影線の長さを算出
-    float r = 0.0f;          // 近接距離
+    float r = 0.0f;               // 近接距離
     XMVECTOR PlaneNormal = nomal; // 平面の法線ベクトル
     for (int i = 0; i < 3; i++) {
         XMVECTOR Direct = obb.GetDirect(i); // OBBの1つの軸ベクトル

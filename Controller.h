@@ -32,6 +32,12 @@ public:
 
     //向きのゲッター
     XMFLOAT3 GetRotate();
-    XMFLOAT3 GetCameraPos();
+
+    /// <summary>
+    /// カメラの位置のゲッター
+    /// </summary>
+    /// <param name="position">このオブジェクトが対応しているオブジェクトの位置</param>
+    /// <returns></returns>
+    XMFLOAT3 GetCameraPos(XMFLOAT3 position);
 };
 

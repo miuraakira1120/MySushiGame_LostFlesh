@@ -180,6 +180,7 @@
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pause.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBase.cpp" />
     <ClCompile Include="PlayerControlButton.cpp" />
     <ClCompile Include="PlayScene.cpp" />
@@ -192,6 +193,7 @@
     <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="Syari.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
@@ -249,6 +251,7 @@
     <ClInclude Include="OBB.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Pause.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBase.h" />
     <ClInclude Include="PlayerControlButton.h" />
     <ClInclude Include="PlayScene.h" />
@@ -261,6 +264,7 @@
     <ClInclude Include="StartScene.h" />
     <ClInclude Include="Syari.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="TutorialScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">

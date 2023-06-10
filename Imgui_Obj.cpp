@@ -34,6 +34,7 @@ enum class IniType
     BUTTON,
     ENEMY,
     IMAGE,
+    PLAYER,
     TYPE_MAX
 
 };
@@ -98,6 +99,8 @@ namespace
 
     std::vector<Imgui_Obj::SettingInfo> settingInfoButtonFromPauseList;//作ったボタンのリスト(ポーズ画面)
     std::vector<Imgui_Obj::SettingInfo> settingInfoImageFromPauseList; //作った画像のリスト(ポーズ画面)
+
+    std::vector<GameObject*> debugLogList; //デバッグログを表示するオブジェクトのリスト
     
 }
 
@@ -138,6 +141,9 @@ namespace Imgui_Obj
 
         //楽にシーンチェンジ出来るようにする
         SceneChangeImgui();
+
+        //デバッグログを表示するImguiを出す
+        CreateDebugLog();
 
         //今エディットシーンにいたら
         if (pSceneManager->GetNowSceneID() == SCENE_ID::SCENE_ID_EDIT)
@@ -226,6 +232,10 @@ namespace Imgui_Obj
             {
                 iniType = IniType::ENEMY;
             }
+            if (ImGui::Button("Player"))
+            {
+                iniType = IniType::PLAYER;
+            }
             ImGui::TreePop();
 
             //ボタン作成モードなら
@@ -240,6 +250,13 @@ namespace Imgui_Obj
             {
                 //画像作成モードの時に出すimgui
                 CreateImageImgui();
+            }
+
+            //3Dオブジェクト作成モードの時に出すimgui
+            if (iniType == IniType::PLAYER)
+            {
+                //3Dオブジェクト作成モードの時に出すImgui(Beginの中で使う)
+                CreateObjectImgui();
             }
         }
         ImGui::End();
@@ -650,6 +667,106 @@ namespace Imgui_Obj
         }
         ImGui::End();
     }
+
+    //3Dオブジェクト作成モードの時に出すImgui(Beginの中で使う)
+    void CreateObjectImgui()
+    {
+        ImGui::Begin("Create Button");
+
+        // オブジェクトを生成する時に基本的なImguiを出す(Beginの中で使う)
+        SettingBasicImgui();
+
+        //どんな種類のボタンを生成するか
+        ImGui::Text("ButtonType");
+        //ImGui::RadioButton("SceneChange", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON)); ImGui::SameLine();
+        ImGui::RadioButton("PlayerControl", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON));
+        ImGui::RadioButton("Slinder", &buttonKinds, static_cast<int>(ButtonManager::ButtonKinds::SLIDER));
+
+        //シーンチェンジボタンを作成する予定なら
+        if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::SCENE_CHANGE_BUTTON))
+        {
+            ImGui::Text("NextScene");
+            ImGui::RadioButton("Title", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_START)); ImGui::SameLine();
+            ImGui::RadioButton("Play", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_PLAY));
+            ImGui::RadioButton("GameOver", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_GAMEOVER)); ImGui::SameLine();
+            ImGui::RadioButton("Clear", &SceneChangeNextScene, static_cast<int>(SCENE_ID::SCENE_ID_GOAL));
+        }
+
+        //生成ボタン
+        if (canCreate && ImGui::Button("Create"))
+        {
+            selectButtonKinds = JsonOperator::ButtonToString(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON);
+
+            //拡張子を追加
+            selectLoadFileNameStr = std::string(loadFileName) + AddExtension();
+
+            //保存していないオブジェクトは消す
+            if (pSelectObj != nullptr)
+            {
+                pSelectObj->KillMe();
+            }
+
+            //プレイヤーのボタン配置を変えるボタンを作成するなら
+            if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
+            {
+                //オブジェクトを作成しポインタを保存しておく
+                pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
+            }
+            //スライダーを作成するなら
+            if (buttonKinds == static_cast<int>(ButtonManager::ButtonKinds::PLAYER_CONTROL_BUTTON))
+            {
+                //オブジェクトを作成しポインタを保存しておく
+                pSelectObj = InstantiateButton<PlayerControlButton>(pSceneManager->GetNowScenePointer(), selectLoadFileNameStr, iniPosition, iniRotate, iniScale);
+            }
+        }
+
+        if (pSelectObj != nullptr)
+        {
+            ImGui::SameLine();
+            //セーブボタン
+            if (ImGui::Button("Save"))
+            {
+                //親が今のシーンなら
+                if (parentNum == static_cast<int>(GameManager::ParentNum::NOW_SCENE))
+                {
+                    //タイトルシーンだったら
+                    switch (pSceneManager->GetNowSceneID())
+                    {
+                        //タイトルシーンだったら
+                    case SCENE_ID::SCENE_ID_START:
+                        InstanceManager::SaveButton(JsonOperator::TITLE_BUTTON_JSON, selectUniqueName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                //ポーズだったら
+                else if (parentNum == static_cast<int>(GameManager::ParentNum::PAUSE))
+                {
+                    //保存する
+                    InstanceManager::SaveButton(JsonOperator::PAUSE_BUTTON_JSON, selectUniqueName, selectLoadFileNameStr, selectButtonKinds, iniPosition, iniRotate, iniScale);
+                }
+
+                //imguiでボタンを保存した後にやること
+                RearButtonInstantiate();
+            }ImGui::SameLine();
+
+            //削除ボタン
+            if (ImGui::Button("Delete"))
+            {
+                pSelectObj->KillMe();
+                pSelectObj = nullptr;
+            }
+        }
+
+        //キャンセルボタン
+        if (ImGui::Button("Cancel"))
+        {
+
+            iniType = IniType::NONE;
+        }
+        ImGui::End();
+    }
     
 
     //Transformをいじるimguiを出す
@@ -739,6 +856,27 @@ namespace Imgui_Obj
 
     }
 
+    //デバッグログを表示するImguiを出す
+    void CreateDebugLog()
+    {
+        ImGui::Begin("Debug Log");
+
+        for (int i = 0; i < debugLogList.size(); i++)
+        {
+            ImGui::Text("Position");
+            ImGui::Text("%f", debugLogList[i]->GetPosition().x);
+            ImGui::Text("%f", debugLogList[i]->GetPosition().y);
+            ImGui::Text("%f", debugLogList[i]->GetPosition().z);
+        }
+        ImGui::End();
+    }
+
+    //デバッグログを表示するリストに追加する
+    void AddDebugLogList(GameObject* obj)
+    {
+        debugLogList.push_back(obj);
+    }
+
     // 拡張子を追加する関数(変数extensionを参照)
     std::string AddExtension()
     {
@@ -778,6 +916,7 @@ namespace Imgui_Obj
         settingInfoImageFromPauseList.clear();
         settingInfoButtonList.clear();
         settingInfoImageList.clear();
+        debugLogList.clear();
     }
 
     //UIモードを選択するImguiを作成する
