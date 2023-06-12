@@ -154,3 +154,4 @@ namespace Imgui_Obj
 //追加するボタンを増やす手順
 //1 CreateButtonImguiの中のどんな種類のボタンを生成するかに追加
 //2 生成ボタンに追加
+//3 JsonOperator::ButtonToStringに追加(buttonStrList)

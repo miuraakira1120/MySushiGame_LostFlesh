@@ -6,6 +6,16 @@
 //-----------------------------------------------------------
 namespace Audio
 {
+	//サウンドの種類
+	enum class Sound_Type
+	{
+		BGM,
+		SE,
+		VOICE,
+		MASTER,
+		SOUND_MAX
+	};
+
 	//初期化
 	void Initialize();
 
@@ -40,7 +50,14 @@ namespace Audio
 	/// マスターボリュームを変更する
 	/// </summary>
 	/// <param name="vol">変更後のマスターボリューム(0から100)</param>
-	void SetMasterVolume(float vol);
+	/// 
+
+	/// <summary>
+	/// マスターボリュームを変更する
+	/// </summary>
+	/// <param name="vol">変更後のボリューム(0から100)</param>
+	/// <param name="type">変更するヴォリュームタイプタイプ</param>
+	void SetVolume(float vol, Sound_Type type);
 
 	//すべて開放
 	void Release();
