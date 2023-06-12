@@ -49,7 +49,7 @@ void Syari::Initialize()
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
     AddCollider(collision);
 
-   /* transform_.position_.x = 10;
+    /*transform_.position_.x = 10;
     transform_.position_.y = -10;
     transform_.position_.z = 31;*/
 
@@ -63,7 +63,7 @@ void Syari::Initialize()
     Time::UnLock(TimerID);
     pGauge_->SetMaxHP(300 * 60);
 
-    //transform_.position_.y = -37;
+    transform_.position_.y = -37;
 }
 
 //更新

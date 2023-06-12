@@ -28,6 +28,7 @@ void StartScene::Initialize()
 	JsonOperator::GetJSONFloat(JsonOperator::TITLE_JSON, "ChangeSceneButton", "posX", pos.x);
 	JsonOperator::GetJSONFloat(JsonOperator::TITLE_JSON, "ChangeSceneButton", "posY", pos.y);
 	pStartButton = ButtonManager::CreateSceneChangeButton(this, pos, SCENE_ID_PLAY, "GameStartButton.png");
+	//pStartButton->SetPosition(0,)
 
 	JsonOperator::AppendToJSONFileString(JsonOperator::TITLE_JSON, "sec", "key", "hello");
 	JsonOperator::AppendToJSONFileFloat(JsonOperator::TITLE_JSON, "OptionButton", "posX", 100);
