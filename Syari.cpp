@@ -322,7 +322,7 @@ void Syari::Update()
             {
             case TOP :
                 //めり込みを直す
-                transform_.position_.y -= length;
+                 transform_.position_.y -= length;
                 break;
             case BOTOM:
                 //接地フラグを真にする

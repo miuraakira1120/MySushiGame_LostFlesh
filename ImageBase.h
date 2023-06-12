@@ -8,6 +8,7 @@ class ImageBase : public GameObject
     std::string PrevPathName_; //1フレーム前の画像番号  
 
     bool isParentMove;//親オブジェクトの位置にって画像の位置を変える
+    XMFLOAT3 shiftPosition;//親オブジェクトの位置にって画像の位置を変える時に使う、ずらす値
 
 public:
     //コンストラクタ
@@ -28,16 +29,23 @@ public:
     //開放
     void Release() override;
 
+    
     /// <summary>
     /// 親オブジェクトの位置にって画像の位置を変える
     /// </summary>
+    /// <param name="shiftPos"></param>
     /// <returns>変更後のスクリーン座標</returns>
-    XMFLOAT3 parentObjectPositionByImagePosition();
+    XMFLOAT3 parentObjectPositionByImagePosition(XMFLOAT3 shiftPos);
 
     /// <summary>
     /// 親オブジェクトの位置にって画像の位置を変える状態にする
     /// </summary>
     /// <returns>変更後のスクリーン座標</returns>
     void SetParentMove(bool flag);
+
+    /// <summary>
+    /// shiftPositionのセッター
+    /// </summary>
+    void SetShiftPos(XMFLOAT3 shift);
 
 };

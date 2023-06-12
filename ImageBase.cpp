@@ -76,10 +76,10 @@ void ImageBase::Release()
 //親オブジェクトの位置にって画像の位置を変える
 XMFLOAT3 ImageBase::parentObjectPositionByImagePosition()
 {
-    Player* pPlayer = (Player*)FindObject("Player");    //ステージオブジェクトを探す
+    //Player* pPlayer = (Player*)FindObject("Player");    //ステージオブジェクトを探す
 
     //親オブジェクトをスクリーン座標に変換
-    XMFLOAT3 scrParentPos = Camera::ToWorldCalcScreen(pPlayer->GetPosition());
+    XMFLOAT3 scrParentPos = Camera::ToWorldCalcScreen(this->GetParent()->GetPosition());
     scrParentPos = Math::Float3Add( scrParentPos, transform_.position_);
     return scrParentPos;
 }
