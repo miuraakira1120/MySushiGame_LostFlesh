@@ -419,8 +419,6 @@ void FbxParts::IntConstantBuffer()
 //描画
 void FbxParts::Draw(Transform& transform)
 {
-	Direct3D::SetBlendMode(Direct3D::BLEND_DEFAULT);
-
 	//今から描画する頂点情報をシェーダに伝える
 	UINT stride = sizeof(VERTEX);
 	UINT offset = 0;
@@ -455,7 +453,7 @@ void FbxParts::Draw(Transform& transform)
 		cb.speculer = pMaterial_[i].specular;
 		cb.shininess = pMaterial_[i].shininess;
 		cb.cameraPosition = XMFLOAT4(Camera::GetPosition().x, Camera::GetPosition().y, Camera::GetPosition().z, 0);
-		cb.lightDirection = XMFLOAT4(1, -1, 1, 0);
+		cb.lightDirection = XMFLOAT4(15, -20, 1, 0);
 		cb.isTexture = pMaterial_[i].pTexture != nullptr;
 
 
@@ -474,6 +472,11 @@ void FbxParts::Draw(Transform& transform)
 			ID3D11ShaderResourceView*	pSRV = pMaterial_[i].pTexture->GetSRV();
 			Direct3D::pContext_->PSSetShaderResources(0, 1, &pSRV);
 		}
+
+		ID3D11ShaderResourceView* pSRV = Direct3D::pDepthSRV_;
+		Direct3D::pContext_->PSSetShaderResources(1, 1, &pSRV);
+
+
 		Direct3D::pContext_->Unmap(pConstantBuffer_, 0);									// GPUからのリソースアクセスを再開
 
 		 //ポリゴンメッシュを描画する
@@ -600,27 +603,16 @@ void FbxParts::RayCast(RayCastData * data)
 			ver[1] = pVertexData_[ppIndexData_[i][j * 3 + 1]].position;
 			ver[2] = pVertexData_[ppIndexData_[i][j * 3 + 2]].position;
 
-			XMFLOAT3 pos = { 0,0,0 };
 			BOOL  hit = FALSE;
 			float dist = 0.0f;
 
-			hit = Direct3D::Intersect(data->start, data->dir, ver[0], ver[1], ver[2], &dist, &pos);
+			hit = Direct3D::Intersect(data->start, data->dir, ver[0], ver[1], ver[2], &dist);
 
-			//vPos = XMVector3TransformCoord(vPos, Transform::GetWorldMatrix());	//ベクトルｖを行列ｍで変形
+
 			if (hit && dist < data->dist)
 			{
 				data->hit = TRUE;
 				data->dist = dist;
-				data->pos = pos;
-
-				XMFLOAT3 vec1 = Math::Float3Sub(ver[0], ver[1]);
-				XMFLOAT3 vec2 = Math::Float3Sub(ver[2], ver[1]);
-
-				XMVECTOR vVec1 = XMLoadFloat3(&vec1);
-				XMVECTOR vVec2 = XMLoadFloat3(&vec2);
-
-				XMVECTOR vCross = XMVector3Cross(vVec1, vVec2);				
-				data->normal = XMVector3Normalize(vCross);
 			}
 		}
 	}

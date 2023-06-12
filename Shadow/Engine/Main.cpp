@@ -1,3 +1,10 @@
+
+//
+//　最終更新日：2022/11/22
+//
+
+
+
 #include <Windows.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -5,27 +12,16 @@
 
 #include "global.h"
 #include "RootObject.h"
-#include "SceneManager.h"
 #include "Model.h"
 #include "Image.h"
 #include "Camera.h"
 #include "Input.h"
 #include "Audio.h"
-#include "Text.h"
-#include "../Syari.h"
-#include "../Time.h"
-#include "../Controller.h"
-#include "../imgui/imgui_impl_dx11.h"
-#include "../imgui/imgui_impl_win32.h"
-#include "../Imgui_Obj.h"
-#include "../Engine/JsonOperator.h"
-#include "../GameManager.h"
 
 #pragma comment(lib,"Winmm.lib")
 
 //定数宣言
-const char* WIN_CLASS_NAME = "鮮度命";	//ウィンドウクラス名
-const int FPS = 60;
+const char* WIN_CLASS_NAME = "SampleGame";	//ウィンドウクラス名
 
 
 //プロトタイプ宣言
@@ -47,28 +43,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int screenWidth = GetPrivateProfileInt("SCREEN", "Width", 800, ".\\setup.ini");		//スクリーンの幅
 	int screenHeight = GetPrivateProfileInt("SCREEN", "Height", 600, ".\\setup.ini");	//スクリーンの高さ
 	int fpsLimit = GetPrivateProfileInt("GAME", "Fps", 60, ".\\setup.ini");				//FPS（画面更新速度）
-	int isDrawFps = GetPrivateProfileInt("DEBUG", "ViewFps", 0, ".\\setup.ini");	
+	int isDrawFps = GetPrivateProfileInt("DEBUG", "ViewFps", 0, ".\\setup.ini");		//キャプションに現在のFPSを表示するかどうか
+
+
+
 
 	//ウィンドウを作成
 	HWND hWnd = InitApp(hInstance, screenWidth, screenHeight, nCmdShow);
 
 	//Direct3D準備
 	Direct3D::Initialize(hWnd, screenWidth, screenHeight);
-
-	//GUI初期化
-	{
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO();
-		ImFontConfig config;
-		config.MergeMode = true;
-		io.Fonts->AddFontDefault();
-		io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\meiryo.ttc", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-		ImGui::StyleColorsDark();
-		ImGui_ImplWin32_Init(hWnd);
-		ImGui_ImplDX11_Init(Direct3D::pDevice_, Direct3D::pContext_);
-		ImGui::SetNextWindowSize(ImVec2(320, 100));
-	}
 
 	//カメラを準備
 	Camera::Initialize();
@@ -79,29 +63,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
 
-	//JsonOperatorの準備
-	JsonOperator::Initialize();
-
-	//ゲームマネジャーの準備
-	GameManager::Initialize();
 
 	//ルートオブジェクト準備
 	//すべてのゲームオブジェクトの親となるオブジェクト
 	RootObject* pRootObject = new RootObject;
 	pRootObject->Initialize();
 
-	//シーンマネージャーのポインタを入れる
-	SceneManager* pSceneManager;
-	pSceneManager = (SceneManager*)pRootObject->FindObject("SceneManager");
-
-	//ゲームマネージャーにシーンマネージャーのポインタを入れる
-	GameManager::SetScenemanagerPointor(pSceneManager);
-
-	//Timeのイニシャライズ
-	Time::Initialize(FPS);
-
-	//imguiのイニシャライズ
-	Imgui_Obj::Initialize(pSceneManager);
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
@@ -144,81 +111,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//指定した時間（FPSを60に設定した場合は60分の1秒）経過していたら更新処理
 			if ((nowTime - lastUpdateTime) * fpsLimit > 1000.0f)
 			{
-#if _DEBUG
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplWin32_NewFrame();
-				ImGui::NewFrame();
-#endif
-
 				//時間計測関連
 				lastUpdateTime = nowTime;	//現在の時間（最後に画面を更新した時間）を覚えておく
 				FPS++;						//画面更新回数をカウントする
 
+
+
+
 				//入力（キーボード、マウス、コントローラー）情報を更新
 				Input::Update();
 
-				//ゲーム内時間が止まっていなかったら
-				if (GameManager::GetIsTimeMoving())
-				{
-					//Timeの更新
-				Time::Update();
+				//全オブジェクトの更新処理
+				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+				pRootObject->UpdateSub();
 
-					//全オブジェクトの更新処理
-					//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-					pRootObject->UpdateSub();						
-				}
-
-				//マネージャの更新処理を呼ぶ
-				GameManager::Update();
-#if _DEBUG
-				//imguiのアップデート
-				Imgui_Obj::Update();
-#endif
-				//カメラを更新
-				Camera::Update();
-
-				//このフレームの描画開始
-				Direct3D::BeginDraw();
-
-				//全オブジェクトを描画
-				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-				//pRootObject->DrawSub();
 				
-				//左画面描画
-				{
-					Direct3D::SetViewPort(0);
-
-					//Camera::SetPosition(XMFLOAT3(0, 0, -10));
-					Camera::Update();
-
-					//全オブジェクトを描画
-					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-					pRootObject->DrawSub();
-				}
-
-
-
-				////右画面描画
-				//{
-				//	Direct3D::SetViewPort(1);
-
-				//	Syari* pSyari = (Syari*)pRootObject->FindObject("Syari");
-				//	//controllerクラスのポインタを入れる
-				//	Controller* pController;
-				//	pController = (Controller*)pRootObject->FindObject("Controller");
-
-				//}
-
-				//ゲームマネジャーの準備
-				GameManager::Draw();
-
-#if _DEBUG
-				//Imguiの描画
-				Imgui_Obj::Draw();
-#endif
-
+				
 				//シャドウマップ作成
 				//ライトの位置から見た画像を、遠くは白、近くは黒のグレースケールで表す
+				Camera::SetPosition(XMFLOAT3(-15, 20, -1));
+				Camera::SetTarget(XMFLOAT3(0, 0, 0));
 				Camera::Update();
 				Direct3D::lightView_ = Camera::GetViewMatrix();
 
@@ -229,6 +141,27 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//描画終了
 				Direct3D::EndDraw();
 
+
+
+
+				//通常の描画
+				Camera::SetPosition(XMFLOAT3(0, 5, -8));
+				Camera::SetTarget(XMFLOAT3(0, 0, 0));
+				Camera::Update();
+
+				//このフレームの描画開始
+				Direct3D::BeginDraw();
+
+				//全オブジェクトを描画
+				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+				pRootObject->DrawSub();
+
+				//描画終了
+				Direct3D::EndDraw();
+
+
+
+				
 				//ちょっと休ませる
 				Sleep(1);
 			}
@@ -237,18 +170,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	
+
+	//いろいろ解放
 	Audio::Release();
 	Model::AllRelease();
 	Image::AllRelease();
-	Imgui_Obj::Release();
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
 	Direct3D::Release();
-	GameManager::Release();
-#if _DEBUG
-	ImGui_ImplDX11_Shutdown();
-	ImGui::DestroyContext();
-#endif
 
 	return 0;
 }
@@ -302,13 +231,10 @@ HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdSho
 	return hWnd;
 }
 
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 //ウィンドウプロシージャ（何かあった時によばれる関数）
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-		return true;
 	switch (msg)
 	{
 	//ウィンドウを閉じた
