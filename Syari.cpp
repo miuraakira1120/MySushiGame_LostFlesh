@@ -43,7 +43,7 @@ void Syari::Initialize()
     assert(hModel_ >= 0);
 
     //子オブジェクトの生成
-    //Instantiate<Maguro>(this);
+    Instantiate<Maguro>(this);
 
     //当たり判定の生成
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));

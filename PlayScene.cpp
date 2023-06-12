@@ -23,10 +23,11 @@ PlayScene::PlayScene(GameObject* parent)
 //èâä˙âª
 void PlayScene::Initialize()
 {
-	CharacterInstantiate<Player>(this, "syari.fbx");
+	//CharacterInstantiate<Player>(this, "syari.fbx");
+	Instantiate<Syari>(this);
 	Instantiate<Controller>(this);
 	Instantiate<Stage>(this);
-	InstantiateImage<ImageBase>(this, "PC.jpg", XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+	//InstantiateImage<ImageBase>(this, "PC.jpg", XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
 }
 
 //çXêV

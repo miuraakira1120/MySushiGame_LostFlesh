@@ -6,6 +6,7 @@
 #include "Controller.h"
 #include "OBB.h"
 #include "Engine/Global.h"
+#include "Maguro.h"
 
 
 //コンストラクタ
@@ -30,6 +31,9 @@ void PlayerBase::SetUp()
 
     //カメラのコントローラーを探す
     pController = (Controller*)FindObject("Controller");
+
+    //子オブジェクトの生成
+    Instantiate<Maguro>(this);
 }
 
 //ジャンプ
