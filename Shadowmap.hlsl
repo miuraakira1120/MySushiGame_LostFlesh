@@ -1,8 +1,8 @@
 //───────────────────────────────────────
  // テクスチャ＆サンプラーデータのグローバル変数定義
 //───────────────────────────────────────
-Texture2D g_texture : register(t0);	// テクスチャー
-SamplerState g_sampler : register(s0); // テクスチャーサンプラー
+Texture2D		g_texture: register(t0);	//テクスチャー
+SamplerState	g_sampler : register(s0);	//サンプラー
 
 //───────────────────────────────────────
  // コンスタントバッファ
@@ -10,41 +10,37 @@ SamplerState g_sampler : register(s0); // テクスチャーサンプラー
 //───────────────────────────────────────
 cbuffer global
 {
-	matrix g_matWorld;		// 頂点座標変換行列
-	matrix g_matTexture;	// テクスチャ座標変換行列
-	float4 g_vecColor;		// テクスチャ合成色
-};
+	float4x4	g_matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 
-cbuffer sky
-{
-	matrix dummy;
-	float pos;
-}
+};
 
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
 //───────────────────────────────────────
-struct VS_OUTPUT
+struct VS_OUT
 {
-	float4 pos	: SV_POSITION;	// 位置
-	float2 uv	: TEXCOORD;		// UV座標
+	float4 Pos : SV_POSITION;
+	float4 Depth : TEXCOORD0;
 };
 
 //───────────────────────────────────────
 // 頂点シェーダ
 //───────────────────────────────────────
-VS_OUTPUT VS(float4 pos : POSITION, float4 uv : TEXCOORD)
+VS_OUT VS(float4 pos : POSITION)
 {
-	VS_OUTPUT output;
-	output.pos = mul(pos, g_matWorld);
-	output.uv = mul(uv + pos, g_matTexture);
-	return output;
+	VS_OUT outData;
+	outData.Pos = mul(pos, g_matWVP);
+	outData.Depth = outData.Pos;
+
+	return outData;
 }
 
 //───────────────────────────────────────
 // ピクセルシェーダ
 //───────────────────────────────────────
-float4 PS(VS_OUTPUT input) : SV_Target
+float4 PS(VS_OUT inData) : SV_Target
 {
-  return g_vecColor * g_texture.Sample(g_sampler, input.uv);
+	float4 color = inData.Depth.z / inData.Depth.w;
+	color.a = 1;  //透明にはしたくない 
+	return color;
 }

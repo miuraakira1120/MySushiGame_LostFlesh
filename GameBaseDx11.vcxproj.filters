@@ -516,7 +516,7 @@
     <FxCompile Include="Assets\Shader\Flash2D.hlsl">
       <Filter>00Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\UVScroll.hlsl">
+    <FxCompile Include="Shadowmap.hlsl">
       <Filter>00Shader</Filter>
     </FxCompile>
   </ItemGroup>

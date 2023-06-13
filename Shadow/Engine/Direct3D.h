@@ -25,35 +25,13 @@ namespace Direct3D
 	//【コンテキスト】
 	//GPUに命令を出すためのやつ
 	extern ID3D11DeviceContext*    pContext_;
-
-	//ビューポート
-	extern D3D11_VIEWPORT vp_left;
-
-	//【コンテキスト】
-	//GPUに命令を出すためのやつ
 	extern XMMATRIX lightView_;
 	extern XMMATRIX clipToUV_;
 	extern ID3D11ShaderResourceView* pDepthSRV_;
 
 
 	//■シェーダー関連で必要なセット
-	enum SHADER_TYPE
-	{
-		SHADER_UNLIT = 0,
-		SHADER_3D, 
-		SHADER_2D, 
-		SHADER_FLASH_2D,
-		SHADER_BILLBOARD,
-		SHADER_UVSCROLL,
-		SHADER_SHADOW,
-		SHADER_MAX
-	};	//4タイプ（3D用、2D用、当たり判定枠表示用, ビルボード用）
-
-	enum ViewPos
-	{
-		MAIN_CAM,
-		SUB_CAM,
-	};
+	enum SHADER_TYPE{SHADER_3D, SHADER_2D, SHADER_UNLIT, SHADER_SHADOW, SHADER_MAX};	//3タイプ（3D用、2D用、当たり判定枠表示用）
 	struct SHADER_BUNDLE
 	{
 		//【頂点入力レイアウト情報】
@@ -73,21 +51,16 @@ namespace Direct3D
 		//頂点の表示位置確定後、画面のどのピクセルを光らせればいいか求めるもの
 		ID3D11RasterizerState*	pRasterizerState;
 	};
-	
 	extern SHADER_BUNDLE shaderBundle[SHADER_MAX];
 
-	//■ブレンドモード
-	enum BLEND_MODE
-	{
-		BLEND_DEFAULT, BLEND_ADD, BLEND_MAX
-	};
+
 
 	//その他
 	extern int		screenWidth_;		//スクリーンの幅
 	extern int		screenHeight_;		//スクリーンの高さ
 	extern bool		isDrawCollision_;	//コリジョンを表示するかフラグ
 
-	extern int		lrMode;
+
 
 
 
@@ -103,38 +76,20 @@ namespace Direct3D
 	//シェーダー関連で必要なセット準備
 	void InitShaderBundle();
 
-	//DEBUGの当たり判定Shaderの初期化
-	void InitShaderUnlit();
-
-	//Shader2Dの初期化
-	void InitShader2D();
-
-	//Shader3Dの初期化
-	void InitShader3D();
-
-	//頂点シェーダーの作成
-	ID3DBlob* CreateVertexSheder(int num);
-
-	//ピクセルシェーダーの作成
-	void CreatePixelSheder(int num);
-
-	//ラスタライザ作成
-	void CreateRasterizer(int num);
-
 	//今から描画するShaderBundleを設定
-	//引数：type	シェーダーは何を使うか
+	//引数：type	SHADER_3D, SHADER_2D, SHADER_UNLITのどれか
 	void SetShader(SHADER_TYPE type);
 
+
+//////////////////追加//////////////////
 	//テクスチャへ深度情報を描く
 	void BeginDrawToTexture();
-
-	//ブレンドモードの変更
-	//引数：blendMode	BLEND_DEFAULT	通常
-	//					BLEND_ADD		加算合成（パーティクル用）
-	void SetBlendMode(BLEND_MODE blendMode);
+////////////////////////////////////////
 
 	//描画開始
 	void BeginDraw();
+
+
 
 	//描画終了
 	void EndDraw();
@@ -149,12 +104,10 @@ namespace Direct3D
 	//引数：v0,v1,v2	三角形の各頂点位置
 	//引数：distance	衝突点までの距離を返す
 	//戻値：衝突したかどうか
-	bool Intersect(XMFLOAT3& start, XMFLOAT3& direction, XMFLOAT3 &v0, XMFLOAT3& v1, XMFLOAT3& v2, float* distance, XMFLOAT3* pos);
+	bool Intersect(XMFLOAT3& start, XMFLOAT3& direction, XMFLOAT3 &v0, XMFLOAT3& v1, XMFLOAT3& v2, float* distance);
 
 	//Zバッファへの書き込みON/OFF
 	//引数：isWrite	  true=書き込みON／false=書き込みOFF
 	void SetDepthBafferWriteEnable(bool isWrite);
-
-	void SetViewPort(int lr);
 };
 
