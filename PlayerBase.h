@@ -33,6 +33,7 @@ private:
     XMFLOAT3 size;               //プレイヤーのサイズ
     Direct3D::SHADER_TYPE type;  //描画に使用するシェーダー
     Controller* pController;
+    XMFLOAT3 prevPos;            //前のフレームの位置
 
 public:
 

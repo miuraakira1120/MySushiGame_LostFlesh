@@ -2,6 +2,7 @@
 #include "Engine/Model.h"
 #include "Goal.h"
 #include "SalmonRoe.h"
+#include "Engine/Direct3D.h"
 
 //コンストラクタ
 Stage::Stage(GameObject* parent)
@@ -35,12 +36,12 @@ void Stage::Initialize()
         {0,-37,0}
     };
 
-    for (int i = 0; i < 5; i++)
+    /*for (int i = 0; i < 5; i++)
     {
         SalmonRoe* pSalmonRoe = Instantiate<SalmonRoe>(this);
         pSalmonRoe->SetPosition(setPos[i]);
         pSalmonRoe->SetRotate(0,270,0);
-    }
+    }*/
 
     //Goal* pGoal = Instantiate<Goal>(this);
     //pGoal->SetPosition(4.5, 13, 285);
@@ -54,8 +55,10 @@ void Stage::Update()
 //描画
 void Stage::Draw()
 {
+    
     Model::SetTransform(hModel_, transform_);
     Model::Draw(hModel_);
+    
 }
 
 //開放

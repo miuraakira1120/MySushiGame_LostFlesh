@@ -391,14 +391,16 @@ void Syari::Update()
     //動かす前の位置を保存しておく
     prevPos = transform_.position_;
     for (int i = 0; i < VERTEX_MAX; i++)
-    {
+    { 
         prevBonePos[i] = vertexBonePos[i];
     }
 
     //カメラのコントローラーを探す
     Controller* pController = (Controller*)FindObject("Controller");
     Camera::SetTarget(transform_.position_);
-    Camera::SetPosition(pController->GetCameraPos(transform_.position_));
+    //pController->SetCameraPos(transform_.position_);
+    pController->SetCameraLerpPos(transform_.position_, 0.05f);
+    //pController->SetCameraLerpFovPos(Math::Float3Comparison(prevPos, transform_.position_));
 }
 
 //描画

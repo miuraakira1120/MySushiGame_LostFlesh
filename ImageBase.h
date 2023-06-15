@@ -33,9 +33,8 @@ public:
     /// <summary>
     /// 親オブジェクトの位置にって画像の位置を変える
     /// </summary>
-    /// <param name="shiftPos"></param>
     /// <returns>変更後のスクリーン座標</returns>
-    XMFLOAT3 parentObjectPositionByImagePosition(XMFLOAT3 shiftPos);
+    XMFLOAT3 parentObjectPositionByImagePosition();
 
     /// <summary>
     /// 親オブジェクトの位置にって画像の位置を変える状態にする

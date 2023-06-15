@@ -1,6 +1,8 @@
 #include "EditScene.h"
 #include "Engine/JsonOperator.h"
 #include "Imgui_Obj.h"
+#include "ModelBase.h"
+#include "Engine/Camera.h"
 
 
 //コンストラクタ
@@ -11,14 +13,16 @@ EditScene::EditScene(GameObject* parent)
 
 //初期化
 void EditScene::Initialize()
-{
-	
+{	
+	pSoy = CharacterInstantiate<ModelBase>(this, "SoySauce.fbx");
+	pSoy->SetRotateX(180);
+	pSoy->SetScale(5, 5, 5);
+	Camera::SetTarget(transform_.position_);
 }
 
 //更新
 void EditScene::Update()
 {
-	
 	modeUI = static_cast<UI_Type>(Imgui_Obj::GetUIType());
 
 	//前の作成していたUIのタイプと違ったら
@@ -43,6 +47,10 @@ void EditScene::Update()
 		}
 	}
 	prevModeUI = modeUI;
+
+
+	
+
 }
 
 //描画

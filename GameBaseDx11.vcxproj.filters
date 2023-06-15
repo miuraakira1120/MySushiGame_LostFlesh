@@ -294,6 +294,8 @@
       <Filter>Object\Player</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Easing.cpp" />
+    <ClCompile Include="ModelBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -499,6 +501,8 @@
       <Filter>Object\Player</Filter>
     </ClInclude>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Easing.h" />
+    <ClInclude Include="ModelBase.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
@@ -517,6 +521,9 @@
       <Filter>00Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shadowmap.hlsl">
+      <Filter>00Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\UVScroll.hlsl">
       <Filter>00Shader</Filter>
     </FxCompile>
   </ItemGroup>

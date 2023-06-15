@@ -35,6 +35,8 @@ namespace Direct3D
 	extern XMMATRIX clipToUV_;
 	extern ID3D11ShaderResourceView* pDepthSRV_;
 
+	
+
 
 	//■シェーダー関連で必要なセット
 	enum SHADER_TYPE
@@ -88,6 +90,7 @@ namespace Direct3D
 	extern bool		isDrawCollision_;	//コリジョンを表示するかフラグ
 
 	extern int		lrMode;
+	extern SHADER_TYPE nowShaderType;
 
 
 

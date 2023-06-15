@@ -173,6 +173,7 @@ void Particle::EmitterUpdate()
 //パーティクル描画
 void Particle::Draw()
 {
+    Direct3D::SHADER_TYPE shaderType = Direct3D::nowShaderType;
     Direct3D::SetShader(Direct3D::SHADER_BILLBOARD);
     Direct3D::SetBlendMode(Direct3D::BLEND_ADD);
 
@@ -188,8 +189,8 @@ void Particle::Draw()
         matWorld = matScale * Camera::GetBillboardMatrix() * matTrans;
         (*particle)->pEmitter->pBillBoard->Draw(matWorld, (*particle)->now.color);
     }
-
-
+    Direct3D::SetBlendMode(Direct3D::BLEND_ADD);
+    Direct3D::SetShader(shaderType);
 }
 
 void Particle::Release()

@@ -8,6 +8,7 @@ XMMATRIX _proj;
 XMMATRIX _proj2;
 int viewFlag;
 XMMATRIX _billBoard;
+float fov_;
 
 //初期化（プロジェクション行列作成）
 void Camera::Initialize()
@@ -17,9 +18,11 @@ void Camera::Initialize()
 
 	viewFlag = 0;
 
+	fov_ = XM_PIDIV4;	//視野角(2分の1π{90度})
+
 	//プロジェクション行列
-	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
-	_proj2 = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_ / 2.0f, 0.1f, 1000.0f);
+	_proj = XMMatrixPerspectiveFovLH(fov_, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
+	_proj2 = XMMatrixPerspectiveFovLH(fov_, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_ / 2.0f, 0.1f, 1000.0f);
 }
 
 //更新（ビュー行列作成）
@@ -70,6 +73,15 @@ void Camera::SetViewFlag(int flag)
 	viewFlag = flag;
 }
 
+//視野角の設定(度数法)
+void Camera::SetFOV(float fov)
+{
+	fov_ = fov;
+	//プロジェクション行列
+	_proj = XMMatrixPerspectiveFovLH(fov_, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
+	_proj2 = XMMatrixPerspectiveFovLH(fov_, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_ / 2.0f, 0.1f, 1000.0f);
+}
+
 //ビルボード用回転行列を取得
 XMMATRIX Camera::GetBillboardMatrix() { return _billBoard; }
 
@@ -93,7 +105,7 @@ XMFLOAT3 Camera::ToWorldCalcScreen(XMFLOAT3 position)
 
 	return screenPosition;
 }
-////必要な変数を作成
+	////必要な変数を作成
 	//XMMATRIX invView, invPrj, viewPor, invViewport;
 
 	////positionのXMVECTORに変換

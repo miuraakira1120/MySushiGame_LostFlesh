@@ -8,6 +8,11 @@ class Controller : public GameObject
     const float DOWN_ANGLE_LIMIT = -1000;
     const float PAD_SPEED = 3.0f;
     int hPict_;    //画像番号
+
+    XMFLOAT3 cameraDistance;//コントローラーからカメラの距離
+
+    const float MOVED_FOV = 65.0f; // プレイヤーが移動している時のFoV
+    const float FOV = 50.0f; // プレイヤーが立ち止まっている時のFoV
 public:
     //コンストラクタ
     Controller(GameObject* parent);
@@ -34,10 +39,23 @@ public:
     XMFLOAT3 GetRotate();
 
     /// <summary>
-    /// カメラの位置のゲッター
+    /// コントローラーでカメラを回転させる関数
     /// </summary>
-    /// <param name="position">このオブジェクトが対応しているオブジェクトの位置</param>
-    /// <returns></returns>
-    XMFLOAT3 GetCameraPos(XMFLOAT3 position);
+    /// <param name="position">コントローラーの位置を変える</param>
+    void SetCameraPos(XMFLOAT3 position);
+
+    /// <summary>
+    /// リープを使用してコントローラーでカメラを回転させる関数
+    /// </summary>
+    /// <param name="position">到達するべき位置</param>
+    /// <param name="attenRate">減衰比率(1{等倍 }より0.1の方が減速する)</param>
+    void SetCameraLerpPos(XMFLOAT3 position, float attenRate);
+
+    /// <summary>
+    /// リープをとFoV使用してコントローラーでカメラを回転させる関数
+    /// 動いていたかどうかによってFoVを変更
+    /// </summary>
+    /// <param name="isMoved">動いていたか</param>
+    void SetCameraLerpFovPos(bool isMoved);
 };
 

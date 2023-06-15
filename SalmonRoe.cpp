@@ -42,7 +42,7 @@ void SalmonRoe::Initialize()
 
     ImageBase* pImage = InstantiateImage<ImageBase>(this, "tuna.jpg", XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
     pImage->SetParentMove(true);
-    pImage->SetPosition(0, 0.3f, 0);
+    pImage->SetPosition(0, 5, 0);
     pImage->SetScale(0.2, 0.2, 0.2);
 }
 

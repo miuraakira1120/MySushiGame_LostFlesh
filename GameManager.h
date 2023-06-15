@@ -1,8 +1,11 @@
 #pragma once
+#include <DirectXMath.h>
 
 
 class Pause;
 class SceneManager;
+
+using namespace DirectX;
 
 namespace GameManager
 {
@@ -14,6 +17,8 @@ namespace GameManager
 		PARENT_MAX
 	};
 
+	//ライトの向き
+	const XMFLOAT4 LIGHT_VEC = { 15, -20, 1, 0 };
 	
 
 	/// <summary>
@@ -85,5 +90,16 @@ namespace GameManager
 	/// <returns></returns>
 	Pause* GetPauseClass();
 
+	/// <summary>
+	/// ライトの向きをセットする関数
+	/// </summary>
+	/// <param name="light">ライトの向き</param>
+	void SetLightVec(XMFLOAT3 light);
+
+	/// <summary>
+	/// ライトの向きを取得する関数
+	/// </summary>
+	/// <returns>ライトの向き</returns>
+	XMFLOAT3 GetLightVec();
 };
 

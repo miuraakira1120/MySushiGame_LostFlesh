@@ -102,6 +102,7 @@ void Sprite::InitIndex()
 
 void Sprite::Draw(Transform& transform, RECT rect, float alpha, Direct3D::SHADER_TYPE type)
 {
+	Direct3D::SHADER_TYPE shaderType = Direct3D::nowShaderType;
 	Direct3D::SetShader(Direct3D::SHADER_2D);
 	//‚¢‚ë‚¢‚ëÝ’è
 	//Direct3D::SetShader(type);
@@ -160,7 +161,7 @@ void Sprite::Draw(Transform& transform, RECT rect, float alpha, Direct3D::SHADER
 	//ƒ|ƒŠƒSƒ“ƒƒbƒVƒ…‚ð•`‰æ‚·‚é
 	Direct3D::pContext_->DrawIndexed(6, 0, 0);
 
-	Direct3D::SetShader(Direct3D::SHADER_3D);
+	Direct3D::SetShader(shaderType);
 
 	Direct3D::SetDepthBafferWriteEnable(true);
 

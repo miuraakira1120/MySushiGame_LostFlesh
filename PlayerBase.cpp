@@ -233,10 +233,10 @@ void PlayerBase::PostureGroundFollow(int hStageModel)
 }
 
 //このオブジェクトにカメラをセットする
-void PlayerBase::SetCameraController(XMFLOAT3 ShiftPos)
+void PlayerBase::SetCameraController(XMFLOAT3 shiftPos)
 {
     Camera::SetTarget(transform_.position_);
-    Camera::SetPosition(pController->GetCameraPos(Math::Float3Add(transform_.position_, ShiftPos)));
+    pController->SetCameraPos(Math::Float3Add(transform_.position_, shiftPos));
 }
 
 //地面にめり込んだ時の処理

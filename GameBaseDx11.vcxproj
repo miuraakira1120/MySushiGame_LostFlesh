@@ -136,6 +136,7 @@
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Crab.cpp" />
+    <ClCompile Include="Easing.cpp" />
     <ClCompile Include="EditScene.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Imgui_Obj.cpp" />
     <ClCompile Include="InstanceManager.cpp" />
     <ClCompile Include="Maguro.cpp" />
+    <ClCompile Include="ModelBase.cpp" />
     <ClCompile Include="MoveByMouthButton.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -205,6 +207,7 @@
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Crab.h" />
+    <ClInclude Include="Easing.h" />
     <ClInclude Include="EditScene.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
@@ -247,6 +250,7 @@
     <ClInclude Include="Imgui_Obj.h" />
     <ClInclude Include="InstanceManager.h" />
     <ClInclude Include="Maguro.h" />
+    <ClInclude Include="ModelBase.h" />
     <ClInclude Include="MoveByMouthButton.h" />
     <ClInclude Include="OBB.h" />
     <ClInclude Include="Particle.h" />
@@ -287,6 +291,9 @@
     <FxCompile Include="Assets\Shader\Simple3D.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\UVScroll.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
     </FxCompile>
     <FxCompile Include="Shadowmap.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

@@ -44,6 +44,14 @@ namespace Math
 	XMFLOAT3 Float3Reverse(XMFLOAT3 a);
 
 	/// <summary>
+	/// ˆø”2‚Â‚ğ”äŠr‚µ‚Ä“¯‚¶‚©’²‚×‚é
+	/// </summary>
+	/// <param name="a"></param>
+	/// <param name="b"></param>
+	/// <returns>“¯‚¶‚©‚Ç‚¤‚©</returns>
+	bool Float3Comparison(XMFLOAT3 a, XMFLOAT3 b);
+
+	/// <summary>
 	/// Transform‚ğƒsƒNƒZƒ‹‚É•ÏŠ·
 	/// </summary>
 	/// <param name="transform"></param>
