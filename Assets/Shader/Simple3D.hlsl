@@ -4,6 +4,7 @@
 Texture2D		g_texture: register(t0);	//テクスチャー
 SamplerState	g_sampler : register(s0);	//サンプラー
 Texture2D		g_texDepth : register(t1);//深度テクスチャー
+Texture2D		g_textureNormal : register(t2);   //ノーマルテクスチャー
 //───────────────────────────────────────
  // コンスタントバッファ
 // DirectX 側から送信されてくる、ポリゴン頂点以外の諸情報の定義
@@ -56,6 +57,7 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 	//視線ベクトル（ハイライトの計算に必要
 	float4 worldPos = mul(pos, g_matWorld);					//ローカル座標にワールド行列をかけてワールド座標へ
 	outData.eye = normalize(g_vecCameraPosition - worldPos);	//視点から頂点位置を引き算し視線を求めてピクセルシェーダーへ
+
 	//UV「座標
 	outData.uv = Uv + g_uvScroll;	//そのままピクセルシェーダーへ
 
