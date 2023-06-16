@@ -24,6 +24,7 @@ cbuffer global
 	float4		g_vecCameraPosition;// 視点（カメラの位置）
 	float		g_shuniness;		// ハイライトの強さ（テカリ具合）
 	bool		g_isTexture;		// テクスチャ貼ってあるかどうか
+	float		g_uvScroll;			//uvスクロールの値
 };
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
@@ -56,7 +57,7 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 	float4 worldPos = mul(pos, g_matWorld);					//ローカル座標にワールド行列をかけてワールド座標へ
 	outData.eye = normalize(g_vecCameraPosition - worldPos);	//視点から頂点位置を引き算し視線を求めてピクセルシェーダーへ
 	//UV「座標
-	outData.uv = Uv;	//そのままピクセルシェーダーへ
+	outData.uv = Uv + g_uvScroll;	//そのままピクセルシェーダーへ
 
 	///////////////////////////////////////////////////////
 	 //ライトビューを参照するとき、手がかりとなるテクスチャー座標 

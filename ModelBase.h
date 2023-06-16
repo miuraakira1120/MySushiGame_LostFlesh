@@ -5,6 +5,7 @@
 class ModelBase : public GameObject
 {
     int hModel_;    //モデル番号
+    float scroll;
 public:
     //コンストラクタ
     ModelBase(GameObject* parent, std::string filename);
