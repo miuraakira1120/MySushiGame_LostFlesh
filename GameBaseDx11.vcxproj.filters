@@ -232,9 +232,6 @@
     <ClCompile Include="Pause.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Particle.cpp">
-      <Filter>00Engine\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="PoryLine.cpp">
       <Filter>00Engine\Effect</Filter>
     </ClCompile>
@@ -296,6 +293,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="ModelBase.cpp" />
+    <ClCompile Include="VFX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -445,9 +443,6 @@
     <ClInclude Include="PoryLine.h">
       <Filter>00Engine\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Particle.h">
-      <Filter>00Engine\Effect</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\IniOperator.h">
       <Filter>00Engine\Ini</Filter>
     </ClInclude>
@@ -503,6 +498,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Easing.h" />
     <ClInclude Include="ModelBase.h" />
+    <ClInclude Include="VFX.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

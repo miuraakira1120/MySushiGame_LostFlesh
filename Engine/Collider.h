@@ -33,6 +33,17 @@ protected:
 	int				hDebugModel_;	//デバッグ表示用のモデルのID
 
 public:
+
+	//関数ポインタ
+	using FunctionPtr = void (GameObject::*)(GameObject*);
+
+	FunctionPtr OnCollision;  //当たった時に呼ばれる関数のポインタ
+	FunctionPtr OutCollision; //当たらなくなった時に呼ばれる関数のポインタ
+
+	//関数ポインタセットするとき
+	void SetHitFunc(FunctionPtr func) { OnCollision = func; }
+	void SetHitOutFunc(FunctionPtr func) { OutCollision = func; }
+
 	//コンストラクタ
 	Collider();
 
@@ -62,12 +73,24 @@ public:
 	//戻値：接触していればtrue
 	bool IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circleB);
 
+	//当たった時に呼ばれる関数ポインタをセット
+	template<class T>
+	void SetHitFunc(void (T::* func)(GameObject*)) { SetHitFunc(static_cast<FunctionPtr>(func)); }
+
+	//当たらなくなった時に呼ばれる関数のポインタをセット
+	template<class T>
+	void SetHitOutFunc(void (T::* func)(GameObject*)) { SetHitOutFunc(static_cast<FunctionPtr>(func)); }
+
 	//テスト表示用の枠を描画
 	//引数：position	オブジェクトの位置
 	void Draw(XMFLOAT3 position);
 
 	//セッター
 	void SetGameObject(GameObject* gameObject) { pGameObject_ = gameObject; }
+
+private:
+
+	
 
 };
 

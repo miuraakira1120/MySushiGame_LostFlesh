@@ -35,8 +35,6 @@ void Crab::Initialize()
     //“–‚½‚è”»’è‚Ì¶¬
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 0.5f, 3));
     AddCollider(collision);
-
-    pParticle_ = Instantiate<Particle>(this);
 }
 
 //XV

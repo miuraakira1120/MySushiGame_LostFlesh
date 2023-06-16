@@ -467,7 +467,6 @@ void FbxParts::Draw(Transform& transform)
 
 
 		// テクスチャをシェーダーに設定
-
 		if (cb.isTexture)
 		{
 			ID3D11SamplerState*			pSampler = pMaterial_[i].pTexture->GetSampler();

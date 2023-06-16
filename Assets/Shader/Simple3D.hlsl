@@ -47,19 +47,22 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 {
 	//ピクセルシェーダーへ渡す情報
 	VS_OUT outData;
+
 	//ローカル座標に、ワールド・ビュー・プロジェクション行列をかけて
 	//スクリーン座標に変換し、ピクセルシェーダーへ
 	outData.pos = mul(pos, g_matWVP);
+
 	//法線の変形
 	Normal.w = 0;					//4次元目は使わないので0
 	Normal = mul(Normal, g_matNormalTrans);		//オブジェクトが変形すれば法線も変形
 	outData.normal = Normal;		//これをピクセルシェーダーへ
+
 	//視線ベクトル（ハイライトの計算に必要
 	float4 worldPos = mul(pos, g_matWorld);					//ローカル座標にワールド行列をかけてワールド座標へ
 	outData.eye = normalize(g_vecCameraPosition - worldPos);	//視点から頂点位置を引き算し視線を求めてピクセルシェーダーへ
 
 	//UV「座標
-	outData.uv = Uv + g_uvScroll;	//そのままピクセルシェーダーへ
+	outData.uv = Uv ;	//そのままピクセルシェーダーへ
 
 	///////////////////////////////////////////////////////
 	 //ライトビューを参照するとき、手がかりとなるテクスチャー座標 
@@ -81,6 +84,17 @@ float4 PS(VS_OUT inData) : SV_Target
 	lightDir = normalize(lightDir);	//向きだけが必要なので正規化
 	//法線はピクセルシェーダーに持ってきた時点で補完され長さが変わっている
 	//正規化しておかないと面の明るさがおかしくなる
+
+	float alpha = 0;
+
+	float2 uv1 = inData.uv;
+	uv1.x += g_uvScroll;
+	float4 normal1 = g_textureNormal.Sample(g_sampler, uv1) * 2 - 1;
+
+	float2 uv2 = inData.uv;
+	uv2.x -= g_uvScroll * 0.3;
+	float4 normal2 = g_textureNormal.Sample(g_sampler, uv2) * 2 - 1;
+
 	inData.normal = normalize(inData.normal);
 	//拡散反射光（ディフューズ）
 	//法線と光のベクトルの内積が、そこの明るさになる
@@ -92,6 +106,7 @@ float4 PS(VS_OUT inData) : SV_Target
 	{
 		//テクスチャの色
 		diffuse = g_texture.Sample(g_sampler, inData.uv);
+		alpha = g_texture.Sample(g_sampler, inData.uv).a;
 	}
 	else
 	{

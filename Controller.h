@@ -11,8 +11,8 @@ class Controller : public GameObject
 
     XMFLOAT3 cameraDistance;//コントローラーからカメラの距離
 
-    const float MOVED_FOV = 65.0f; // プレイヤーが移動している時のFoV
-    const float FOV = 50.0f; // プレイヤーが立ち止まっている時のFoV
+    const float MOVED_FOV = XM_PIDIV4 * 1.1f; // プレイヤーが移動している時のFoV
+    const float FOV = XM_PIDIV4; // プレイヤーが立ち止まっている時のFoV
 public:
     //コンストラクタ
     Controller(GameObject* parent);
@@ -56,6 +56,6 @@ public:
     /// 動いていたかどうかによってFoVを変更
     /// </summary>
     /// <param name="isMoved">動いていたか</param>
-    void SetCameraLerpFovPos(bool isMoved);
+    void ChangeFovMove(bool isMoved);
 };
 

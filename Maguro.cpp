@@ -31,8 +31,6 @@ void Maguro::Initialize()
     //モデルデータのロード
     hModel_ = Model::Load("tuna.fbx");
     assert(hModel_ >= 0);
-
-    pParticle_ = Instantiate<Particle>(this);
 }
 
 //更新

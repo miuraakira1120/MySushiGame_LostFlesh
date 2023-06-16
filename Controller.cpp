@@ -121,8 +121,8 @@ void Controller::SetCameraLerpPos(XMFLOAT3 position, float attenRate)
     //コントローラーでカメラを回転
     SetCameraPos(camPos);
 }
-//リープをとFoV使用してコントローラーでカメラを回転させる関数
-void Controller::SetCameraLerpFovPos(bool isMoved)
+//リープとFoV使用してコントローラーでカメラを回転させる関数
+void Controller::ChangeFovMove(bool isMoved)
 {
     //FoVの設定
     float fov = isMoved ? MOVED_FOV : FOV;

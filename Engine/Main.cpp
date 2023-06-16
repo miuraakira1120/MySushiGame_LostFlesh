@@ -20,6 +20,7 @@
 #include "../Imgui_Obj.h"
 #include "../Engine/JsonOperator.h"
 #include "../GameManager.h"
+#include "../VFX.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -209,10 +210,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 					Camera::Update();
 
+					//エフェクトの更新
+					VFX::Update();
+
 					//全オブジェクトを描画
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->DrawSub();
 				}
+
+				//エフェクトの描画
+				VFX::Draw();
 
 				//ゲームマネジャーの準備
 				GameManager::Draw();
@@ -232,7 +239,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	
+	//解放
+	VFX::Release();
 	Audio::Release();
 	Model::AllRelease();
 	Image::AllRelease();

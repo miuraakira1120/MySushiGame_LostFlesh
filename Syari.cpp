@@ -17,6 +17,7 @@
 #include "OBB.h"
 #include "Ball.h"
 #include "Engine/Global.h"
+#include "VFX.h"
 
 
 using std::vector;
@@ -25,7 +26,7 @@ using std::vector;
 Syari::Syari(GameObject* parent)
     :GameObject(parent, "Syari"), hModel_(-1), mode(1), axisPos(0,0,0),
     prevPos(0.0f, 0.0f, 0.0f), accel(0.0f), jumpSpeed(0), pGauge_(nullptr), isGround(false), 
-    prevBonePos(), countTime(0), flipped(XMVECTOR{ 0,0,0,0 }), upDistanceDifference(0,0,0)
+    prevBonePos(), countTime(0), flipped(XMVECTOR{ 0,0,0,0 }), upDistanceDifference(0,0,0), prevPosMove(0,0,0)
 {
 }
 
@@ -69,6 +70,7 @@ void Syari::Initialize()
 //更新
 void Syari::Update()
 {
+    prevPosMove = transform_.position_;
     countTime++;
     //pGauge_->SetNowHP(Time::GetTimei());
     pGauge_->Damage(1);
@@ -400,7 +402,8 @@ void Syari::Update()
     Camera::SetTarget(transform_.position_);
     //pController->SetCameraPos(transform_.position_);
     pController->SetCameraLerpPos(transform_.position_, 0.05f);
-    //pController->SetCameraLerpFovPos(Math::Float3Comparison(prevPos, transform_.position_));
+    pController->ChangeFovMove(Math::Float3Comparison(prevPosMove, transform_.position_));
+    
 }
 
 //描画
@@ -425,8 +428,22 @@ void Syari::KeyOperation()
 #if _DEBUG
     if (Input::IsKeyDown(DIK_RETURN))
     {
-        SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-        pSceneManager->ChangeScene(SCENE_ID_GOAL);
+        EmitterData  data;
+        data.textureFileName = "PCloud.png";
+        data.position = transform_.position_;
+        data.delay = 0;
+        data.number = 80;
+        data.lifeTime = 20;
+        data.direction = XMFLOAT3(0, 1, 0);
+        data.directionRnd = XMFLOAT3(90, 90, 90);
+        data.speed = 0.1f;
+        data.speedRnd = 0.8;
+        data.size = XMFLOAT2(1, 1);
+        data.sizeRnd = XMFLOAT2(0.4, 0.4);
+        data.scale = XMFLOAT2(1.05, 1.05);
+        data.color = XMFLOAT4(1, 1, 0.1, 1);
+        data.deltaColor = XMFLOAT4(0, -1.0 / 20, 0, -1.0 / 20);
+        VFX::Start(data);	//エミッターを設置
     }
 #endif
     ////////移動/////////////

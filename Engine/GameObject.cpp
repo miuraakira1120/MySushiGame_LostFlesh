@@ -277,6 +277,7 @@ void GameObject::Collision(GameObject * pTarget)
 			if ((*i)->IsHit(*j))
 			{
 				//“–‚½‚Á‚½
+				(*this.*(*i)->OnCollision)(pTarget);
 				this->OnCollision(pTarget);
 			}
 		}

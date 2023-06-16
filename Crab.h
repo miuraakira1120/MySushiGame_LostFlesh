@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include "Particle.h"
 
 class Stage;
 class Syari;
@@ -36,9 +35,6 @@ class Crab : public GameObject
     XMFLOAT3 vertexBonePos[8];
 
     XMFLOAT3 prevPos;//1f前の自分の位置
-
-    Particle* pParticle_;
-
 public:
     //コンストラクタ
     Crab(GameObject* parent);
