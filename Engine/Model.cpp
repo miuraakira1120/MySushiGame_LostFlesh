@@ -60,6 +60,9 @@ namespace Model
 				}
 			}
 
+			//UVScrollの値の初期化
+			pData->uvScrollVal = 0;
+
 			//新たに追加
 			_datas.push_back(pData);
 			return (int)_datas.size() - 1;
@@ -81,6 +84,8 @@ namespace Model
 		//最後までアニメーションしたら戻す
 		if (_datas[handle]->nowFrame > (float)_datas[handle]->endFrame)
 			_datas[handle]->nowFrame = (float)_datas[handle]->startFrame;
+
+		
 
 		if (_datas[handle]->pFbx)
 		{
@@ -210,5 +215,16 @@ namespace Model
 			XMStoreFloat3(&data->dir, vecDir);
 
 			_datas[handle]->pFbx->RayCast(data); 
+	}
+
+	//uvのスクロールの値をセットする
+	void SetScrollVal(int handle, float scrollVal)
+	{
+		if (handle < 0 || handle >= _datas.size() || _datas[handle] == nullptr)
+		{
+			return;
+		}
+
+		_datas[handle]->uvScrollVal = scrollVal;
 	}
 }

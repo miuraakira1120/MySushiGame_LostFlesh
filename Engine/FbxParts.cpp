@@ -9,7 +9,7 @@
 FbxParts::FbxParts():
 	ppIndexBuffer_(nullptr), pMaterial_(nullptr), 
 	pVertexBuffer_(nullptr), pConstantBuffer_(nullptr),
-	pVertexData_(nullptr), ppIndexData_(nullptr)
+	pVertexData_(nullptr), ppIndexData_(nullptr), scrollVal(0)
 {
 }
 
@@ -458,6 +458,7 @@ void FbxParts::Draw(Transform& transform)
 		cb.cameraPosition = XMFLOAT4(Camera::GetPosition().x, Camera::GetPosition().y, Camera::GetPosition().z, 0);
 		cb.lightDirection = XMFLOAT4(GameManager::GetLightVec().x, GameManager::GetLightVec().y, GameManager::GetLightVec().z, 0);
 		cb.isTexture = pMaterial_[i].pTexture != nullptr;
+		cb.uvScrollVal = 
 
 
 		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのリソースアクセスを一時止める
@@ -625,4 +626,10 @@ void FbxParts::RayCast(RayCastData * data)
 			}
 		}
 	}
+}
+
+//uvスクロールの値
+void FbxParts::SetScroll(float scroll)
+{
+	scrollVal = scroll;
 }
