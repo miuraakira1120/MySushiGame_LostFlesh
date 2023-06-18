@@ -271,6 +271,7 @@ namespace Imgui_Obj
         ImGui::RadioButton("Goal", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GOAL)); ImGui::SameLine();
         ImGui::RadioButton("GameOver", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_GAMEOVER));
         ImGui::RadioButton("Edit", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_EDIT));
+        ImGui::RadioButton("Tutorial", &nextScene, static_cast<int>(SCENE_ID::SCENE_ID_TUTORIAL));
 
         if (ImGui::Button("Scene Change"))
         {
@@ -927,6 +928,7 @@ namespace Imgui_Obj
         //ラジオボタン作成
         ImGui::RadioButton("NONE", &modeUI, static_cast<int>(UI_Type::NONE)); ImGui::SameLine();
         ImGui::RadioButton("PAUSE", &modeUI, static_cast<int>(UI_Type::PAUSE)); 
+        ImGui::RadioButton("TUTORIAL_JUMP", &modeUI, static_cast<int>(UI_Type::TUTORIAL_JUMP));
 
         //前フレームと作成するUIが違ったら
         if (modeUI != prevModeUI)

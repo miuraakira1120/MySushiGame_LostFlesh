@@ -100,5 +100,8 @@ public:
     /// </summary>
     /// <param name="hStageModel">ステージのモデル</param>
     void RevertProcess(int hStageModel);
+
+    //テスト用の一時的な地面にめり込んだ時の処理
+    void TestRevertProcess();
 };
 

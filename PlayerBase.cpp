@@ -7,6 +7,20 @@
 #include "OBB.h"
 #include "Engine/Global.h"
 
+enum Direction
+{
+    TOP = 0,
+    BOTOM,
+    LEFT,
+    RIGHT,
+    FRONT,
+    BACK,
+    DOWN_RIGHT_FRONT,
+    DOWN_RIGHT_BACK,
+    DOWN_LEFT_FRONT,
+    DOWN_LEFT_BACK,
+    DIRECTION_MAX
+};
 
 //コンストラクタ
 PlayerBase::PlayerBase(GameObject* parent, std::string name, std::string modelFilename)
@@ -276,7 +290,7 @@ void PlayerBase::RevertProcess(int hStageModel)
     //レイのスタート地点
     XMFLOAT3 pos = { 0,0,0 };
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < DIRECTION_MAX; i++)
     {
         float length;
         //衝突しているか調べる
@@ -311,5 +325,10 @@ void PlayerBase::RevertProcess(int hStageModel)
             }
         }
     }  
+}
+
+//テスト用の一時的な地面にめり込んだ時の処理
+void PlayerBase::TestRevertProcess()
+{
 }
 

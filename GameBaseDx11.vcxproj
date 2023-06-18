@@ -194,6 +194,7 @@
     <ClCompile Include="Syari.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TutorialScene.cpp" />
+    <ClCompile Include="TutorialStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
@@ -265,6 +266,7 @@
     <ClInclude Include="Syari.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TutorialScene.h" />
+    <ClInclude Include="TutorialStage.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">

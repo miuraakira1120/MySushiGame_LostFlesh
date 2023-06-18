@@ -13,6 +13,7 @@ enum UI_Type
 {
 	NONE = 0,
 	PAUSE,
+	TUTORIAL_JUMP,
 	TYPE_MAX
 };
 

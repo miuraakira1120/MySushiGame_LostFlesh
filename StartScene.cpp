@@ -8,6 +8,8 @@
 #include "Pause.h"
 #include "Engine/JsonOperator.h"
 #include "Engine/Audio.h"
+#include "Syari.h"
+#include "TutorialStage.h"
 
 
 //コンストラクタ
@@ -34,6 +36,15 @@ void StartScene::Initialize()
 	//サウンドデータのロード
 	hSound_ = Audio::Load("TestHello.wav", false, 1.0f);
 	assert(hSound_ >= 0);
+
+	Instantiate<TutorialStage>(this);
+
+	vector<Syari> pSyarilist;
+	Instantiate<Syari>(this);
+	/*pSyarilist.push_back(Instantiate<Syari>(this)); 
+	pSyarilist[0].isMove = false;
+	pSyarilist[0].SetPosition(0, 0, 0);*/
+
 }
 
 //更新

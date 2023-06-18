@@ -14,7 +14,7 @@ namespace GameManager
 		PARENT_MAX
 	};
 
-	
+
 
 	/// <summary>
 	/// ‰Šú‰»

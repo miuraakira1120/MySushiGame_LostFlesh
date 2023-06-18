@@ -36,6 +36,11 @@ void EditScene::Update()
 			InstanceManager::AllCreateImage(JsonOperator::PAUSE_IMAGE_JSON, this);
 			InstanceManager::AllCreateButton(JsonOperator::PAUSE_BUTTON_JSON, this);
 			break;
+			
+		case UI_Type::TUTORIAL_JUMP:
+			InstanceManager::AllCreateImage(JsonOperator::TUTORIAL_JUMP_IMAGE_JSON, this);
+			break;
+
 		case UI_Type::TYPE_MAX:
 			break;
 		default:

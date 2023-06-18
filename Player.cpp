@@ -2,7 +2,9 @@
 #include "Stage.h"
 #include "Engine/Input.h"
 #include "ImageBase.h"
-
+#include "Engine/SceneManager.h"
+#include "GameManager.h"
+#include "TutorialStage.h"
 
 Player::Player(GameObject* parent, std::string pathName)
 	:PlayerBase(parent, "Player", pathName)
@@ -47,9 +49,20 @@ void Player::Update()
 
 	//ステージ関連の処理
 	{
+		int hGroundModel;
+
+		//ステージのモデルを取得
+		TutorialStage* pTutorialStage = (TutorialStage*)FindObject("TutorialStage");    //ステージオブジェクトを探す
+		if (pTutorialStage != nullptr)
+		{
+			hGroundModel = pTutorialStage->GetModelHandle();    //モデル番号を取得
+		}
+			
+
 		//ステージのモデルを取得
 		Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
-		int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
+		if (pStage != nullptr)
+			hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
 
 		//姿勢を地面の法線に添わせる
 		PostureGroundFollow(hGroundModel);

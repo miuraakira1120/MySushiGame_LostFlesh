@@ -17,6 +17,8 @@
 #include "OBB.h"
 #include "Ball.h"
 #include "Engine/Global.h"
+#include "TutorialStage.h"
+#include "Imgui_Obj.h"
 
 
 using std::vector;
@@ -43,7 +45,7 @@ void Syari::Initialize()
     assert(hModel_ >= 0);
 
     //子オブジェクトの生成
-    //Instantiate<Maguro>(this);
+    Instantiate<Maguro>(this);
 
     //当たり判定の生成
     BoxCollider* collision = new BoxCollider(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
@@ -64,6 +66,8 @@ void Syari::Initialize()
     pGauge_->SetMaxHP(300 * 60);
 
     //transform_.position_.y = -37;
+
+    Imgui_Obj::AddDebugLogList(this);
 }
 
 //更新
@@ -83,7 +87,11 @@ void Syari::Update()
 
     //MoveMouse();
     //キー入力をする
-    KeyOperation();
+    if (isMove)
+    {
+        KeyOperation();
+    }
+    
 
 
     //各頂点の位置を調べる
@@ -92,8 +100,16 @@ void Syari::Update()
         vertexBonePos[i] = Model::GetBonePosition(hModel_, vertexName[i]);
     }
 
+    int hGroundModel;
+
+
     Stage* pStage = (Stage*)FindObject("Stage");    //ステージオブジェクトを探す
-    int hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
+    if(pStage != nullptr)
+        hGroundModel = pStage->GetModelHandle();    //モデル番号を取得
+
+    TutorialStage* pTutorialStage = (TutorialStage*)FindObject("TutorialStage");    //ステージオブジェクトを探す
+    if(pTutorialStage != nullptr)
+        hGroundModel = pTutorialStage->GetModelHandle();    //モデル番号を取得
 
     //Goal* pGoal = (Goal*)FindObject("Goal");        //ゴールオブジェクトを探す
     //int hGoalModel = pGoal->GetModelHandle();       //モデル番号を取得

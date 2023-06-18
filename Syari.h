@@ -123,6 +123,7 @@ class Syari : public GameObject
 
     XMVECTOR flipped;
 public:
+    bool isMove = true;
     float accel;//ç°Ç«ÇÍÇæÇØâ¡ë¨Ç∑ÇÈÇ©
     XMFLOAT3 fupRightFrontPos;
     XMFLOAT3 vertexBonePos[VERTEX_MAX];
