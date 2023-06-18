@@ -6,7 +6,7 @@
 
 //コンストラクタ
 ImageBase::ImageBase(GameObject* parent, std::string pathName, int alpha)
-    :GameObject(parent, "ImageBase"),hPict_(-1), isParentMove(false)
+    :GameObject(parent, "ImageBase"),hPict_(-1), isParentMove(false),shiftPosition()
 {
     SetPathName(pathName);
     SetAlpha(alpha);
@@ -76,11 +76,9 @@ void ImageBase::Release()
 //親オブジェクトの位置にって画像の位置を変える
 XMFLOAT3 ImageBase::parentObjectPositionByImagePosition()
 {
-    Player* pPlayer = (Player*)FindObject("Player");    //ステージオブジェクトを探す
-
     //親オブジェクトをスクリーン座標に変換
-    XMFLOAT3 scrParentPos = Camera::ToWorldCalcScreen(pPlayer->GetPosition());
-    scrParentPos = Math::Float3Add( scrParentPos, transform_.position_);
+    XMFLOAT3 scrParentPos = Camera::ToWorldCalcScreen(Math::Float3Add(GetParent()->GetPosition(), transform_.position_));
+    //scrParentPos = Math::Float3Add( scrParentPos, transform_.position_);
     return scrParentPos;
 }
 
@@ -92,5 +90,9 @@ void ImageBase::SetParentMove(bool flag)
     isParentMove = flag;
 }
 
+void ImageBase::SetShiftPos(XMFLOAT3 shift)
+{
+    shiftPosition = shift;
+}
 
 

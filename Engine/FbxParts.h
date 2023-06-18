@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "Transform.h"
 
+
 using namespace DirectX;
 
 class Fbx;
@@ -31,6 +32,10 @@ class FbxParts
 		XMMATRIX worldVewProj;	//ワールド、ビュー、プロジェクション行列の合成（頂点変換に使用）
 		XMMATRIX normalTrans;	//回転行列と拡大行列の逆行列を合成したもの（法線の変形に使用）
 		XMMATRIX world;			//ワールド行列
+
+		XMMATRIX mWLP;			//ワールド・”ライトビュー”・プロジェクションの合成 
+		XMMATRIX mWLPT;			//ワールド・”ライトビュー”・プロジェクション・テクスチャ座標行列の合
+
 		XMFLOAT4 lightDirection;//ライトの向き
 		XMFLOAT4 diffuse;		//ディフューズカラー。マテリアルの色。（テクスチャ貼ってるときは使わない）
 		XMFLOAT4 ambient;		//アンビエント
@@ -38,6 +43,7 @@ class FbxParts
 		XMFLOAT4 cameraPosition;//カメラの位置（ハイライトの計算に必要）
 		FLOAT	 shininess;		//ハイライトの強さ（MayaのCosinePower）
 		BOOL	 isTexture;		//テクスチャの有無
+		FLOAT	 uvScrollVal;   //uvスクロールの値
 	};
 
 	// マテリアル情報（質感の情報）
@@ -81,6 +87,8 @@ class FbxParts
 	VERTEX *pVertexData_;
 	DWORD** ppIndexData_;
 
+	//uvScrollの値
+	float scrollVal;
 
 	//【頂点バッファ】
 	//各頂点の情報（位置とか色とか）を格納するところ
@@ -151,5 +159,8 @@ public:
 	//レイキャスト（レイを飛ばして当たり判定）
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(RayCastData *data);
+
+	//uvスクロールの値
+	void SetScroll(float scroll);
 };
 

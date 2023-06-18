@@ -94,6 +94,9 @@ public:
 	bool IsVisibled();		// Draw実行していいか
 	void DoSetUp();			//セットアップが完了した状態にする
 	bool IsSetUp();			//セットアップが完了しているか
+	void PutShadow();		//影をつける
+	void DeleteShadow();	//影を消す
+	bool IsSyadow();		
 
 
 	//子オブジェクトリストを取得
@@ -192,6 +195,7 @@ private:
 		unsigned visible : 1;		//描画するか
 		unsigned dead : 1;			//削除するか
 		unsigned setUp : 1;			//セットアップしているか
+		unsigned hasShadow : 1;		//影をつけるかどうか
 	};
 	OBJECT_STATE state_;
 

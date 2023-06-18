@@ -2,14 +2,12 @@
 #include <d3d11.h>
 #include <wrl/client.h>
 #include "Engine/GameObject.h"
-#include "Particle.h"
 
 class PlayScene : public GameObject
 {
 
 	//const XMFLOAT3 UVSCROLL_SPEED = { 0.1f, 0.1f, 0.0f };
 	const float UVSCROLL_SPEED = 0.1f;
-	Particle* pParticle_;
 
 	struct ConstantBuffer
 	{

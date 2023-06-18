@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include "Particle.h"
 
 class Stage;
 class Syari;
@@ -37,7 +36,6 @@ class Maguro : public GameObject
 
     XMFLOAT3 prevPos;//1f前の自分の位置
 
-    Particle* pParticle_;
     
 public:
     //コンストラクタ

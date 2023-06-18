@@ -33,6 +33,12 @@ namespace Camera
 
 	void SetViewFlag(int flag);
 
+	/// <summary>
+	/// 視野角の設定(度数法)
+	/// </summary>
+	/// <param name="fov"></param>
+	void SetFOV(float fov);
+
 	//ビルボード用回転行列を取得
 	XMMATRIX GetBillboardMatrix();
 

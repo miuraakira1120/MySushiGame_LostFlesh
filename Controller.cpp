@@ -8,7 +8,7 @@
 
 //コンストラクタ
 Controller::Controller(GameObject* parent)
-    :GameObject(parent, "Controller"), hPict_(-1)
+    :GameObject(parent, "Controller"), hPict_(-1), cameraDistance(0.0f, 4.0f, 20.0f)
 {
 }
 
@@ -49,8 +49,6 @@ void Controller::Update()
 
     XMFLOAT3 stickR = { Input::GetPadStickR().y, Input::GetPadStickR().x, 0 };
     transform_.rotate_ = Math::Float3Add(Math::Float3Mul( stickR, PAD_SPEED, PAD_SPEED, PAD_SPEED), transform_.rotate_);
-
-    Camera::SetTarget(transform_.position_);
 }
 
 //描画
@@ -78,16 +76,55 @@ XMFLOAT3 Controller::GetRotate()
     return transform_.rotate_;
 }
 
-XMFLOAT3 Controller::GetCameraPos(XMFLOAT3 position)
+//コントローラーでカメラを回転関数
+void Controller::SetCameraPos(XMFLOAT3 position)
 {
+    //現在地をXMVECTORに変換
     XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
 
-    XMVECTOR vCam = XMVectorSet(0.0f, 4.0f, 10.0f, 0.0f);
+    //カメラの位置の設定
+    //距離を設定
+    XMVECTOR vCam = XMVectorSet(cameraDistance.x, cameraDistance.y, cameraDistance.z, 0.0f);
+
+    //コントローラーの角度によってカメラの位置を変える
     XMMATRIX mRotate = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
     mRotate *= XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
     vCam = XMVector3TransformCoord(vCam, mRotate);
     XMFLOAT3 camPos;
     XMStoreFloat3(&camPos, vPos + vCam);
     transform_.position_ = position;
-    return camPos;
+    
+    //カメラの位置を変える
+    Camera::SetPosition(camPos);
+
+    //カメラの焦点を変える
+    Camera::SetTarget(transform_.position_);
+}
+
+//リープを使用してコントローラーでカメラを回転させる関数
+void Controller::SetCameraLerpPos(XMFLOAT3 position, float attenRate)
+{
+    //XMVECTORに変換
+    //到達するべき位置
+    XMVECTOR vReachPosition = XMLoadFloat3(&position);
+
+    //現在地
+    XMVECTOR vPos = XMLoadFloat3(&transform_.position_);
+
+    //Lerp減衰
+    XMVECTOR vCamPos = XMVectorLerp(vPos, vReachPosition, attenRate);
+
+    //XMFLOAT3に変換
+    XMFLOAT3 camPos;
+    XMStoreFloat3(&camPos, vCamPos);
+
+    //コントローラーでカメラを回転
+    SetCameraPos(camPos);
+}
+//リープとFoV使用してコントローラーでカメラを回転させる関数
+void Controller::ChangeFovMove(bool isMoved)
+{
+    //FoVの設定
+    float fov = isMoved ? MOVED_FOV : FOV;
+    Camera::SetFOV(fov);
 }

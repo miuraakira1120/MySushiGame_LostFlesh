@@ -3,12 +3,13 @@
 #include "Global.h"
 #include "Direct3D.h"
 #include "Camera.h"
+#include "../GameManager.h"
 
 //コンストラクタ
 FbxParts::FbxParts():
 	ppIndexBuffer_(nullptr), pMaterial_(nullptr), 
 	pVertexBuffer_(nullptr), pConstantBuffer_(nullptr),
-	pVertexData_(nullptr), ppIndexData_(nullptr)
+	pVertexData_(nullptr), ppIndexData_(nullptr), scrollVal(0)
 {
 }
 
@@ -446,13 +447,18 @@ void FbxParts::Draw(Transform& transform)
 		cb.worldVewProj =	XMMatrixTranspose(transform.GetWorldMatrix() * Camera::GetViewMatrix() * Camera::GetProjectionMatrix());						// リソースへ送る値をセット
 		cb.world =		XMMatrixTranspose(transform.GetWorldMatrix());
 		cb.normalTrans =	XMMatrixTranspose(transform.matRotate_ * XMMatrixInverse(nullptr, transform.matScale_));
+
+		cb.mWLP = XMMatrixTranspose(transform.GetWorldMatrix() * Direct3D::lightView_ * Camera::GetProjectionMatrix());
+		cb.mWLPT = XMMatrixTranspose(transform.GetWorldMatrix() * Direct3D::lightView_ * Camera::GetProjectionMatrix() * Direct3D::clipToUV_);
+
 		cb.ambient = pMaterial_[i].ambient;
 		cb.diffuse = pMaterial_[i].diffuse;
 		cb.speculer = pMaterial_[i].specular;
 		cb.shininess = pMaterial_[i].shininess;
 		cb.cameraPosition = XMFLOAT4(Camera::GetPosition().x, Camera::GetPosition().y, Camera::GetPosition().z, 0);
-		cb.lightDirection = XMFLOAT4(1, -1, 1, 0);
+		cb.lightDirection = XMFLOAT4(GameManager::GetLightVec().x, GameManager::GetLightVec().y, GameManager::GetLightVec().z, 0);
 		cb.isTexture = pMaterial_[i].pTexture != nullptr;
+		cb.uvScrollVal = scrollVal;
 
 
 		Direct3D::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);	// GPUからのリソースアクセスを一時止める
@@ -461,7 +467,6 @@ void FbxParts::Draw(Transform& transform)
 
 
 		// テクスチャをシェーダーに設定
-
 		if (cb.isTexture)
 		{
 			ID3D11SamplerState*			pSampler = pMaterial_[i].pTexture->GetSampler();
@@ -620,4 +625,10 @@ void FbxParts::RayCast(RayCastData * data)
 			}
 		}
 	}
+}
+
+//uvスクロールの値
+void FbxParts::SetScroll(float scroll)
+{
+	scrollVal = scroll;
 }

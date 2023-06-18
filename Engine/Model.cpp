@@ -60,6 +60,9 @@ namespace Model
 				}
 			}
 
+			//UVScrollの値の初期化
+			pData->uvScrollVal = 0;
+
 			//新たに追加
 			_datas.push_back(pData);
 			return (int)_datas.size() - 1;
@@ -68,7 +71,7 @@ namespace Model
 
 
 	//描画
-	void Draw(int handle)
+	void Draw(int handle, float uvScroll)
 	{
 		if (handle < 0 || handle >= _datas.size() || _datas[handle] == nullptr)
 		{
@@ -84,7 +87,7 @@ namespace Model
 
 		if (_datas[handle]->pFbx)
 		{
-			_datas[handle]->pFbx->Draw(_datas[handle]->transform, (int)_datas[handle]->nowFrame);
+			_datas[handle]->pFbx->Draw(_datas[handle]->transform, (int)_datas[handle]->nowFrame, _datas[handle]->uvScrollVal);
 		}
 	}
 
@@ -105,7 +108,7 @@ namespace Model
 
 		if (_datas[handle]->pFbx)
 		{
-			_datas[handle]->pFbx->Draw(_datas[handle]->transform, (int)_datas[handle]->nowFrame);
+			_datas[handle]->pFbx->Draw(_datas[handle]->transform, (int)_datas[handle]->nowFrame, _datas[handle]->uvScrollVal);
 		}
 	}
 
@@ -210,5 +213,16 @@ namespace Model
 			XMStoreFloat3(&data->dir, vecDir);
 
 			_datas[handle]->pFbx->RayCast(data); 
+	}
+
+	//uvのスクロールの値をセットする
+	void SetScrollVal(int handle, float scrollVal)
+	{
+		if (handle < 0 || handle >= _datas.size() || _datas[handle] == nullptr)
+		{
+			return;
+		}
+
+		_datas[handle]->uvScrollVal = scrollVal;
 	}
 }

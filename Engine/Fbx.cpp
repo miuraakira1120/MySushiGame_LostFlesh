@@ -118,7 +118,7 @@ XMFLOAT3 Fbx::GetBonePosition(std::string boneName)
 	return position;
 }
 
-void Fbx::Draw(Transform& transform, int frame)
+void Fbx::Draw(Transform& transform, int frame, float scrollVal)
 {
 	//パーツを1個ずつ描画
 	for (int k = 0; k < parts_.size(); k++)
@@ -127,6 +127,8 @@ void Fbx::Draw(Transform& transform, int frame)
 		FbxTime     time;
 		time.SetTime(0, 0, 0, frame, 0, 0, _frameRate);
 
+		//uvスクロールの値をセット
+		parts_[k]->SetScroll(scrollVal);
 
 		//スキンアニメーション（ボーン有り）の場合
 		if (parts_[k]->GetSkinInfo() != nullptr)

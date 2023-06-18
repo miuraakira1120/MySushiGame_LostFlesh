@@ -136,6 +136,7 @@
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Crab.cpp" />
+    <ClCompile Include="Easing.cpp" />
     <ClCompile Include="EditScene.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
@@ -176,9 +177,9 @@
     <ClCompile Include="Imgui_Obj.cpp" />
     <ClCompile Include="InstanceManager.cpp" />
     <ClCompile Include="Maguro.cpp" />
+    <ClCompile Include="ModelBase.cpp" />
     <ClCompile Include="MoveByMouthButton.cpp" />
     <ClCompile Include="OBB.cpp" />
-    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerBase.cpp" />
@@ -194,7 +195,11 @@
     <ClCompile Include="Syari.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TutorialScene.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="TutorialStage.cpp" />
+=======
+    <ClCompile Include="VFX.cpp" />
+>>>>>>> 186f7b8e939c4f20c838481a843dae9592ab11f6
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
@@ -206,6 +211,7 @@
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Crab.h" />
+    <ClInclude Include="Easing.h" />
     <ClInclude Include="EditScene.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BoxCollider.h" />
@@ -248,9 +254,9 @@
     <ClInclude Include="Imgui_Obj.h" />
     <ClInclude Include="InstanceManager.h" />
     <ClInclude Include="Maguro.h" />
+    <ClInclude Include="ModelBase.h" />
     <ClInclude Include="MoveByMouthButton.h" />
     <ClInclude Include="OBB.h" />
-    <ClInclude Include="Particle.h" />
     <ClInclude Include="Pause.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBase.h" />
@@ -266,7 +272,11 @@
     <ClInclude Include="Syari.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TutorialScene.h" />
+<<<<<<< HEAD
     <ClInclude Include="TutorialStage.h" />
+=======
+    <ClInclude Include="VFX.h" />
+>>>>>>> 186f7b8e939c4f20c838481a843dae9592ab11f6
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
@@ -292,7 +302,13 @@
     </FxCompile>
     <FxCompile Include="Assets\Shader\UVScroll.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
-      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+    </FxCompile>
+    <FxCompile Include="Shadowmap.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

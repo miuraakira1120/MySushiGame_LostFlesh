@@ -3,7 +3,8 @@
 //───────────────────────────────────────
 Texture2D		g_texture: register(t0);	//テクスチャー
 SamplerState	g_sampler : register(s0);	//サンプラー
-
+Texture2D		g_texDepth : register(t1);//深度テクスチャー
+Texture2D		g_textureNormal : register(t2);   //ノーマルテクスチャー
 //───────────────────────────────────────
  // コンスタントバッファ
 // DirectX 側から送信されてくる、ポリゴン頂点以外の諸情報の定義
@@ -13,6 +14,10 @@ cbuffer global
 	float4x4	g_matWVP;			// ワールド・ビュー・プロジェクションの合成行列
 	float4x4	g_matNormalTrans;	// 法線の変換行列（回転行列と拡大の逆行列）
 	float4x4	g_matWorld;			// ワールド変換行列
+
+	float4x4	g_mWLP;				//ワールド・”ライトビュー”・プロジェクションの合成 
+	float4x4	g_mWLPT;			//ワールド・”ライトビュー”・プロジェクション・UV 行列の合成 
+
 	float4		g_vecLightDir;		// ライトの方向ベクトル
 	float4		g_vecDiffuse;		// ディフューズカラー（マテリアルの色）
 	float4		g_vecAmbient;		// アンビエントカラー（影の色）
@@ -20,9 +25,8 @@ cbuffer global
 	float4		g_vecCameraPosition;// 視点（カメラの位置）
 	float		g_shuniness;		// ハイライトの強さ（テカリ具合）
 	bool		g_isTexture;		// テクスチャ貼ってあるかどうか
-
+	float		g_uvScroll;			//uvスクロールの値
 };
-
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
 //───────────────────────────────────────
@@ -32,8 +36,10 @@ struct VS_OUT
 	float4 normal : TEXCOORD2;		//法線
 	float2 uv	  : TEXCOORD0;		//UV座標
 	float4 eye	  : TEXCOORD1;		//視線
-};
 
+	float4 LightTexCoord : TEXCOORD5;
+	float4 LighViewPos : TEXCOORD6;
+};
 //───────────────────────────────────────
 // 頂点シェーダ
 //───────────────────────────────────────
@@ -44,7 +50,7 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 
 	//ローカル座標に、ワールド・ビュー・プロジェクション行列をかけて
 	//スクリーン座標に変換し、ピクセルシェーダーへ
-	outData.pos = mul(pos, g_matWVP);		
+	outData.pos = mul(pos, g_matWVP);
 
 	//法線の変形
 	Normal.w = 0;					//4次元目は使わないので0
@@ -56,13 +62,18 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 	outData.eye = normalize(g_vecCameraPosition - worldPos);	//視点から頂点位置を引き算し視線を求めてピクセルシェーダーへ
 
 	//UV「座標
-	outData.uv = Uv;	//そのままピクセルシェーダーへ
+	outData.uv = Uv ;	//そのままピクセルシェーダーへ
 
+	///////////////////////////////////////////////////////
+	 //ライトビューを参照するとき、手がかりとなるテクスチャー座標 
+	outData.LightTexCoord = mul(pos, g_mWLPT); //この点が、ライトビューであったときの位置がわかる 
+
+	//ライトビューにおける位置(変換後) 
+	outData.LighViewPos = mul(pos, g_mWLP);
 
 	//まとめて出力
 	return outData;
 }
-
 //───────────────────────────────────────
 // ピクセルシェーダ
 //───────────────────────────────────────
@@ -71,33 +82,40 @@ float4 PS(VS_OUT inData) : SV_Target
 	//ライトの向き
 	float4 lightDir = g_vecLightDir;	//グルーバル変数は変更できないので、いったんローカル変数へ
 	lightDir = normalize(lightDir);	//向きだけが必要なので正規化
-
 	//法線はピクセルシェーダーに持ってきた時点で補完され長さが変わっている
 	//正規化しておかないと面の明るさがおかしくなる
-	inData.normal = normalize(inData.normal);
 
+	float alpha = 0;
+
+	float2 uv1 = inData.uv;
+	uv1.x += g_uvScroll;
+	float4 normal1 = g_textureNormal.Sample(g_sampler, uv1) * 2 - 1;
+
+	float2 uv2 = inData.uv;
+	uv2.x -= g_uvScroll * 0.3;
+	float4 normal2 = g_textureNormal.Sample(g_sampler, uv2) * 2 - 1;
+
+	inData.normal = normalize(inData.normal);
 	//拡散反射光（ディフューズ）
 	//法線と光のベクトルの内積が、そこの明るさになる
 	float4 shade = saturate(dot(inData.normal, -lightDir));
 	shade.a = 1;	//暗いところが透明になるので、強制的にアルファは1
-
 	float4 diffuse;
 	//テクスチャ有無
 	if (g_isTexture == true)
 	{
 		//テクスチャの色
 		diffuse = g_texture.Sample(g_sampler, inData.uv);
+		alpha = g_texture.Sample(g_sampler, inData.uv).a;
 	}
 	else
 	{
 		//マテリアルの色
 		diffuse = g_vecDiffuse;
 	}
-
 	//環境光（アンビエント）
 	//これはMaya側で指定し、グローバル変数で受け取ったものをそのまま
 	float4 ambient = g_vecAmbient;
-
 	//鏡面反射光（スペキュラー）
 	float4 speculer = float4(0.0f, 0.0f, 0.0f, 0);	//とりあえずハイライトは無しにしておいて…
 	if (g_vecSpeculer.a != 0)	//スペキュラーの情報があれば
@@ -105,7 +123,19 @@ float4 PS(VS_OUT inData) : SV_Target
 		float4 R = reflect(lightDir, inData.normal);			//正反射ベクトル
 		speculer = pow(saturate(dot(R, inData.eye)), g_shuniness) * g_vecSpeculer;	//ハイライトを求める
 	}
-
 	//最終的な色
-	return diffuse * shade + diffuse * ambient + speculer;
+	float4 color = diffuse * shade + diffuse * ambient + speculer;
+	
+	//影の処理 
+	inData.LightTexCoord /= inData.LightTexCoord.w;
+	float TexValue = g_texDepth.Sample(g_sampler, inData.LightTexCoord).r;
+
+
+	float LightLength = inData.LighViewPos.z / inData.LighViewPos.w;
+	if (TexValue + 0.003 >= LightLength) //ライトビューでの長さが短い（ライトビューでは遮蔽物がある） 
+	{
+		color *= 0.6; //影（明るさを 60%） 
+	}
+	color.a = diffuse.a;
+	return color;
 }

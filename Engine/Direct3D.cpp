@@ -8,6 +8,15 @@
 //画面の描画に関する処理
 namespace Direct3D
 {
+
+	///////////////影に必要な変数//////////////////
+	ID3D11Texture2D* pDepthTexture = nullptr;			//深度を書き込むテクスチャ
+	ID3D11RenderTargetView* pDepthTargetView = nullptr;	//↑のビュー
+	XMMATRIX lightView_;
+	XMMATRIX clipToUV_;
+	ID3D11ShaderResourceView* pDepthSRV_ = nullptr;
+	/////////////////////////////////
+	// 
 	//【スワップチェーン】
 	//画用紙を2枚用紙しておき、片方を画面に映している間にもう一方に描画。
 	//1フレーム分の絵が出来上がったら画用紙を交換。これにより画面がちらつかない。
@@ -49,6 +58,7 @@ namespace Direct3D
 	int						screenHeight_ = 0;
 
 	int						lrMode;
+	SHADER_TYPE nowShaderType = SHADER_3D;
 
 	std::array<std::wstring, SHADER_MAX> shaderName =
 	{
@@ -234,6 +244,53 @@ namespace Direct3D
 		screenWidth_ = screenWidth;
 		screenHeight_ = screenHeight;
 
+		////////////////////影の処理//////////////////
+		//深度を描きこむテクスチャ
+		D3D11_TEXTURE2D_DESC texdec;
+		texdec.Width = screenWidth_;
+		texdec.Height = screenHeight_;
+		texdec.MipLevels = 1;
+		texdec.ArraySize = 1;
+		texdec.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		texdec.SampleDesc.Count = 1;
+		texdec.SampleDesc.Quality = 0;
+		texdec.Usage = D3D11_USAGE_DEFAULT;
+		texdec.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+		texdec.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		texdec.MiscFlags = 0;
+		pDevice_->CreateTexture2D(&texdec, nullptr, &pDepthTexture);
+
+
+		D3D11_RENDER_TARGET_VIEW_DESC renderTargetViewDesc;
+		ZeroMemory(&renderTargetViewDesc, sizeof(D3D11_RENDER_TARGET_VIEW_DESC));
+		renderTargetViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+		renderTargetViewDesc.Texture2D.MipSlice = 0;
+		pDevice_->CreateRenderTargetView(pDepthTexture, &renderTargetViewDesc, &pDepthTargetView);
+
+
+		// シェーダリソースビュー(テクスチャ用)の設定
+		D3D11_SHADER_RESOURCE_VIEW_DESC srv = {};
+		srv.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		srv.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srv.Texture2D.MipLevels = 1;
+		Direct3D::pDevice_->CreateShaderResourceView(pDepthTexture, &srv, &pDepthSRV_);
+
+
+
+		//カメラから見たある点が、ライタから見た時どの位置になるかを求めるために必要な行列
+		XMFLOAT4X4 clip;
+		ZeroMemory(&clip, sizeof(XMFLOAT4X4));
+		clip._11 = 0.5;
+		clip._22 = -0.5;
+		clip._33 = 1;
+		clip._41 = 0.5;
+		clip._42 = 0.5;
+		clip._44 = 1;
+
+		clipToUV_ = XMLoadFloat4x4(&clip);
+		//////////////////////////////////////
+
 		return S_OK;
 	}
 
@@ -415,18 +472,18 @@ namespace Direct3D
 			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_BILLBOARD].pRasterizerState);
 		}
 
-		//UVScroll
+		//UVスクロール
 		{
 			// 頂点シェーダの作成（コンパイル）
 			ID3DBlob* pCompileVS = NULL;
 			D3DCompileFromFile(L"Shader/UVScroll.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
-			pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shaderBundle[SHADER_UVSCROLL].pVertexShader);
+			pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shaderBundle[SHADER_2D].pVertexShader);
 
 
 			// ピクセルシェーダの作成（コンパイル）
 			ID3DBlob* pCompilePS = NULL;
 			D3DCompileFromFile(L"Shader/UVScroll.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
-			pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shaderBundle[SHADER_UVSCROLL].pPixelShader);
+			pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shaderBundle[SHADER_2D].pPixelShader);
 
 
 			// 頂点レイアウトの作成（1頂点の情報が何のデータをどんな順番で持っているか）
@@ -434,7 +491,7 @@ namespace Direct3D
 				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, vectorSize * 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, vectorSize * 1, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 			};
-			pDevice_->CreateInputLayout(layout, 2, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shaderBundle[SHADER_UVSCROLL].pVertexLayout);
+			pDevice_->CreateInputLayout(layout, 2, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shaderBundle[SHADER_2D].pVertexLayout);
 
 
 			//シェーダーが無事作成できたので、コンパイルしたやつはいらない
@@ -448,12 +505,47 @@ namespace Direct3D
 			rdc.FrontCounterClockwise = TRUE;
 			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_2D].pRasterizerState);
 		}
+		
+
+		//シャドウマップ用
+		{
+			// 頂点シェーダの作成（コンパイル）
+			ID3DBlob* pCompileVS = NULL;
+			D3DCompileFromFile(L"Shader/Shadowmap.hlsl", nullptr, nullptr, "VS", "vs_5_0", NULL, 0, &pCompileVS, NULL);
+			pDevice_->CreateVertexShader(pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), NULL, &shaderBundle[SHADER_SHADOW].pVertexShader);
+
+
+			// ピクセルシェーダの作成（コンパイル）
+			ID3DBlob* pCompilePS = NULL;
+			D3DCompileFromFile(L"Shader/Shadowmap.hlsl", nullptr, nullptr, "PS", "ps_5_0", NULL, 0, &pCompilePS, NULL);
+			pDevice_->CreatePixelShader(pCompilePS->GetBufferPointer(), pCompilePS->GetBufferSize(), NULL, &shaderBundle[SHADER_SHADOW].pPixelShader);
+
+
+			// 頂点レイアウトの作成（1頂点の情報が何のデータをどんな順番で持っているか）
+			D3D11_INPUT_ELEMENT_DESC layout[] = {
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			};
+			pDevice_->CreateInputLayout(layout, 1, pCompileVS->GetBufferPointer(), pCompileVS->GetBufferSize(), &shaderBundle[SHADER_SHADOW].pVertexLayout);
+
+
+			//シェーダーが無事作成できたので、コンパイルしたやつはいらない
+			pCompileVS->Release();
+			pCompilePS->Release();
+
+			//ラスタライザ作成
+			D3D11_RASTERIZER_DESC rdc = {};
+			rdc.CullMode = D3D11_CULL_BACK;
+			rdc.FillMode = D3D11_FILL_SOLID;
+			rdc.FrontCounterClockwise = TRUE;
+			pDevice_->CreateRasterizerState(&rdc, &shaderBundle[SHADER_SHADOW].pRasterizerState);
+		}
 	}
 
 
 	//今から描画するShaderBundleを設定
 	void SetShader(SHADER_TYPE type)
 	{
+		nowShaderType = type;
 		pContext_->RSSetState(shaderBundle[type].pRasterizerState);
 		pContext_->VSSetShader(shaderBundle[type].pVertexShader, NULL, 0);                         // 頂点シェーダをセット
 		pContext_->PSSetShader(shaderBundle[type].pPixelShader, NULL, 0);                          // ピクセルシェーダをセット
@@ -469,6 +561,24 @@ namespace Direct3D
 
 		//Zバッファへの書き込み
 		pContext_->OMSetDepthStencilState(pDepthStencilState[blendMode], 0);
+	}
+
+	//影の描画
+	void Direct3D::BeginDrawToTexture()
+	{
+		pContext_->OMSetRenderTargets(1, &pDepthTargetView, pDepthStencilView);
+
+		//背景の色
+		float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };//R,G,B,A
+
+		//画面をクリア
+		pContext_->ClearRenderTargetView(pDepthTargetView, clearColor);
+
+
+		//深度バッファクリア
+		pContext_->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+		SetShader(SHADER_SHADOW);
 	}
 
 
@@ -489,6 +599,8 @@ namespace Direct3D
 
 		//深度バッファクリア
 		pContext_->ClearDepthStencilView(pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+		SetShader(SHADER_3D);
 	}
 
 

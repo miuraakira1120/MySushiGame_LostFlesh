@@ -2,6 +2,7 @@
 #include "Cannon.h"
 #include "Engine/Model.h"
 #include "Stage.h"
+#include "ImageBase.h"
 
 //コンストラクタ
 SalmonRoe::SalmonRoe(GameObject* parent)
@@ -37,6 +38,12 @@ void SalmonRoe::Initialize()
     }
 
     transform_.position_.x = 4;
+
+
+    ImageBase* pImage = InstantiateImage<ImageBase>(this, "tuna.jpg", XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+    pImage->SetParentMove(true);
+    pImage->SetPosition(0, 5, 0);
+    pImage->SetScale(0.2, 0.2, 0.2);
 }
 
 //更新

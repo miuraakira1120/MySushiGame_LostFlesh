@@ -20,6 +20,7 @@
 #include "../Imgui_Obj.h"
 #include "../Engine/JsonOperator.h"
 #include "../GameManager.h"
+#include "../VFX.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -170,44 +171,55 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 				//マネージャの更新処理を呼ぶ
 				GameManager::Update();
+
 #if _DEBUG
 				//imguiのアップデート
 				Imgui_Obj::Update();
 #endif
-				//カメラを更新
-				Camera::Update();
 
-				//このフレームの描画開始
+				////シャドウマップ作成
+				////ライトの位置から見た画像を、遠くは白、近くは黒のグレースケールで表す
+				//XMFLOAT3 reverseVec = { -GameManager::GetLightVec().x , -GameManager::GetLightVec().y, -GameManager::GetLightVec().z };
+				//
+				//Camera::SetPosition(reverseVec);
+				//Camera::SetTarget(XMFLOAT3(0, -37, 0));
+				//Camera::Update();
+				//Direct3D::lightView_ = Camera::GetViewMatrix();
+
+				//Direct3D::BeginDrawToTexture();
+				//Direct3D::nowShaderType;
+
+				//pRootObject->DrawSub();
+
+				////描画終了
+				//Direct3D::EndDraw();
+
+				////このフレームの描画開始
+				//Camera::SetPosition(XMFLOAT3(reverseVec));
+				//Camera::SetTarget(XMFLOAT3(0, -37, 0));
+				//Camera::Update();
+
 				Direct3D::BeginDraw();
 
 				//全オブジェクトを描画
 				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-				//pRootObject->DrawSub();
 				
 				//左画面描画
 				{
 					Direct3D::SetViewPort(0);
 
-					//Camera::SetPosition(XMFLOAT3(0, 0, -10));
 					Camera::Update();
+
+					//エフェクトの更新
+					VFX::Update();
 
 					//全オブジェクトを描画
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->DrawSub();
 				}
 
-
-
-				////右画面描画
-				//{
-				//	Direct3D::SetViewPort(1);
-
-				//	Syari* pSyari = (Syari*)pRootObject->FindObject("Syari");
-				//	//controllerクラスのポインタを入れる
-				//	Controller* pController;
-				//	pController = (Controller*)pRootObject->FindObject("Controller");
-
-				//}
+				//エフェクトの描画
+				VFX::Draw();
 
 				//ゲームマネジャーの準備
 				GameManager::Draw();
@@ -227,7 +239,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	
+	//解放
+	VFX::Release();
 	Audio::Release();
 	Model::AllRelease();
 	Image::AllRelease();

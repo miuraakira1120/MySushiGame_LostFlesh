@@ -32,7 +32,7 @@ GameObject::GameObject(GameObject* parent, const std::string& name, const std::s
 	: pParent_(parent), objectName_(name),pathName_(pathFilename)
 {
 	childList_.clear();
-	state_ = { 0, 1, 1, 0 };
+	state_ = { 0, 1, 1, 0, 0 };
 
 	if (parent)
 		transform_.pParent_ = &parent->transform_;
@@ -119,6 +119,24 @@ void GameObject::DoSetUp()
 bool GameObject::IsSetUp()
 {
 	return (state_.setUp != 0);
+}
+
+//影をつける
+void GameObject::PutShadow()
+{
+	state_.hasShadow = 1;
+}
+
+//影を消す
+void GameObject::DeleteShadow()
+{
+	state_.hasShadow = 0;
+}
+
+//影をつけるかどうか
+bool GameObject::IsSyadow()
+{
+	return (state_.hasShadow != 0);
 }
 
 //子オブジェクトリストを取得
@@ -259,6 +277,7 @@ void GameObject::Collision(GameObject * pTarget)
 			if ((*i)->IsHit(*j))
 			{
 				//当たった
+				(*this.*(*i)->OnCollision)(pTarget);
 				this->OnCollision(pTarget);
 			}
 		}
@@ -279,14 +298,14 @@ void GameObject::Collision(GameObject * pTarget)
 //テスト用の衝突判定枠を表示
 void GameObject::CollisionDraw()
 {
+	Direct3D::SHADER_TYPE shaderType = Direct3D::nowShaderType;
 	Direct3D::SetShader(Direct3D::SHADER_UNLIT);
 
 	for (auto i = this->colliderList_.begin(); i != this->colliderList_.end(); i++)
 	{
 		(*i)->Draw(GetWorldPosition());
 	}
-
-	Direct3D::SetShader(Direct3D::SHADER_3D);
+	Direct3D::SetShader(shaderType);
 }
 
 //RootJobを取得

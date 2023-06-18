@@ -6,6 +6,7 @@
 #include "Controller.h"
 #include "OBB.h"
 #include "Engine/Global.h"
+#include "Maguro.h"
 
 enum Direction
 {
@@ -44,6 +45,9 @@ void PlayerBase::SetUp()
 
     //カメラのコントローラーを探す
     pController = (Controller*)FindObject("Controller");
+
+    //子オブジェクトの生成
+    Instantiate<Maguro>(this);
 }
 
 //ジャンプ
@@ -243,10 +247,10 @@ void PlayerBase::PostureGroundFollow(int hStageModel)
 }
 
 //このオブジェクトにカメラをセットする
-void PlayerBase::SetCameraController(XMFLOAT3 ShiftPos)
+void PlayerBase::SetCameraController(XMFLOAT3 shiftPos)
 {
     Camera::SetTarget(transform_.position_);
-    Camera::SetPosition(pController->GetCameraPos(Math::Float3Add(transform_.position_, ShiftPos)));
+    pController->SetCameraPos(Math::Float3Add(transform_.position_, shiftPos));
 }
 
 //地面にめり込んだ時の処理

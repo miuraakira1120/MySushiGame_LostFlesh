@@ -55,6 +55,16 @@ namespace Math
 	{
 		return XMFLOAT3(-(a.x), -(a.y), -(a.z));
 	}
+	//ˆø”2‚Â‚ğ”äŠr‚µ‚Ä“¯‚¶‚©’²‚×‚é
+	bool Float3Comparison(XMFLOAT3 a, XMFLOAT3 b)
+	{
+		//”äŠr
+		if (a.x == b.x && a.y == b.y && a.z == b.z)
+		{
+			return true;
+		}
+		return false;
+	}
 
 	/// <summary>
 	/// Transform‚ğƒsƒNƒZƒ‹‚É•ÏŠ·

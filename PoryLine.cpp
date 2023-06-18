@@ -110,6 +110,7 @@ HRESULT PoryLine::Load(std::string fileName)
 
 void PoryLine::Draw()
 {
+	Direct3D::SHADER_TYPE shaderType = Direct3D::nowShaderType;
 	Direct3D::SetShader(Direct3D::SHADER_BILLBOARD);
 
 
@@ -152,6 +153,8 @@ void PoryLine::Draw()
 
 	//頂点データの並び方を指定を戻す
 	Direct3D::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	Direct3D::SetShader(shaderType);
 }
 
 void PoryLine::Release()

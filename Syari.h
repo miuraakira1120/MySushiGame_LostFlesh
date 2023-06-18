@@ -108,7 +108,7 @@ class Syari : public GameObject
     int mode;     //モード
     bool breakFlag = false;
     XMFLOAT3 axisPos;
-    XMFLOAT3 prevPos;//1f前の自分の位置
+    XMFLOAT3 prevPos;
     XMFLOAT3 prevBonePos[VERTEX_MAX]; //1f前の角の位置
     bool isGround;   //地面に設置しているか
     XMFLOAT3 upDistanceDifference;
@@ -122,6 +122,7 @@ class Syari : public GameObject
     XMFLOAT3 fMove;
 
     XMVECTOR flipped;
+    XMFLOAT3 prevPosMove;//1f前の自分の位置
 public:
     bool isMove = true;
     float accel;//今どれだけ加速するか

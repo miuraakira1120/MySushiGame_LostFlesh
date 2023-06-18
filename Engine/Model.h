@@ -24,6 +24,9 @@ namespace Model
 		//行列
 		Transform 	transform;
 
+		//UVスクロール値
+		float		uvScrollVal;
+
 		//アニメーションのフレーム
 		float nowFrame, animSpeed;
 		int startFrame, endFrame;
@@ -58,8 +61,7 @@ namespace Model
 
 	//描画
 	//引数：handle	描画したいモデルの番号
-	//引数：matrix	ワールド行列
-	void Draw(int handle);
+	void Draw(int handlefloat, float uvScroll = 0);
 
 	//任意のモデルを開放
 	//引数：handle	開放したいモデルの番号
@@ -100,5 +102,12 @@ namespace Model
 	//引数：handle	判定したいモデルの番号
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(int handle, RayCastData *data);
+
+	/// <summary>
+	/// uvのスクロールの値をセットする
+	/// </summary>
+	/// <param name="handle">判定したいモデルの番号</param>
+	/// <param name="scrollVal">uvスクロールする値</param>
+	void SetScrollVal(int handle, float scrollVal);
 
 };

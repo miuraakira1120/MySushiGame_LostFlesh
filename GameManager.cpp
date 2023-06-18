@@ -15,6 +15,9 @@ namespace
 
 	//SceneManagerのポインタ
 	SceneManager* pSceneManager;
+
+	//ライトの向き
+	XMFLOAT4 lightVec;
 }
 
 namespace GameManager
@@ -30,6 +33,9 @@ namespace GameManager
 		pPause->Initialize();
 
 		isPause = false;
+
+		//ライトの向きを指定
+		lightVec = LIGHT_VEC;
 	}
 
 	//更新
@@ -67,7 +73,6 @@ namespace GameManager
 			pPause->Draw();
 		}	
 	}
-
 
 	//解放
 	void Release()
@@ -126,5 +131,17 @@ namespace GameManager
 	void SetPause(bool pause)
 	{
 		isPause = pause;
+	}
+
+	//ライトの向きをセットする関数
+	void SetLightVec(XMFLOAT3 light)
+	{
+		lightVec =  XMFLOAT4(light.x, light.y, light.z, 0);
+	}
+
+	//ライトの向きを取得する関数
+	XMFLOAT3 GetLightVec()
+	{
+		return XMFLOAT3(lightVec.x, lightVec.y, lightVec.z);
 	}
 }

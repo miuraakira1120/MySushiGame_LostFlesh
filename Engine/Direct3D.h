@@ -29,6 +29,14 @@ namespace Direct3D
 	//ビューポート
 	extern D3D11_VIEWPORT vp_left;
 
+	//【コンテキスト】
+	//GPUに命令を出すためのやつ
+	extern XMMATRIX lightView_;
+	extern XMMATRIX clipToUV_;
+	extern ID3D11ShaderResourceView* pDepthSRV_;
+
+	
+
 
 	//■シェーダー関連で必要なセット
 	enum SHADER_TYPE
@@ -39,6 +47,7 @@ namespace Direct3D
 		SHADER_FLASH_2D,
 		SHADER_BILLBOARD,
 		SHADER_UVSCROLL,
+		SHADER_SHADOW,
 		SHADER_MAX
 	};	//4タイプ（3D用、2D用、当たり判定枠表示用, ビルボード用）
 
@@ -81,6 +90,7 @@ namespace Direct3D
 	extern bool		isDrawCollision_;	//コリジョンを表示するかフラグ
 
 	extern int		lrMode;
+	extern SHADER_TYPE nowShaderType;
 
 
 
@@ -117,6 +127,9 @@ namespace Direct3D
 	//今から描画するShaderBundleを設定
 	//引数：type	シェーダーは何を使うか
 	void SetShader(SHADER_TYPE type);
+
+	//テクスチャへ深度情報を描く
+	void BeginDrawToTexture();
 
 	//ブレンドモードの変更
 	//引数：blendMode	BLEND_DEFAULT	通常

@@ -13,13 +13,8 @@ cbuffer global
 	matrix g_matWorld;		// 頂点座標変換行列
 	matrix g_matTexture;	// テクスチャ座標変換行列
 	float4 g_vecColor;		// テクスチャ合成色
+	float  uv_pos;			// UVの動かす位置　
 };
-
-cbuffer sky
-{
-	matrix dummy;
-	float pos;
-}
 
 //───────────────────────────────────────
 // 頂点シェーダー出力＆ピクセルシェーダー入力データ構造体
@@ -37,7 +32,7 @@ VS_OUTPUT VS(float4 pos : POSITION, float4 uv : TEXCOORD)
 {
 	VS_OUTPUT output;
 	output.pos = mul(pos, g_matWorld);
-	output.uv = mul(uv + pos, g_matTexture);
+	output.uv = mul(uv + uv_pos, g_matTexture);
 	return output;
 }
 
@@ -46,5 +41,5 @@ VS_OUTPUT VS(float4 pos : POSITION, float4 uv : TEXCOORD)
 //───────────────────────────────────────
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-  return g_vecColor * g_texture.Sample(g_sampler, input.uv);
+	return g_vecColor * g_texture.Sample(g_sampler, input.uv);
 }
